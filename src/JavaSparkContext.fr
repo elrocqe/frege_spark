@@ -1,0 +1,19 @@
+module JavaSparkContext where
+
+import JavaRDD
+
+data JavaSparkContext  = native org.apache.spark.api.java.JavaSparkContext where
+	--native new JavaSparkContext
+    native new :: String -> String -> STMutable s (JavaSparkContext)
+    --native new :: String -> String -> String -> String -> STMutable s (JavaSparkContext)
+    --native new :: a b c d -> STMutable s (JavaSparkContext)
+    native textFile :: Mutable s JavaSparkContext -> String -> STMutable s (JavaRDD)
+
+    --native textFile :: String -> STMutable s (JavaRDD String)
+    
+    
+--data JavaRDD  = native org.apache.spark.api.java.JavaRDD where
+
+    --native new :: String -> STMutable s (JavaRDD (RDD T) scala.reflect.ClassTag<T> -- JavaRDD(RDD<T> rdd, scala.reflect.ClassTag<T> classTag)
+	--native cache :: () -> STMutable s (JavaRDD String)
+   -- public JavaRDD(RDD<T> rdd,        scala.reflect.ClassTag<T> classTag)

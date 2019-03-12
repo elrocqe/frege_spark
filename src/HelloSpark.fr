@@ -1,0 +1,30 @@
+module HelloSpark where
+
+import JavaSparkContext
+import JavaRDD
+
+sparkLocation :: String
+sparkLocation = "~/Documents/Code/spark-2.4.0-bin-hadoop2.7"
+
+appJar :: String
+appJar = "target/P9-spark-frege-1.0-SNAPSHOT.jar"
+
+logFile :: String
+logFile = "data/first.csv"
+
+main :: IO ()
+main = do {
+  --putStrLn "before spark"
+  --TODO further config to use local spark
+  sc <- JavaSparkContext.new "local" "Frege Spark" -- sparkLocation appJar 
+  -- TODO How to do type definitions here
+  -- TODO How to work with JavaRDD
+  ; logData <- JavaSparkContext.textFile sc logFile
+  --	 TODO write native declarations for java methods like filter, map (for comparision)
+  -- ; filter logData (\elem -> ) 
+  ; JavaRDD.saveAsTextFile logData ("target/testOutput") -- TODO fix error "directory already exists"
+  -- ; logData :: JavaRDD String
+  -- ; logData = sc.textFile(logFile).cache();
+  ; putStrLn ("Hello Spark from Frege") 
+   }
+  

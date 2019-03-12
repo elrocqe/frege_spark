@@ -1,0 +1,5 @@
+module MyInt where
+
+data MyInt = native java.math.BigInteger where
+    pure  native zero    java.math.BigInteger.TEN    :: Integer
+--  pure native toString                              :: Integer -> String

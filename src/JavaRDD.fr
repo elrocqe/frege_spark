@@ -1,0 +1,15 @@
+module JavaRDD where
+
+data JavaRDD  = native org.apache.spark.api.java.JavaRDD where
+    --native count :: () -> STMutable s (long)
+  native count    org.apache.spark.api.java.JavaRDD.count    :: Long
+  --native first ::    Mutable s JavaRDD -> ST s (String) 
+  native saveAsTextFile  :: Mutable s JavaRDD -> String -> ST s ()
+  native saveAsObjectFile  :: Mutable s JavaRDD -> String -> ST s ()
+  --native collect  ::  Mutable s JavaRDD -> ST s [String]
+
+   --native new :: String -> STMutable s (JavaRDD String)
+     -- JavaRDD(RDD<T> rdd, scala.reflect.ClassTag<T> classTag)
+--    native new :: String -> STMutable s (JavaRDD (RDD T) scala.reflect.ClassTag<T> -- JavaRDD(RDD<T> rdd, scala.reflect.ClassTag<T> classTag)
+	--native cache :: () -> STMutable s (JavaRDD String)
+   -- public JavaRDD(RDD<T> rdd,        scala.reflect.ClassTag<T> classTag)
