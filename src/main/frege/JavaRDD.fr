@@ -1,0 +1,15 @@
+module JavaRDD where
+
+data JavaRDD a = native org.apache.spark.api.java.JavaRDD where
+
+  native isEmpty  org.apache.spark.api.java.JavaRDD.isEmpty :: Boolean
+
+  native name :: Mutable s (JavaRDD String) -> ST s String
+  native count :: Mutable s (JavaRDD String) -> ST s Long
+  native first :: Mutable s (JavaRDD String) -> ST s String
+  --native filter :: Mutable s (JavaRDD a) -> Function a Boolean -> STMutable s (JavaRDD a)
+  --native map :: Mutable s (JavaRDD String) -> STMutable s (JavaRDD String)
+
+  native saveAsTextFile  :: Mutable s (JavaRDD String) -> String -> ST s ()
+  native saveAsObjectFile  :: Mutable s (JavaRDD String) -> String -> ST s ()
+  --native collect  ::  Mutable s (JavaRDD String) -> ST s [String]

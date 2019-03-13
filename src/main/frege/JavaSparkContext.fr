@@ -1,0 +1,10 @@
+module JavaSparkContext where
+
+import JavaRDD
+
+data JavaSparkContext  = native org.apache.spark.api.java.JavaSparkContext where
+    native new :: String -> String -> STMutable s (JavaSparkContext)
+    native textFile :: Mutable s JavaSparkContext -> String -> STMutable s (JavaRDD String)
+
+    native appName :: Mutable s JavaSparkContext -> ST s String
+    native version :: Mutable s JavaSparkContext -> ST s String

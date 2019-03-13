@@ -22,70 +22,70 @@
 		<frege.plugin.version>1.0.5</frege.plugin.version>
 	</properties>
 
-	<build>
-		<plugins>
+<!-- 	<build> -->
+<!-- 		<plugins> -->
 
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-dependency-plugin</artifactId>
-				<version>2.8</version>
-				<executions>
-					<execution>
-						<id>purge-local-dependencies</id>
-						<phase>process-sources</phase>
-						<goals>
-							<goal>build-classpath</goal>
-						</goals>
-						<configuration>
-							<outputFile>classpath.conf</outputFile>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
+<!-- 			<plugin> -->
+<!-- 				<groupId>org.apache.maven.plugins</groupId> -->
+<!-- 				<artifactId>maven-dependency-plugin</artifactId> -->
+<!-- 				<version>2.8</version> -->
+<!-- 				<executions> -->
+<!-- 					<execution> -->
+<!-- 						<id>purge-local-dependencies</id> -->
+<!-- 						<phase>process-sources</phase> -->
+<!-- 						<goals> -->
+<!-- 							<goal>build-classpath</goal> -->
+<!-- 						</goals> -->
+<!-- 						<configuration> -->
+<!-- 							<outputFile>classpath.conf</outputFile> -->
+<!-- 						</configuration> -->
+<!-- 					</execution> -->
+<!-- 				</executions> -->
+<!-- 			</plugin> -->
 
-			<plugin>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.1</version>
-				<configuration>
-					<source>1.7</source>
-					<target>1.7</target>
-				</configuration>
-			</plugin>
+<!-- 			<plugin> -->
+<!-- 				<artifactId>maven-compiler-plugin</artifactId> -->
+<!-- 				<version>3.1</version> -->
+<!-- 				<configuration> -->
+<!-- 					<source>1.7</source> -->
+<!-- 					<target>1.7</target> -->
+<!-- 				</configuration> -->
+<!-- 			</plugin> -->
 
 
-			<!-- https://tomassetti.me/getting-started-with-frege-hello-world-and-basic-setup-using-maven/ -->
-			<plugin>
-				<groupId>com.theoryinpractise.frege</groupId>
-				<artifactId>frege-maven-plugin</artifactId>
-				<version>${frege.plugin.version}</version>
-				<executions>
-					<execution>
-						<id>compile</id>
-						<phase>generate-sources</phase>
-						<goals>
-							<goal>compile</goal>
-						</goals>
-					</execution>
-					<execution>
-						<id>test-compile</id>
-						<phase>generate-test-sources</phase>
-						<goals>
-							<goal>test-compile</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<inline>true</inline>
-					<hints>true</hints>
-					<sourceDirectory>src</sourceDirectory>
-					<testSourceDirectory>src/test/frege</testSourceDirectory>
-					<outputDirectory>target/generated-sources/frege</outputDirectory>
-					<testOutputDirectory>target/generated-test-sources/frege</testOutputDirectory>
-				</configuration>
-			</plugin>
+ 			<!-- https://tomassetti.me/getting-started-with-frege-hello-world-and-basic-setup-using-maven/ -->
+<!-- 			<plugin> -->
+<!-- 				<groupId>com.theoryinpractise.frege</groupId> -->
+<!-- 				<artifactId>frege-maven-plugin</artifactId> -->
+<!-- 				<version>${frege.plugin.version}</version> -->
+<!-- 				<executions> -->
+<!-- 					<execution> -->
+<!-- 						<id>compile</id> -->
+<!-- 						<phase>generate-sources</phase> -->
+<!-- 						<goals> -->
+<!-- 							<goal>compile</goal> -->
+<!-- 						</goals> -->
+<!-- 					</execution> -->
+<!-- 					<execution> -->
+<!-- 						<id>test-compile</id> -->
+<!-- 						<phase>generate-test-sources</phase> -->
+<!-- 						<goals> -->
+<!-- 							<goal>test-compile</goal> -->
+<!-- 						</goals> -->
+<!-- 					</execution> -->
+<!-- 				</executions> -->
+<!-- 				<configuration> -->
+<!-- 					<inline>true</inline> -->
+<!-- 					<hints>true</hints> -->
+<!-- 					<sourceDirectory>src</sourceDirectory> -->
+<!-- 					<testSourceDirectory>src/test/frege</testSourceDirectory> -->
+<!-- 					<outputDirectory>target/generated-sources/frege</outputDirectory> -->
+<!-- 					<testOutputDirectory>target/generated-test-sources/frege</testOutputDirectory> -->
+<!-- 				</configuration> -->
+<!-- 			</plugin> -->
 
-		</plugins>
-	</build>
+<!-- 		</plugins> -->
+<!-- 	</build> -->
 
 	<dependencies>
 		<dependency>

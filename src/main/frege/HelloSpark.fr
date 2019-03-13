@@ -12,6 +12,9 @@ appJar = "target/P9-spark-frege-1.0-SNAPSHOT.jar"
 logFile :: String
 logFile = "data/first.csv"
 
+--getStringJValue :: StringJ String -> String
+--getStringJValue (StringJ x) = x
+
 main :: IO ()
 main = do {
   --putStrLn "before spark"
@@ -19,9 +22,22 @@ main = do {
   sc <- JavaSparkContext.new "local" "Frege Spark" -- sparkLocation appJar 
   -- TODO How to do type definitions here
   -- TODO How to work with JavaRDD
+  ; scversion <- sc.version
+  ; putStrLn $ (scversion)
+  ; scAppName <- sc.appName
+  ; putStrLn $ (scAppName)
   ; logData <- JavaSparkContext.textFile sc logFile
-  --	 TODO write native declarations for java methods like filter, map (for comparision)
+  ; logDataName <- logData.name
+  ; putStrLn $ (logDataName)
+  ; logDataCount <- logData.count
+  ; putStrLn $ (show logDataCount)
+  ; logDataFirst <- logData.first
+  ; putStrLn $ (logDataFirst) 
+
+  --	 TODO write native declarations for java methods like filter, map (for comparison)
   -- ; filter logData (\elem -> ) 
+ -- ; logData.count
+--  ; isEmpty <- JavaRDD.isEmpty logData
   ; JavaRDD.saveAsTextFile logData ("target/testOutput") -- TODO fix error "directory already exists"
   -- ; logData :: JavaRDD String
   -- ; logData = sc.textFile(logFile).cache();
