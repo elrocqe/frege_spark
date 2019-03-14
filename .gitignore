@@ -3,6 +3,4 @@ target
 classpath.conf
 **/.DS_Store
 .classpath
-.settings
 P9spark
-.project
