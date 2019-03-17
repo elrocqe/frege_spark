@@ -1,0 +1,33 @@
+module BasicSparkOnString where
+
+import JavaSparkContext
+import SparkConf
+import JavaRDD
+import Function
+import Function2
+
+import frege.test.QuickCheck
+
+file :: String
+file = "data/cassandraData.csv"
+
+main :: IO ()
+main = basicSpark
+
+basicSpark :: IO ()
+basicSpark = do {
+  sparkConfig <- SparkConf.new ()
+  ; sparkConfig.setMaster "local"
+  ; sparkConfig.setAppName "Frege-Spark"
+
+  ; sc <- JavaSparkContext.new sparkConfig
+  ; currentData <- JavaSparkContext.textFile sc file
+  --; parsedData <- currentData.map  Function.parseLine
+  ; filteredData <- currentData.filter  Function.filterHighRainFromString
+  ; mappedData <- filteredData.map  Function.getTemperatureFromString
+  ; averageTemperature <- mappedData.reduce  Function2.getSum
+
+  ; count <- mappedData.count
+  ; putStrLn $ "Average temperature of measurements with high rain: " ++ (show (averageTemperature / Long.double count))
+
+}

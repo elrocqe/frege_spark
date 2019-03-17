@@ -1,0 +1,18 @@
+module DataSet where
+	
+data DataSet = DataSet
+  { stn :: String
+  , time    :: String
+  , tre200s0   :: String
+  , sre000z0   :: String
+  , rre150z0   :: String
+  , dkl010z0   :: String
+  , fu3010z0   :: String
+  , pp0qnhs0   :: String
+  , fu3010z1   :: String
+  , ure200s0   :: String
+  , prestas0   :: String
+  , pp0qffs0   :: String
+}
+derive Show DataSet
+derive Eq DataSet

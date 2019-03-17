@@ -1,25 +1,24 @@
 module HelloSpark where
 
 import JavaSparkContext
+import SparkConf
 import JavaRDD
-
-sparkLocation :: String
-sparkLocation = "~/Documents/Code/spark-2.4.0-bin-hadoop2.7"
-
-appJar :: String
-appJar = "target/P9-spark-frege-1.0-SNAPSHOT.jar"
+import Function
+import frege.test.QuickCheck
 
 logFile :: String
 logFile = "data/first.csv"
-
---getStringJValue :: StringJ String -> String
---getStringJValue (StringJ x) = x
 
 main :: IO ()
 main = do {
   --putStrLn "before spark"
   --TODO further config to use local spark
-  sc <- JavaSparkContext.new "local" "Frege Spark" -- sparkLocation appJar 
+  sparkConfig <- SparkConf.new ()
+  ; sparkConfig.setMaster "local"
+  ; sparkConfig.setAppName "Frege-Spark"
+
+  ; sc <- JavaSparkContext.new sparkConfig
+  --; sc <- JavaSparkContext.new "local" "Frege Spark" -- sparkLocation appJar 
   -- TODO How to do type definitions here
   -- TODO How to work with JavaRDD
   ; scversion <- sc.version
@@ -30,17 +29,25 @@ main = do {
   ; logDataName <- logData.name
   ; putStrLn $ (logDataName)
   ; logDataCount <- logData.count
+-- ;	putStrLn $ show logData.count -- why does that not work?
+
   ; putStrLn $ (show logDataCount)
   ; logDataFirst <- logData.first
   ; putStrLn $ (logDataFirst) 
-
   --	 TODO write native declarations for java methods like filter, map (for comparison)
-  -- ; filter logData (\elem -> ) 
+  ; filteredData <- logData.filter  Function.equalsOne
+  ; filteredLogDataFirst <- filteredData.first
+  ; putStrLn $ filteredLogDataFirst
+  
+  ; mappedData <- filteredData.map  Function.appendTest
+  ; mappedLogDataFirst <- mappedData.first
+  ; putStrLn $ mappedLogDataFirst
+    ; putStrLn =<< mappedData.first
+
  -- ; logData.count
 --  ; isEmpty <- JavaRDD.isEmpty logData
-  ; JavaRDD.saveAsTextFile logData ("target/testOutput") -- TODO fix error "directory already exists"
+ -- ; JavaRDD.saveAsTextFile filteredData ("target/testOutput") -- TODO fix error "directory already exists"
   -- ; logData :: JavaRDD String
   -- ; logData = sc.textFile(logFile).cache();
   ; putStrLn ("Hello Spark from Frege") 
-   }
-  
+}

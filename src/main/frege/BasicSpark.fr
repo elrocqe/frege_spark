@@ -1,0 +1,41 @@
+module BasicSpark where
+
+import JavaSparkContext
+import SparkConf
+import JavaRDD
+import Function
+import Function2
+import frege.test.QuickCheck
+
+file :: String
+file = "data/cassandraData.csv"
+
+main :: IO ()
+main = basicSpark
+
+
+
+basicSpark :: IO ()
+basicSpark = do {
+  sparkConfig <- SparkConf.new ()
+  ; sparkConfig.setMaster "local"
+  ; sparkConfig.setAppName "Frege-Spark"
+
+  ; sc <- JavaSparkContext.new sparkConfig
+  ; currentData <- JavaSparkContext.textFile sc file
+  ; parsedData <- currentData.map  Function.parseLine
+  -- TODO module error
+  {-
+  The parameterized method <Phantom.RealWorld, String, 
+	 PreludeBase.TList<String>>map(JavaRDD<String>, Function<String,PreludeBase.TList<String>>) of type 
+	 JavaRDD.TJavaRDD is not applicable for the arguments (JavaRDD<String>, Function<String,String[]>)
+  -}
+  --; filteredData <- parsedData.filter  Function.filterHighRain
+  --; mappedData <- filteredData.map  Function.getTemperature
+  --; averageTemperature <- mappedData.reduce  Function2.getSum
+
+  --; count <- mappedData.count
+  --; putStrLn $ "Average temperature of measurements with high rain: " ++ (show (averageTemperature / Long.double count))
+  ; count <- parsedData.count
+  ; putStrLn $ "Average"
+}

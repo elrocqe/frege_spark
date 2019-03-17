@@ -1,9 +1,12 @@
 module JavaSparkContext where
 
 import JavaRDD
+import SparkConf
+
 
 data JavaSparkContext  = native org.apache.spark.api.java.JavaSparkContext where
-    native new :: String -> String -> STMutable s (JavaSparkContext)
+    native new :: Mutable s (SparkConf) -> STMutable s (JavaSparkContext)
+    -- TODO how to map constructors with different parameters
     native textFile :: Mutable s JavaSparkContext -> String -> STMutable s (JavaRDD String)
 
     native appName :: Mutable s JavaSparkContext -> ST s String

@@ -4,3 +4,5 @@ classpath.conf
 **/.DS_Store
 .classpath
 P9spark
+/bin/
+/data
