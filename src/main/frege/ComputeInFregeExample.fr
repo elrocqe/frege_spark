@@ -1,0 +1,96 @@
+module ComputeInFregeExample where
+
+import JavaSparkContext
+import SparkConf
+import JavaRDD
+--import Util
+import CSVUtil
+import frege.java.Util
+import Function
+import Function2
+import frege.test.QuickCheck
+
+file :: String
+file = "data/cassandraData.csv"
+
+main :: IO ()
+main = basicSpark2
+
+add :: Double -> Double -> Double
+add a b = a + b
+
+getStringOfMaybe :: Maybe String -> String
+getStringOfMaybe (Nothing) = "nothing"
+getStringOfMaybe (Just a)  = a
+
+getLocationOfMaybe :: Maybe [String] -> String
+getLocationOfMaybe (Nothing) = "nothing"
+getLocationOfMaybe (Just as)  = as!!0
+
+parseLine :: Maybe String -> Maybe [String]
+parseLine (Nothing) = Just []
+parseLine (Just line)  = Just (csvParse line)
+
+parseString :: String ->[String]
+parseString line = csvParse line
+
+getDataFromMutable :: ST s (Maybe String) -> Maybe String 
+getDataFromMutable = undefined
+
+getString :: Maybe String -> String
+getString a = "undefined"
+
+filterMaybeForLocation :: Maybe [String] -> Bool
+filterMaybeForLocation (Just as)
+  | (as!!0 == "GRE") = true
+  | otherwise = false
+  
+myFilter = undefined
+
+toJArray :: List String -> JArray String
+toJArray = undefined
+
+--getDataOfMutable ::  STMutable t1 (List String) -> List String
+--getDataOfMutable (STMutable t1 xs) = xs
+
+basicSpark2 :: IO ()
+basicSpark2 = do
+  sparkConfig <- SparkConf.new ()
+  sparkConfig.setMaster "local"
+  sparkConfig.setAppName "Frege-Spark"
+  sc <- JavaSparkContext.new sparkConfig
+  currentData :: Mutable s (JavaRDD String) <- JavaSparkContext.textFile sc file
+  count <- currentData.count
+  println $ show (Long.double count)
+  collection <- currentData.collect
+--  first <- bind head collection
+  println ""
+
+basicSpark :: IO ()
+basicSpark = do {
+  sparkConfig <- SparkConf.new ()
+  ; sparkConfig.setMaster "local"
+  ; sparkConfig.setAppName "Frege-Spark"
+
+  ; sc <- JavaSparkContext.new sparkConfig
+  ; currentData <- JavaSparkContext.textFile sc file
+  ; collectedData <- currentData.collect
+  --; putStrLn $ (toJArray collectedData).genericElemAt 0
+  ; first <- collectedData.get 0
+ -- ; firstp <- parseLine (first)
+--  ; putStrLn $ ((filter myFilter (collectedData.toArray)!!0))
+
+  --; putStrLn $ getLocationOfMaybe ((filter filterMaybeForLocation collectedData).get 0)
+
+--  ; putStrLn $ getStringOfMaybe first
+    --" type is : StringJ t1 expected: ST t2 t1
+	--StringJ is not an instance of Bind
+  --; parsedFirst <- (getDataFromMutable (first))
+  --; location <- getLocationOfMaybe parsedFirst
+
+  
+  --; length <- length currentData
+  --; putStrLn $ "Length of array : " ++ (show (Long.double length))
+  --; putStrLn $ "Average temperature of measurements with high rain: " ++ (show (averageTemperature / Long.double count))
+  ; putStrLn $ "Average"
+}
