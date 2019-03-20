@@ -18,20 +18,20 @@ public class App {
         //sparkLocation, new String[]{appJar});
         JavaRDD<String> rdd = sc.textFile(file);
 
-        JavaRDD<Double> resultRdd = rdd
+        /*JavaRDD<Double> resultRdd = rdd
                 .filter(Functions.filterHighRainFromString)
         		.map(Functions.getTemperatureFromString);
-
-        /*JavaRDD<Double> resultRdd1 = rdd
+        */
+        
+        JavaRDD<Double> resultRdd = rdd
                 .map(Functions.parseLine)
                 .filter(Functions.filterHighRain)
         		.map(Functions.getTemperature);
-         */
-        
+                
         long count = resultRdd.count();
         Double averageTemperature = resultRdd
         		.reduce(Functions.getSum);
-          //.reduce((a, b) -> a + b);
+          		//.reduce((a, b) -> a + b);
         
         System.out.println("Average temperature of measurements with high rain: " + averageTemperature/count);
     };

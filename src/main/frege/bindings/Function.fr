@@ -1,14 +1,19 @@
 module Function where
 
+-- runnable
+--https://github.com/Frege/frege/blob/master/frege/java/Lang.fr#L89
+
 data Function a b = pure native "org.apache.spark.api.java.function.Function" where
 
   -- filters
   pure native equalsOne "main.java.Functions.equalsOne"           :: Function String Boolean
-  pure native filterHighRain "main.java.Functions.filterHighRain" :: Function [String] Boolean 
+  pure native filterHighRain "main.java.Functions.filterHighRain" :: Function (JArray String) Boolean 
   pure native filterHighRainFromString "main.java.Functions.filterHighRainFromString" :: Function String Boolean 
 
   -- mappers
   pure native appendTest "main.java.Functions.appendTest"         :: Function String String
-  pure native parseLine "main.java.Functions.parseLine"           :: Function String [String]
-  pure native getTemperature "main.java.Functions.getTemperature" :: Function [String] Double
+  pure native parseLine "main.java.Functions.parseLine"           :: Function String (JArray String)
+  pure native getTemperature "main.java.Functions.getTemperature" :: Function (JArray String) Double
   pure native getTemperatureFromString "main.java.Functions.getTemperatureFromString" :: Function String Double
+  
+  

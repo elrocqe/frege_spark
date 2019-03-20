@@ -1,0 +1,33 @@
+module JavaBindingsExample where
+
+import JavaSparkContext
+import SparkConf
+import JavaRDD
+import Function
+import Function2
+import frege.test.QuickCheck
+
+file :: String
+file = "data/cassandraData.csv"
+
+main :: IO ()
+main = basicSpark
+
+add :: Double -> Double -> Double
+add a b = a + b
+
+basicSpark :: IO ()
+basicSpark = do
+  sparkConfig <- SparkConf.new ()
+  sparkConfig.setMaster "local"
+  sparkConfig.setAppName "Frege-Spark"
+  sc <- JavaSparkContext.new sparkConfig
+  
+  currentData <- JavaSparkContext.textFile sc file
+  parsedData <- currentData.map  Function.parseLine
+  filteredData <- parsedData.filter  Function.filterHighRain
+  mappedData <- filteredData.map  Function.getTemperature
+  averageTemperature <- mappedData.reduce  Function2.getSum
+  
+  count <- mappedData.count
+  putStrLn $ "Average temperature of measurements with high rain: " ++ (show (averageTemperature / Long.double count))

@@ -1,4 +1,4 @@
-module CSVUtil where
+module Test where
 
 import frege.test.QuickCheck
 import DataSet

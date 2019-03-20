@@ -1,0 +1,35 @@
+module NoParseExample where
+
+import JavaSparkContext
+import SparkConf
+import JavaRDD
+import Function
+import Function2
+
+import frege.test.QuickCheck
+
+file :: String
+file = "data/cassandraData.csv"
+
+main :: IO ()
+main = basicSpark
+
+basicSpark :: IO ()
+basicSpark = do
+  sparkConfig <- SparkConf.new ()
+  sparkConfig.setMaster "local"
+  sparkConfig.setAppName "Frege-Spark"
+
+  sc <- JavaSparkContext.new sparkConfig
+  currentData <- JavaSparkContext.textFile sc file
+  filteredData <- currentData.filter  Function.filterHighRainFromString
+  filteredDataFirstElement <- filteredData.first
+  println $ filteredDataFirstElement
+  mappedData <- filteredData.map  Function.getTemperatureFromString
+  mappedDataFirstElement <- mappedData.first
+  println $ mappedDataFirstElement
+  averageTemperature <- mappedData.reduce  Function2.getSum
+
+  count <- mappedData.count
+
+  println $ "Average temperature of measurements with high rain: " ++ (show (averageTemperature / Long.double count))

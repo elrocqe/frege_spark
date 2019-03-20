@@ -52,7 +52,7 @@ public class Functions {
 	
     public static Function<String, String[]> parseLine = new Function<String, String[]>() {
         public String[] call(String s) {
-            return s.split(",");
+        	return s.split(",");
         }
     };
     

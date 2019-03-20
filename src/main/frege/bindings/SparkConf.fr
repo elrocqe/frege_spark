@@ -1,7 +1,14 @@
 module SparkConf where
 
 data SparkConf  = native org.apache.spark.SparkConf where
-    native new :: () -> STMutable s (SparkConf)
-    native set :: Mutable s SparkConf -> String -> String -> STMutable s SparkConf
-    native setMaster :: Mutable s SparkConf -> String -> STMutable s SparkConf
-    native setAppName :: Mutable s SparkConf -> String -> STMutable s SparkConf
+    native new             :: () -> STMutable s (SparkConf)
+    
+    native set             :: Mutable s SparkConf -> String -> String -> STMutable s SparkConf
+    native setMaster       :: Mutable s SparkConf -> String -> STMutable s SparkConf
+    native setAppName      :: Mutable s SparkConf -> String -> STMutable s SparkConf
+    native setSparkHome    :: Mutable s SparkConf -> String -> STMutable s SparkConf
+    
+    native get             :: Mutable s SparkConf -> String -> ST s String
+    -- native getAll          :: Mutable s SparkConf -> STMutable s (JArray (String, String)) -- how to map array and list types?
+
+    

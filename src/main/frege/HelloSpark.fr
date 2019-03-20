@@ -9,45 +9,32 @@ import frege.test.QuickCheck
 logFile :: String
 logFile = "data/first.csv"
 
+sparkLocation :: String
+sparkLocation = "~/Documents/Code/spark-2.4.0-bin-hadoop2.7"
+
 main :: IO ()
-main = do {
-  --putStrLn "before spark"
-  --TODO further config to use local spark
+main = do
   sparkConfig <- SparkConf.new ()
-  ; sparkConfig.setMaster "local"
-  ; sparkConfig.setAppName "Frege-Spark"
-
-  ; sc <- JavaSparkContext.new sparkConfig
-  --; sc <- JavaSparkContext.new "local" "Frege Spark" -- sparkLocation appJar 
-  -- TODO How to do type definitions here
-  -- TODO How to work with JavaRDD
-  ; scversion <- sc.version
-  ; putStrLn $ (scversion)
-  ; scAppName <- sc.appName
-  ; putStrLn $ (scAppName)
-  ; logData <- JavaSparkContext.textFile sc logFile
-  ; logDataName <- logData.name
-  ; putStrLn $ (logDataName)
-  ; logDataCount <- logData.count
--- ;	putStrLn $ show logData.count -- why does that not work?
-
-  ; putStrLn $ (show logDataCount)
-  ; logDataFirst <- logData.first
-  ; putStrLn $ (logDataFirst) 
-  --	 TODO write native declarations for java methods like filter, map (for comparison)
-  ; filteredData <- logData.filter  Function.equalsOne
-  ; filteredLogDataFirst <- filteredData.first
-  ; putStrLn $ filteredLogDataFirst
+  sparkConfig.setMaster "local"
+  sparkConfig.setAppName "Frege-Spark"
+  --sparkConfig.setSparkHome sparkLocation
   
-  ; mappedData <- filteredData.map  Function.appendTest
-  ; mappedLogDataFirst <- mappedData.first
-  ; putStrLn $ mappedLogDataFirst
-    ; putStrLn =<< mappedData.first
+  sc <- JavaSparkContext.new sparkConfig
+  
+  scVersion :: String <- sc.version
+  scAppName :: String <- sc.appName
 
- -- ; logData.count
---  ; isEmpty <- JavaRDD.isEmpty logData
- -- ; JavaRDD.saveAsTextFile filteredData ("target/testOutput") -- TODO fix error "directory already exists"
-  -- ; logData :: JavaRDD String
-  -- ; logData = sc.textFile(logFile).cache();
-  ; putStrLn ("Hello Spark from Frege") 
-}
+  javaRDD <- JavaSparkContext.textFile sc logFile
+  count :: long <- javaRDD.count
+  
+  -- println $ (show javaRDD.count) -- how to print IO types?
+
+  firstElement <- javaRDD.first
+  println $ (firstElement) 
+
+  -- JavaRDD.saveAsTextFile filteredData ("target/testOutput") -- TODO fix error "directory already exists"
+
+  println "Hello Spark from Frege"
+  println $ "Version: " ++ scVersion
+  println $ "AppName: " ++ scAppName
+  -- println $ "Count: " ++  show (Long.double count) -- how to make this the right way?
