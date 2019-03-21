@@ -23,11 +23,20 @@ basicSpark = do
   sparkConfig.setAppName "Frege-Spark"
   sc <- JavaSparkContext.new sparkConfig
   
+  {-
   currentData <- JavaSparkContext.textFile sc file
   parsedData <- currentData.map  Function.parseLine
   filteredData <- parsedData.filter  Function.filterHighRain
   mappedData <- filteredData.map  Function.getTemperature
   averageTemperature <- mappedData.reduce  Function2.getSum
+  -}
   
-  count <- mappedData.count
+  currentData <- JavaSparkContext.textFile sc file
+  parsedData <- currentData.map  Function.parseLine
+  averageTemperature <- currentData.map  Function.parseLine >>= 
+   _.filter  Function.filterHighRain >>=
+   _.map  Function.getTemperature >>=
+   _.reduce  Function2.getSum
+  
+  count <- parsedData.count
   putStrLn $ "Average temperature of measurements with high rain: " ++ (show (averageTemperature / Long.double count))
