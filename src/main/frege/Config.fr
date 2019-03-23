@@ -1,0 +1,5 @@
+module Config where 
+
+file :: String
+file = "data/cassandraDataSmall.csv"
+

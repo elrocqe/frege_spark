@@ -5,11 +5,9 @@ import SparkConf
 import JavaRDD
 import Function
 import Function2
-
+import Config
 import frege.test.QuickCheck
 
-file :: String
-file = "data/cassandraData.csv"
 
 main :: IO ()
 main = basicSpark
@@ -21,7 +19,7 @@ basicSpark = do
   sparkConfig.setAppName "Frege-Spark"
 
   sc <- JavaSparkContext.new sparkConfig
-  currentData <- JavaSparkContext.textFile sc file
+  currentData <- JavaSparkContext.textFile sc Config.file
   filteredData <- currentData.filter  Function.filterHighRainFromString
   filteredDataFirstElement <- filteredData.first
   println $ filteredDataFirstElement

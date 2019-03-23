@@ -15,18 +15,6 @@ public class Functions {
 		}
 	};
 	
-	public static Function<String[], Boolean> filterHighRain = new Function<String[], Boolean>() {
-        public Boolean call(String[] data) {
-            try {
-                String temperature = data[10];
-                if (temperature.equals("")) return false;
-                return Double.parseDouble(data[9]) > 5.0;
-            } catch (Exception e) {
-                return false;
-            }
-        }
-	};
-	
 	public static Function<String, Boolean> filterHighRainFromString = new Function<String, Boolean>() {
         public Boolean call(String input) {
             try {
@@ -40,6 +28,24 @@ public class Functions {
         }
 	};
 	
+	public static Function<String[], Boolean> filterHighRainFromStringArray = new Function<String[], Boolean>() {
+        public Boolean call(String[] data) {
+            try {
+                String temperature = data[10];
+                if (temperature.equals("")) return false;
+                return Double.parseDouble(data[9]) > 5.0;
+            } catch (Exception e) {
+                return false;
+            }
+        }
+	};
+	
+	public static Function<DataSet, Boolean> filterHighRainFromDataSet = new Function<DataSet, Boolean>() {
+        public Boolean call(DataSet dataSet) {
+        		return dataSet.rre150z0 > 5.0;
+        }
+	};
+	
 	//
 	// mappers
 	//
@@ -50,15 +56,14 @@ public class Functions {
 		}
 	};
 	
-    public static Function<String, String[]> parseLine = new Function<String, String[]>() {
+    public static Function<String, String[]> parseLineToStringArray = new Function<String, String[]>() {
         public String[] call(String s) {
         	return s.split(",");
         }
     };
-    
-    public static Function<String[], Double> getTemperature = new Function<String[], Double>() {
-        public Double call(String[] data) {
-            return Double.parseDouble(data[10]);
+    public static Function<String, DataSet> parseLineToDataSet = new Function<String, DataSet>() {
+        public DataSet call(String s) {
+        	return new DataSet(s);
         }
     };
     
@@ -66,6 +71,18 @@ public class Functions {
         public Double call(String input) {
         	String[] data = input.split(",");
             return Double.parseDouble(data[10]);
+        }
+    };
+    
+    public static Function<String[], Double> getTemperatureFromStringArray = new Function<String[], Double>() {
+        public Double call(String[] data) {
+            return Double.parseDouble(data[10]);
+        }
+    };
+    
+    public static Function<DataSet, Double> getTemperatureFromDataSet = new Function<DataSet, Double>() {
+        public Double call(DataSet dataSet) {
+        		return dataSet.tre200s0;
         }
     };
     

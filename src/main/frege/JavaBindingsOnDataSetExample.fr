@@ -22,12 +22,22 @@ basicSpark = do
   sc <- JavaSparkContext.new sparkConfig
   
   
+ 
   currentData <- JavaSparkContext.textFile sc  Config.file
-  parsedData <- currentData.map  Function.parseLineToStringArray
-  filteredData <- parsedData.filter  Function.filterHighRainFromStringArray
-  mappedData <- filteredData.map  Function.getTemperatureFromStringArray
+  parsedData <- currentData.map  Function.parseLineToJavaDataSet
+  filteredData <- parsedData.filter  Function.filterHighRainFromJavaDataSet
+  mappedData <- filteredData.map  Function.getTemperatureFromJavaDataSet
   averageTemperature <- mappedData.reduce  Function2.getSum
   
+
+  {-
+  currentData <- JavaSparkContext.textFile sc  Config.file
+  parsedData <- currentData.map  Function.parseLineToDataSet
+  filteredData <- parsedData.filter  Function.filterHighRainFromDataSet
+  mappedData <- filteredData.map  Function.getTemperatureFromDataSet
+  averageTemperature <- mappedData.reduce  Function2.getSum
+  
+    -}
   {-
   currentData <- JavaSparkContext.textFile sc Config.file
   parsedData <- currentData.map  Function.parseLineToStringArray
