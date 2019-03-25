@@ -34,7 +34,7 @@ main = do
 
   -- JavaRDD.saveAsTextFile filteredData ("target/testOutput") -- TODO fix error "directory already exists"
 
-  println "Hello Spark from Frege"
+  println "Hello Spark from Frege dk"
   println $ "Version: " ++ scVersion
   println $ "AppName: " ++ scAppName
   -- println $ "Count: " ++  show (Long.double count) -- how to make this the right way?
