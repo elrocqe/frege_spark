@@ -33,7 +33,7 @@ computeInFrege = do
   list :: [String] <- (iterator.toList)
   -- TODO what are the requirements for bindings   --  type is : IO () expected: StringJ t1
 	--StringJ is not an instance of Bind
-  count <- Int.double (length (filter filterHighRain (convertToDataSet list)))
+  -- count <- Int.double (length (filter filterHighRain (convertToDataSet list)))
   --temperatureSum <- getSum (map mapGetTemperature (filter filterHighRain (CSVUtil.convertToDataSet list)))
  
   print $ "Average temperature of measurements with high rain: "
