@@ -1,4 +1,3 @@
-package main.java;
 
 import org.apache.spark.api.java.function.Function;
 import org.apache.spark.api.java.function.Function2;
