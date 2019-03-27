@@ -1,17 +1,16 @@
 module ComputeInFregeOnStringArrayExample where
 
-import JavaSparkContext
-import SparkConf
-import JavaRDD
---import Util
-import CSVUtil
+import spark.bindings.JavaSparkContext
+import spark.bindings.SparkConf
+import spark.bindings.JavaRDD
+import util.CSVUtil
 import frege.java.Util
-import Function
-import Function2
+import spark.bindings.Function
+import spark.bindings.Function2
 import frege.test.QuickCheck
-import DataSet
-import FregeFunction
-import Config
+import model.DataSet
+import computations.FregeFunction
+import spark.config.Config
 
 main :: IO ()
 main = computeInFrege
@@ -32,11 +31,11 @@ computeInFrege = do
   elem::Maybe String <- cp.get 0
   iterator:: MutableIO (Iterator String) <- (cp.iterator)
   
-  M a >>= (a -> M b)
-  IO String  >>= ( String -> IO () )
-  (a) >>= (b -> println b)
-  b <- (a);
-  println b;
+  --M a >>= (a -> M b)
+ -- IO String  >>= ( String -> IO () )
+ -- (a) >>= (b -> println b)
+ -- b <- (a);
+ -- println b;
   
   
   list :: [String] <- (iterator.toList)

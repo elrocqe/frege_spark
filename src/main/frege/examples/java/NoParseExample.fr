@@ -1,12 +1,12 @@
 module NoParseExample where
 
-import JavaSparkContext
-import SparkConf
-import JavaRDD
-import Function
-import Function2
-import Config
+import spark.bindings.JavaSparkContext
+import spark.bindings.SparkConf
+import spark.bindings.JavaRDD
+import spark.bindings.Function
+import spark.bindings.Function2
 import frege.test.QuickCheck
+import spark.config.Config
 
 
 main :: IO ()

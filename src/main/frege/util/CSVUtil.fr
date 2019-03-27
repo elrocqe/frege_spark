@@ -1,0 +1,51 @@
+module util.CSVUtil where
+
+import frege.test.QuickCheck
+import model.DataSet
+import Data.List 
+
+main :: IO ()
+main = println $ "CSVUtil"
+
+-- https://stackoverflow.com/questions/4978578/how-to-split-a-string-in-haskell
+separateBy :: Eq a => a -> [a] -> [[a]]
+separateBy chr = unfoldr sep where
+  sep [] = Nothing
+  sep l  = Just . fmap (drop 1) . break (== chr) $ l
+ 
+csvParseString :: String -> [[Char]]
+csvParseString xs = csvParse (unpacked xs)
+
+csvParseStringToStringArray :: String -> [String]
+csvParseStringToStringArray xs = map packed (csvParse (unpacked xs))
+                      
+csvParse :: [Char] -> [[Char]]
+csvParse xs = (separateBy (',')  xs)
+ 
+convertToStringArray :: [String] -> [[String]]
+convertToStringArray xs = map (CSVUtil.csvParseStringToStringArray) xs
+
+convertToDataSet :: [String] -> [DataSet]
+convertToDataSet xs = map (CSVUtil.convertLineToDataSet . CSVUtil.csvParseString) xs
+
+ 
+convertLineToDataSet :: [[Char]] -> DataSet
+convertLineToDataSet xs =
+  DataSet
+  { stn = packed (xs!! 0)
+  , time = packed (xs!! 1)
+  , dkl010z0 = readValue $ String.integer $ packed (xs!! 2)
+  , fu3010z0 = readValue $ String.double $ packed (xs!! 3)
+  , fu3010z1 = readValue $ String.double $ packed (xs!! 4)
+  , pp0qffs0 = readValue $ String.double $ packed (xs!! 5)
+  , pp0qnhs0 = readValue $ String.double $ packed (xs!! 6)
+  , prestas0 = readValue $ String.double $ packed (xs!! 7)
+  , sre000z0 = readValue $ String.double $ packed (xs!! 8)
+  , rre150z0 = readValue $ String.integer $ packed (xs!! 9)
+  , tre200s0 = readValue $ String.double $ packed (xs!! 10)
+  , ure200s0 = readValue $ String.integer $ packed (xs!! 11)
+}
+
+readValue :: (e | a) -> Maybe a
+readValue v = case (v) of (Left e) -> Nothing
+                          (Right d) -> Just d

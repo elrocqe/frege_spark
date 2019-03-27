@@ -18,7 +18,7 @@ public class Functions {
         public Boolean call(String input) {
             try {
             	String[] data = input.split(",");
-                String temperature = data[10];
+				String temperature = data[10];
                 if (temperature.equals("")) return false;
                 return Double.parseDouble(data[9]) > 5.0;
             } catch (Exception e) {

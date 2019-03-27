@@ -1,16 +1,16 @@
-module ComputeInFregeOnDataSetExample where
+module examples.frege.ComputeInFregeOnDataSetExample where
 
-import JavaSparkContext
-import SparkConf
-import JavaRDD
-import CSVUtil
+import spark.bindings.JavaSparkContext
+import spark.bindings.SparkConf
+import spark.bindings.JavaRDD
+import util.CSVUtil
 import frege.java.Util
-import Function
-import Function2
+import spark.bindings.Function
+import spark.bindings.Function2
 import frege.test.QuickCheck
-import DataSet
-import FregeFunction
-import Config
+import model.DataSet
+import computations.FregeFunction
+import spark.config.Config
 
 main :: IO ()
 main = computeInFrege
@@ -31,6 +31,8 @@ computeInFrege = do
   elem::Maybe String <- cp.get 0
   iterator:: MutableIO (Iterator String) <- (cp.iterator)
   list :: [String] <- (iterator.toList)
+  --dataSetList <- CSVUtil.convertToStringArray list
+  
   -- TODO what are the requirements for bindings   --  type is : IO () expected: StringJ t1
 	--StringJ is not an instance of Bind
   -- count <- Int.double (length (filter filterHighRain (convertToDataSet list)))

@@ -1,4 +1,4 @@
-module SparkConf where
+module spark.bindings.SparkConf where
 
 data SparkConf  = native org.apache.spark.SparkConf where
     native new             :: () -> STMutable s (SparkConf)

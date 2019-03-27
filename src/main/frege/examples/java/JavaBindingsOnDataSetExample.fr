@@ -1,13 +1,18 @@
 module JavaBindingsOnDataSetExample where
 
-import JavaSparkContext
-import SparkConf
-import JavaRDD
-import Function
-import Function2
+import spark.bindings.JavaSparkContext
+import spark.bindings.SparkConf
+import spark.bindings.JavaRDD
+import util.CSVUtil
+import frege.java.Util
+import spark.bindings.Function
+import spark.bindings.Function2
 import frege.test.QuickCheck
-import Config
- {-
+import model.DataSet
+import computations.FregeFunction
+import spark.config.Config
+
+
 main :: IO ()
 main = basicSpark
 
@@ -22,15 +27,15 @@ basicSpark = do
   sc <- JavaSparkContext.new sparkConfig
   
   
-
+  {-
   currentData <- JavaSparkContext.textFile sc  Config.file
   parsedData <- currentData.map  Function.parseLineToJavaDataSet
   filteredData <- parsedData.filter  Function.filterHighRainFromJavaDataSet
   mappedData <- filteredData.map  Function.getTemperatureFromJavaDataSet
   averageTemperature <- mappedData.reduce  Function2.getSum
-  -}
 
-  {-
+
+
   currentData <- JavaSparkContext.textFile sc  Config.file
   parsedData <- currentData.map  Function.parseLineToDataSet
   filteredData <- parsedData.filter  Function.filterHighRainFromDataSet
@@ -45,9 +50,9 @@ basicSpark = do
    _.filter  Function.filterHighRainFromStringArray >>=
    _.map  Function.getTemperatureFromStringArray
    _.reduce  Function2.getSum
-
+-}
   
-  count <- mappedData.count
-  putStrLn $ "Average temperature of measurements with high rain: " ++ (show (averageTemperature / Long.double count))  
+  --count <- mappedData.count
+  --putStrLn $ "Average temperature of measurements with high rain: " ++ (show (averageTemperature / Long.double count))  
+  putStrLn $ ""
   
-  -}

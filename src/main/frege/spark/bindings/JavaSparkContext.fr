@@ -1,15 +1,18 @@
-module JavaSparkContext where
+module spark.bindings.JavaSparkContext where
 
-import JavaRDD
-import SparkConf
+import spark.bindings.JavaRDD
+import spark.bindings.SparkConf
 
 
 data JavaSparkContext  = native org.apache.spark.api.java.JavaSparkContext where
+
+	-- TODO check types for IO
 
     -- TODO how to map constructors with different parameters
     native new :: Mutable s (SparkConf) -> STMutable s (JavaSparkContext)
     
     native textFile :: Mutable s JavaSparkContext -> String -> STMutable s (JavaRDD String)
+    --native parallelize :: Mutable s JavaSparkContext -> ST s (JArray String) -> STMutable s (JavaRDD String)
 
     native appName :: Mutable s JavaSparkContext -> ST s String
     native version :: Mutable s JavaSparkContext -> ST s String
