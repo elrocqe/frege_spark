@@ -1,4 +1,4 @@
-module NoParseExample where
+module examples.java.NoParseExample where
 
 import spark.bindings.JavaSparkContext
 import spark.bindings.SparkConf

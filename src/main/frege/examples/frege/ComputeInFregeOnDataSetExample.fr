@@ -26,17 +26,31 @@ computeInFrege = do
   println $ show (Long.double count)
   first:: String <- currentData.first
   println $ first
-  -- how to work with element in a Mutable
+  
+  
+  
+  
   cp::Mutable t (List String) <- currentData.collect
   elem::Maybe String <- cp.get 0
   iterator:: MutableIO (Iterator String) <- (cp.iterator)
   list :: [String] <- (iterator.toList)
-  --dataSetList <- CSVUtil.convertToStringArray list
   
-  -- TODO what are the requirements for bindings   --  type is : IO () expected: StringJ t1
-	--StringJ is not an instance of Bind
-  -- count <- Int.double (length (filter filterHighRain (convertToDataSet list)))
-  --temperatureSum <- getSum (map mapGetTemperature (filter filterHighRain (CSVUtil.convertToDataSet list)))
- 
-  print $ "Average temperature of measurements with high rain: "
+  dataSetList = CSVUtil.convertToDataSet list
+  filtered = filter filterHighRain dataSetList
+  mapped = map mapGetTemperature filtered
+  sum = getSum mapped
+  count = Int.double $ length filtered
+  print $ "First Average temperature of measurements with high rain: "
+  println $ sum / count
+  
+
+  {-
+  print $ "Second Average temperature of measurements with high rain: "
+  result = map mapGetTemperature (filter filterHighRain dataSetList)
+  sum1 = getSum result
+  count1 = Int.double $ length result
+  println $ sum1 / count1
+  -}
+  
+  print $ "Third Average temperature of measurements with high rain: "
   println $ getSum (map mapGetTemperature (filter filterHighRain (CSVUtil.convertToDataSet list))) / Int.double (length (filter filterHighRain (convertToDataSet list)))

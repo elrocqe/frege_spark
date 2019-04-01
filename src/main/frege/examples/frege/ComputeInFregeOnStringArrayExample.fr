@@ -1,4 +1,4 @@
-module ComputeInFregeOnStringArrayExample where
+module examples.frege.ComputeInFregeOnStringArrayExample where
 
 import spark.bindings.JavaSparkContext
 import spark.bindings.SparkConf

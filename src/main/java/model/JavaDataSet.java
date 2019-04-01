@@ -1,5 +1,6 @@
+package model;
 
-public class DataSet {
+public class JavaDataSet {
 	
 	String stn;
 	String time;
@@ -14,7 +15,7 @@ public class DataSet {
 	Double tre200s0;
 	Integer ure200s0;
 	
-	public DataSet(String line) {
+	public JavaDataSet(String line) {
 		String[] data = line.split(",", -1);
 		this.stn = data[0];
 		this.time = data[1];

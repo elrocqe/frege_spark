@@ -1,4 +1,4 @@
-module HelloSpark where
+module examples.frege.HelloSpark where
 
 import spark.bindings.JavaSparkContext
 import spark.bindings.SparkConf

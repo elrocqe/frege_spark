@@ -1,0 +1,43 @@
+module NumbersExample where
+
+import spark.bindings.JavaSparkContext
+import spark.bindings.SparkConf
+import spark.bindings.JavaRDD
+import spark.bindings.Function
+import spark.bindings.Function2
+import frege.test.QuickCheck
+import spark.config.Config
+
+
+main :: IO ()
+main = basicSpark
+
+f :: Function String Bool
+--f = undefined
+f = Function.createStringFilterFunction "5"
+--f = Function.createTypedFunction ( == "5")
+
+basicSpark :: IO ()
+basicSpark = do
+  sparkConfig <- SparkConf.new ()
+  sparkConfig.setMaster "local"
+  sparkConfig.setAppName "Frege-Spark"
+
+  sc <- JavaSparkContext.new sparkConfig
+  currentData <- JavaSparkContext.textFile sc "data/first.csv"
+  currentFirst <- currentData.first
+  println $ currentFirst
+  all <- currentData.count
+  println $ "Number of elements: "
+  println $ show $ Long.double all
+  --filteredData <- currentData.filter  Function.filterFive
+  filteredData <- currentData.filter f
+
+  current <- filteredData.first
+  println $ current
+
+
+  count <- filteredData.count
+  println $ "Number of elements: "
+  println $ show $ Long.double count
+  println $ "compare2"
