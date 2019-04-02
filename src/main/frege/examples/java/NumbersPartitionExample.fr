@@ -1,0 +1,62 @@
+module examples.java.NumbersPartitionExample where
+
+import spark.bindings.JavaSparkContext
+import spark.bindings.SparkConf
+import spark.bindings.JavaRDD
+import spark.bindings.Function
+import spark.bindings.Function2
+import frege.test.QuickCheck
+import spark.config.Config
+import Data.Array
+import frege.prelude.PreludeArrays
+
+
+
+--weights :: STMutable b (JArray Double)
+--weights = undefined -- TODO JArray.new Double 0 
+
+weights :: JArray Double
+weights = Double.arrayFromList [0.0] -- TODO JArray.new Double 0 
+
+--weights1 :: ArrayOf t Double
+weights1 :: STMutable a (JArray Double)
+weights1 = Double.arrayFromListST [0.0]
+
+main :: IO ()
+main = do
+  sparkConfig <- SparkConf.new ()
+  sparkConfig.setMaster "local"
+  sparkConfig.setAppName "Frege-Spark"
+
+  sc <- JavaSparkContext.new sparkConfig
+  currentData <- JavaSparkContext.textFile sc "data/numbers.csv"
+  -- TODO how to get weights with correct type
+  --partitions :: ArrayOf RealWorld (JavaRDD String) <- currentData.randomSplit weights1
+  {-weights = STArray.new (0.0, 2.0) 1.0
+  firstPartition <- partitions!!0
+  secondPartition <- partitions!!1
+  firstPartitionFirst <- firstPartition.first
+  secondPartitionFirst <- secondPartition.first
+  println $ firstPartitionFirst
+  println $ secondPartitionFirst
+  -}
+--  currentFirst <- currentData.first
+  --println $ currentFirst
+  all <- currentData.count
+  println $ "Number of elements: "
+  println $ show $ Long.double all
+  --filteredData <- currentData.filter  Function.filterFive
+
+  --current <- currentData.first
+  --println $ current
+  
+  --mappedData = filteredData
+  mappedData <- currentData.map $ Function.createStringMapFunction "Test"
+
+  currentMapped <- mappedData.first
+  println $ currentMapped
+
+  count <- currentData.count
+  println $ "Number of elements: "
+  println $ show $ Long.double count
+  println $ "compare3"

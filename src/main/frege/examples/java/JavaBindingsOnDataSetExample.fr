@@ -1,4 +1,4 @@
-module JavaBindingsOnDataSetExample where
+module examples.java.JavaBindingsOnDataSetExample where
 
 import spark.bindings.JavaSparkContext
 import spark.bindings.SparkConf

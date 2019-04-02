@@ -1,4 +1,4 @@
-module NumbersExample where
+module examples.java.NumbersExample where
 
 import spark.bindings.JavaSparkContext
 import spark.bindings.SparkConf
@@ -8,23 +8,24 @@ import spark.bindings.Function2
 import frege.test.QuickCheck
 import spark.config.Config
 
-
-main :: IO ()
-main = basicSpark
-
 f :: Function String Bool
 --f = undefined
 f = Function.createStringFilterFunction "5"
---f = Function.createTypedFunction ( == "5")
 
-basicSpark :: IO ()
-basicSpark = do
+--f' = Function.createTypedFunction ( == "5")
+-- TODO module error because of -> The method createTypedFunction(Lambda) in the type Functions is not applicable for the arguments (Func.U<String,Boolean>
+
+m :: String -> String
+m = (++ "Test")
+
+main :: IO ()
+main = do
   sparkConfig <- SparkConf.new ()
   sparkConfig.setMaster "local"
   sparkConfig.setAppName "Frege-Spark"
 
   sc <- JavaSparkContext.new sparkConfig
-  currentData <- JavaSparkContext.textFile sc "data/first.csv"
+  currentData <- JavaSparkContext.textFile sc "data/numbers.csv"
   currentFirst <- currentData.first
   println $ currentFirst
   all <- currentData.count
@@ -32,12 +33,15 @@ basicSpark = do
   println $ show $ Long.double all
   --filteredData <- currentData.filter  Function.filterFive
   filteredData <- currentData.filter f
+  mappedData <- filteredData.map $ Function.createStringMapFunction "Test"
+  --function = Function.createBasicStringMapFunction (++ "Test")
+  -- TODO pass function
+  --mappedData <- filteredData.map function
 
-  current <- filteredData.first
-  println $ current
-
+  currentMapped <- mappedData.first
+  println $ currentMapped
 
   count <- filteredData.count
   println $ "Number of elements: "
   println $ show $ Long.double count
-  println $ "compare2"
+  println $ "compare3"

@@ -17,19 +17,36 @@ public class Functions {
 		};
 	};
 	
-	public static <A, B> Function<A, B> createFunction(final Object f){
-		return new Function<A, B>() {
-			public B call(A x) {
-				return null; // TODO
+	public static Function<String, String> createStringMapFunction(String input){
+		return new Function<String, String>() {
+			public String call(String x) {
+				return input + x; // TODO
 			}
 		};
 	};
 	
-	public static Function<String, Boolean> createTypedFunction(Object f ){
+	public static Function<String, String> createBasicStringMapFunction(final frege.runtime.Lambda f){
+		return new Function<String, String>() {
+			public String call(String x) {
+				return f.apply(x).result().forced(); // TODO
+			}
+		};
+	};
+	
+	
+	public static <A, B> Function<A, B> createFunction(Lambda f){
+		return new Function<A, B>() {
+			public B call(A x) {
+				return f.apply(x).result().forced(); // TODO
+			}
+		};
+	};
+	
+	public static Function<String, Boolean> createTypedFunction(Lambda f ){
 		return new Function<String, Boolean>() {
 			public Boolean call(String x) {
-				Lambda lambda = (Lambda) f;
-				return true; // TODO
+				return f.apply(x).result().forced(); // TODO
+
 			};
 		};
 	};

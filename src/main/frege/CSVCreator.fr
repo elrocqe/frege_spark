@@ -8,8 +8,10 @@ main = do
   writer <- setupOpen
   writer.flush
   writer <- setupAppend
-  numbers = [10000,9999..1]
+  numbers = [1000000,999999..1]
   printNumbers (\x -> writer.println x) numbers 
+  --printNumbers (\x -> println x) numbers 
+  --printNumbersRec 0
   writer.flush
 
     
@@ -26,3 +28,10 @@ printNumbers f (x:[]) = f(Integer.toString x)
 printNumbers f (x:xs) = do 
                        printNumbers f xs
                        f(Integer.toString x)
+      
+{-
+printNumbersRec 100000 = println $ Integer.toString 100000        
+printNumbersRec x = do
+                      printNumbersRec (x+1) 
+                      println $ Integer.toString x
+-}
