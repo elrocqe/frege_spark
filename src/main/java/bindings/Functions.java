@@ -3,7 +3,6 @@ package bindings;
 import org.apache.spark.api.java.function.Function;
 import org.apache.spark.api.java.function.Function2;
 
-import frege.runtime.Lambda;
 import model.JavaDataSet;
 
 public class Functions {
@@ -25,27 +24,27 @@ public class Functions {
 		};
 	};
 	
-	public static Function<String, String> createBasicStringMapFunction(final frege.runtime.Lambda f){
+	public static Function<String, String> createBasicStringMapFunction(final Object f){
 		return new Function<String, String>() {
 			public String call(String x) {
-				return f.apply(x).result().forced(); // TODO
+				return null; // f.apply(x).result().forced(); // TODO
 			}
 		};
 	};
 	
 	
-	public static <A, B> Function<A, B> createFunction(Lambda f){
+	public static <A, B> Function<A, B> createFunction(Object f){
 		return new Function<A, B>() {
 			public B call(A x) {
-				return f.apply(x).result().forced(); // TODO
+				return null; // f.apply(x).result().forced(); // TODO
 			}
 		};
 	};
 	
-	public static Function<String, Boolean> createTypedFunction(Lambda f ){
+	public static Function<String, Boolean> createTypedFunction(Object f ){
 		return new Function<String, Boolean>() {
 			public Boolean call(String x) {
-				return f.apply(x).result().forced(); // TODO
+				return null; //  f.apply(x).result().forced(); // TODO
 
 			};
 		};
