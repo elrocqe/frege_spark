@@ -1,0 +1,25 @@
+module spark.bindings.sql.DataSet where
+
+import frege.java.Util
+import spark.bindings.JavaRDD
+import spark.bindings.Function
+import spark.bindings.sql.DataFrameWriter
+
+
+data DataSet a = native org.apache.spark.sql.Dataset where
+
+  native count            :: Mutable s (DataSet a) -> ST s Long
+  native first            :: Mutable s (DataSet a) -> ST s a
+  --native as {b}               :: Mutable s (DataSet a) -> String -> STMutable s (DataSet b)
+ -- native filter           :: Mutable s (DataSet a) -> Function a Bool-> STMutable s (DataSet a)
+
+  native filter           :: Mutable s (DataSet a) -> String -> STMutable s (DataSet a)
+
+-- TODO how to map String...
+  --native toDF           :: Mutable s (DataSet a) -> String... -> STMutable s (DataSet a)
+
+  native collectAsList    :: Mutable s (DataSet a) -> STMutable s (List a) 
+  native toJavaRDD        :: Mutable s (DataSet a) -> STMutable s (JavaRDD a)
+ -- TODO returns void / is IO
+ -- native show             :: MutableIO s (DataSet a) -> IO ()
+  native write            :: Mutable s (DataSet a) -> STMutable s (DataFrameWriter)

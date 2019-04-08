@@ -1,0 +1,3 @@
+module spark.bindings.SparkSession where
+
+data DataFrameReader  = native org.apache.spark.SparkSession where

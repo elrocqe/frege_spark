@@ -12,7 +12,7 @@ f :: Function String Bool
 --f = undefined
 f = Function.createStringFilterFunction "5"
 
---f' = Function.createTypedFunction ( == "5")
+f' = Function.createTypedFunction ( == "5")
 -- TODO module error because of -> The method createTypedFunction(Lambda) in the type Functions is not applicable for the arguments (Func.U<String,Boolean>
 
 m :: String -> String

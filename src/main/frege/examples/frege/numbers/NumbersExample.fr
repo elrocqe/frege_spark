@@ -1,0 +1,54 @@
+module examples.frege.numbers.NumbersExample where
+
+import frege.java.Util
+import spark.bindings.SparkConf
+import spark.bindings.sql.SQLContext
+import spark.bindings.sql.DataFrameReader
+import spark.bindings.sql.DataFrameWriter
+import spark.bindings.sql.DataSet
+import spark.bindings.sql.Row
+import spark.bindings.JavaSparkContext
+
+import frege.test.QuickCheck
+
+
+main :: IO ()
+main = computeInFrege
+
+computeInFrege :: IO ()
+computeInFrege = do
+  sparkConfig <- SparkConf.new ()
+  sparkConfig.setMaster "local"
+  sparkConfig.setAppName "Frege-Spark"
+  sc :: MutableIO JavaSparkContext <- JavaSparkContext.new sparkConfig
+  sqlContext :: MutableIO SQLContext <- SQLContext.new sc
+  dataFrameReader :: MutableIO (DataFrameReader) <- SQLContext.read sqlContext
+  df1 <- dataFrameReader.format "csv"
+  df2 <- df1.option "inferSchema" "true"
+  currentData :: MutableIO (DataSet Row) <- df1.load "data/first.csv"
+  --list <- currentData.collectAsList
+  --iterator:: MutableIO (Iterator String) <- (cp.iterator)
+  --list :: [String] <- (iterator.toList)
+  
+  filtered <- currentData.filter "_c0 = '5'"
+  --print $ "filtered: "
+  --println $ filtered.first
+  
+  count <- currentData.count
+  print $ "count: "
+  println $ count
+  filteredCount <- filtered.count
+  print $ "filteredCount: "
+  println $ filteredCount
+
+--  dataAsString :: MutableIO (DataSet String) <- DataSet.as currentData "String"
+  --firstRow :: String <- Row.toString currentData.first
+  --first <- firstRow.getAs "String"
+  --println $ first
+
+  dataFrameWriter :: (MutableIO DataFrameWriter) <- filtered.write
+  dataFrameWriter <- dataFrameWriter.mode "overwrite"
+  dataFrameWriter <- dataFrameWriter.format "csv"
+  dataFrameWriter <- dataFrameWriter.save "target/out/"
+
+  println "final"

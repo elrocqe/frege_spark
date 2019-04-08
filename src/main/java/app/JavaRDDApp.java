@@ -10,7 +10,7 @@ import org.apache.spark.api.java.function.Function;
 
 import bindings.Functions;
 
-public class App {
+public class JavaRDDApp {
 
     public static void main(String[] args) {
         //String sparkLocation = "~/Documents/Code/spark-2.4.0-bin-hadoop2.7";
