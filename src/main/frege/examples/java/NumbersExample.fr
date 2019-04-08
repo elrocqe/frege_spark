@@ -33,13 +33,13 @@ main = do
   println $ show $ Long.double all
   --filteredData <- currentData.filter  Function.filterFive
   filteredData <- currentData.filter f'
-  mappedData <- filteredData.map $ Function.createStringMapFunction "Test"
+  --mappedData <- filteredData.map $ Function.createStringMapFunction "Test"
   --function = Function.createBasicStringMapFunction (++ "Test")
   -- TODO pass function
   --mappedData <- filteredData.map function
 
-  currentMapped <- mappedData.first
-  println $ currentMapped
+--  currentMapped <- mappedData.first
+  --println $ currentMapped
 
   count <- filteredData.count
   println $ "Number of elements: "

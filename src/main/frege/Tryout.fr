@@ -1,0 +1,9 @@
+module Tryout where
+
+  test :: a->a
+  test = id (\x -> x)
+    
+  test1 :: String -> Bool
+  test1 = (== "5")
+  
+  
