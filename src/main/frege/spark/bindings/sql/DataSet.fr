@@ -3,6 +3,10 @@ module spark.bindings.sql.DataSet where
 import frege.java.Util
 import spark.bindings.JavaRDD
 import spark.bindings.Function
+import spark.bindings.FilterFunction
+import spark.bindings.MapFunction
+import spark.bindings.ReduceFunction
+import spark.bindings.Encoder
 import spark.bindings.sql.DataFrameWriter
 
 
@@ -11,10 +15,17 @@ data DataSet a = native org.apache.spark.sql.Dataset where
   native count            :: Mutable s (DataSet a) -> ST s Long
   native first            :: Mutable s (DataSet a) -> ST s a
   --native as {b}               :: Mutable s (DataSet a) -> String -> STMutable s (DataSet b)
- -- native filter           :: Mutable s (DataSet a) -> Function a Bool-> STMutable s (DataSet a)
+ 
+  -- TODO creates module error
+  native filter           :: Mutable s (DataSet a) -> (FilterFunction a) -> STMutable s (DataSet a)
 
-  native filter           :: Mutable s (DataSet a) -> String -> STMutable s (DataSet a)
+-- TODO how to overload
+--  native filter           :: Mutable s (DataSet a) -> String -> STMutable s (DataSet a)
+  native map              :: Mutable s (DataSet a) -> (MapFunction a b) -> (Encoder b) -> STMutable s (DataSet b)
+  --<U> Dataset<U>	Experimentalmap(MapFunction<T,U> func, Encoder<U> encoder)
+  native reduce           :: Mutable s (DataSet a) -> (ReduceFunction a) -> ST s a
 
+--T	Experimentalreduce(ReduceFunction<T> func)
 -- TODO how to map String...
   --native toDF           :: Mutable s (DataSet a) -> String... -> STMutable s (DataSet a)
 

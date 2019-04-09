@@ -1,0 +1,7 @@
+module spark.bindings.ReduceFunction where
+
+data ReduceFunction a = pure native "org.apache.spark.api.java.function.ReduceFunction" where
+
+  -- reduce
+  pure native getIntegerSum "bindings.ReduceFunctions.getIntegerSum" :: ReduceFunction Integer
+  pure native getStringSum  "bindings.ReduceFunctions.getStringSum"  :: ReduceFunction String

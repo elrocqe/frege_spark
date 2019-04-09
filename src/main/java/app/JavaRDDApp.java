@@ -8,7 +8,10 @@ package app;
 import org.apache.spark.api.java.*;
 import org.apache.spark.api.java.function.Function;
 
+import bindings.FilterFunctions;
 import bindings.Functions;
+import bindings.MapFunctions;
+import bindings.ReduceFunctions;
 
 public class JavaRDDApp {
 
@@ -24,36 +27,36 @@ public class JavaRDDApp {
         // for String
         
         JavaRDD<Double> resultRddForString = rdd
-                .filter(Functions.filterHighRainFromString)
-        		.map(Functions.getTemperatureFromString);
+                .filter(FilterFunctions.filterHighRainFromString)
+        		.map(MapFunctions.getTemperatureFromString);
         
         long countForString = resultRddForString.count();
         Double averageTemperatureForString = resultRddForString
-        		.reduce(Functions.getSum);
+        		.reduce(ReduceFunctions.getSum);
           		//.reduce((a, b) -> a + b);
         
         // for StringArray
         
         JavaRDD<Double> resultRddForStringArray = rdd
-        .map(Functions.parseLineToStringArray)
-        .filter(Functions.filterHighRainFromStringArray)
-		.map(Functions.getTemperatureFromStringArray);
+        .map(MapFunctions.parseLineToStringArray)
+        .filter(FilterFunctions.filterHighRainFromStringArray)
+		.map(MapFunctions.getTemperatureFromStringArray);
         
         long countForStringArray = resultRddForStringArray.count();
         Double averageTemperatureForStringArray = resultRddForStringArray
-        		.reduce(Functions.getSum);
+        		.reduce(ReduceFunctions.getSum);
           		//.reduce((a, b) -> a + b);
         
         // for DataSet
         
         JavaRDD<Double> resultRddForDataSet = rdd
-                .map(Functions.parseLineToDataSet)
-                .filter(Functions.filterHighRainFromDataSet)
-        		.map(Functions.getTemperatureFromDataSet);
+                .map(MapFunctions.parseLineToDataSet)
+                .filter(FilterFunctions.filterHighRainFromDataSet)
+        		.map(MapFunctions.getTemperatureFromDataSet);
         
         long countForDataSet = resultRddForDataSet.count();
         Double averageTemperatureForDataSet = resultRddForDataSet
-        		.reduce(Functions.getSum);
+        		.reduce(ReduceFunctions.getSum);
           		//.reduce((a, b) -> a + b);
         
         System.out.println("Average temperature of measurements with high rain for String: " + averageTemperatureForString/countForString);

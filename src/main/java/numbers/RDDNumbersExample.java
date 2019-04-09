@@ -5,7 +5,7 @@ import org.apache.spark.api.java.function.Function;
 
 import bindings.Functions;
 
-public class JavaRDDNumbersExample {
+public class RDDNumbersExample {
 
     public static void main(String[] args) {
 

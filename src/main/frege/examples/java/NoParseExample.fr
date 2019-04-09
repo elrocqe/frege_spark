@@ -20,10 +20,10 @@ basicSpark = do
 
   sc <- JavaSparkContext.new sparkConfig
   currentData <- JavaSparkContext.textFile sc Config.file
-  filteredData <- currentData.filter  Function.filterHighRainFromString
+  filteredData <- currentData.filter Function.filterHighRainFromString
   filteredDataFirstElement <- filteredData.first
   println $ filteredDataFirstElement
-  mappedData <- filteredData.map  Function.getTemperatureFromString
+  mappedData <- filteredData.map Function.getTemperatureFromString
   mappedDataFirstElement <- mappedData.first
   println $ mappedDataFirstElement
   averageTemperature <- mappedData.reduce  Function2.getSum

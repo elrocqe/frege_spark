@@ -1,6 +1,5 @@
-module examples.frege.numbers.NumbersExample where
+module examples.frege.numbers.DataSetNumbersFregeExample where
 
-import frege.java.Util
 import spark.bindings.SparkConf
 import spark.bindings.sql.SQLContext
 import spark.bindings.sql.DataFrameReader
@@ -8,6 +7,10 @@ import spark.bindings.sql.DataFrameWriter
 import spark.bindings.sql.DataSet
 import spark.bindings.sql.Row
 import spark.bindings.JavaSparkContext
+import spark.bindings.MapFunction
+import spark.bindings.ReduceFunction
+import spark.bindings.FilterFunction
+import spark.bindings.Encoders
 
 import frege.test.QuickCheck
 
@@ -30,23 +33,42 @@ computeInFrege = do
   --iterator:: MutableIO (Iterator String) <- (cp.iterator)
   --list :: [String] <- (iterator.toList)
   
-  filtered <- currentData.filter "_c0 = '5'"
+  --filteredData <- currentData.filter "_c0 = '5'"
+  filteredData <- currentData.filter FilterFunction.filterThreeOrFiveRow
+
   --print $ "filtered: "
   --println $ filtered.first
   
   count <- currentData.count
   print $ "count: "
   println $ count
-  filteredCount <- filtered.count
+  filteredCount <- filteredData.count
   print $ "filteredCount: "
-  println $ filteredCount
+  println filteredCount
+  
+  -- TODO  how to print Row
+  
+  --filteredFirstRow :: Row <- (filteredData.first).mkString
+  --print $ "filteredFirst: "
+ -- println $ filteredFirst
+  
+  mappedData <- filteredData.map MapFunction.addOneMFRow Encoder.stringEncoder
+  
+  --mappedFirst <- mappedData.first
+  --print $ "mappedFirst: "
+  --println $ mappedFirst
+  result :: String <- mappedData.reduce ReduceFunction.getStringSum
+  print "result: "
+  println result
+
+-- TODO how to convert DataSet<Row> to Integer or String
 
 --  dataAsString :: MutableIO (DataSet String) <- DataSet.as currentData "String"
   --firstRow :: String <- Row.toString currentData.first
   --first <- firstRow.getAs "String"
   --println $ first
 
-  dataFrameWriter :: (MutableIO DataFrameWriter) <- filtered.write
+  dataFrameWriter :: (MutableIO DataFrameWriter) <- mappedData.write
   dataFrameWriter <- dataFrameWriter.mode "overwrite"
   dataFrameWriter <- dataFrameWriter.format "csv"
   dataFrameWriter <- dataFrameWriter.save "target/out/"

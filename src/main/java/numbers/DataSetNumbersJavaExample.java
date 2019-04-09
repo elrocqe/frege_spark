@@ -12,6 +12,7 @@ import java.util.List;
  */
 import org.apache.spark.api.java.*;
 import org.apache.spark.api.java.function.Function;
+import org.apache.spark.api.java.function.MapFunction;
 import org.apache.spark.sql.DataFrameReader;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Encoders;
@@ -27,8 +28,11 @@ import org.apache.spark.sql.types.StructType;
 import org.junit.Assert;
 
 import bindings.Functions;
+import bindings.MapFunctions;
+import bindings.ReduceFunctions;
+import bindings.FilterFunctions;
 
-public class JavaDataSetNumbersExample {
+public class DataSetNumbersJavaExample {
 
     public static void main(String[] args) {
         String file = "data/first.csv"; 
@@ -51,13 +55,14 @@ public class JavaDataSetNumbersExample {
         // as integer
         
         Dataset<Integer> integerDataSet = dataSet.as(Encoders.INT());
-        
 	    	Dataset<Integer> filteredInteger = integerDataSet.filter(col("line").equalTo(5).or(col("line").equalTo(3)));
 	    long countInteger = filteredInteger.count();
 	    	System.out.println("FilteredCount: " + countInteger);
 	    System.out.println(filteredInteger.first());
 	    
-	    Integer result = filteredInteger.reduce((a,b) -> a + b);
+       	Dataset<Integer> mappedInteger = filteredInteger.map(MapFunctions.addOneMF, Encoders.INT());
+	    Integer result = mappedInteger.reduce(ReduceFunctions.getIntegerSum);
+//	    Integer result = mappedInteger.reduce((a,b) -> a + b);
 	    System.out.println("Result: " + result);
        // 	List<Integer> list = resultDataSet.collectAsList();
         	
