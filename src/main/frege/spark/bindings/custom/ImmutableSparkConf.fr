@@ -1,4 +1,4 @@
-module spark.bindings.ImmutableSparkConf where
+module spark.bindings.custom.ImmutableSparkConf where
 
 import spark.bindings.SparkConf
 

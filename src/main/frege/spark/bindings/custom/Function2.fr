@@ -1,4 +1,4 @@
-module spark.bindings.Function2 where
+module spark.bindings.custom.Function2 where
 
 data Function2 a b c = pure native "org.apache.spark.api.java.function.Function2" where
 

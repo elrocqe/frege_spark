@@ -1,0 +1,85 @@
+module examples.frege.numbers.NumbersRDDExampleFrege where
+
+import spark.bindings.SparkConf
+import spark.bindings.custom.Function
+import spark.bindings.custom.Function2
+import frege.java.Util
+import util.CSVUtil
+
+import spark.bindings.JavaSparkContext
+
+import frege.test.QuickCheck
+
+
+isThreeOrFive Nothing = false
+isThreeOrFive (Just x) = (x == 3.0 || x == 5.0)
+
+addOne :: (Maybe Double) -> Maybe Double
+addOne Nothing = Nothing
+addOne (Just x) = (Just (x+1))
+
+getSum :: (Maybe Double) -> (Maybe Double) -> (Maybe Double)
+getSum Nothing Nothing = Just 0
+getSum (Just x) Nothing = Just x
+getSum (Nothing) (Just y) = Just y
+getSum (Just x) (Just y) = Just (x + y)
+
+readString :: String -> Maybe Double
+readString x = readValue $ String.double x
+
+getValueOfMaybe (Just x) = x
+
+main :: IO ()
+main = computeInFrege
+
+parseTest = once $ map readString ["0", "1", "2", "3", "4", "5", "6", "7"] == [(Just 0.0), (Just 1.0), (Just 2.0), (Just 3.0), (Just 4.0), (Just 5.0), (Just 6.0), (Just 7.0)]
+filterTest = once $ filter (\x -> isThreeOrFive x) [(Just 0.0), (Just 1.0), (Just 2.0), (Just 3.0), (Just 4.0), (Just 5.0), (Just 6.0), (Just 7.0)] == [(Just 3.0), (Just 5.0)]
+mapTest = once $ map addOne [(Just 3.0), (Just 5.0)] == [(Just 4.0), (Just 6.0)]
+sumTest = once $ foldr getSum (Just 0.0) [(Just 4.0), (Just 6.0)] == (Just 10.0)
+
+computeInFrege :: IO ()
+computeInFrege = do
+  sparkConfig <- SparkConf.new ()
+  sparkConfig.setMaster "local"
+  sparkConfig.setAppName "Frege-Spark"
+  sc :: MutableIO JavaSparkContext <- JavaSparkContext.new sparkConfig
+    
+  currentData <- JavaSparkContext.textFile sc "data/numbers.csv"
+  
+  cp::Mutable t (List String) <- currentData.collect
+  elem::Maybe String <- cp.get 0
+  iterator:: MutableIO (Iterator String) <- (cp.iterator)
+  currentList :: [String] <- (iterator.toList)
+
+  parsedList = map readString currentList
+  filteredList = filter (\x -> isThreeOrFive x) parsedList
+  mappedList = map addOne filteredList
+  sum = foldr getSum (Just 0.0) mappedList
+
+  -- print insights and results
+
+  currentFirst = head currentList
+  
+  print $ "currentFirst: "
+  println $ currentFirst
+
+  parsedFirst = getValueOfMaybe $ head parsedList
+  
+  print $ "parsedFirst: "
+  println $ show $ parsedFirst
+  
+  filteredFirst = getValueOfMaybe $ head filteredList
+  
+  print $ "filteredFirst: "
+  println $ filteredFirst
+    
+  mappedFirst = getValueOfMaybe $ head mappedList
+  
+  print $ "mappedFirst: "
+  println $ mappedFirst
+  
+  print $ "sum: "
+  println $ getValueOfMaybe $ sum
+  
+
+  println "final"

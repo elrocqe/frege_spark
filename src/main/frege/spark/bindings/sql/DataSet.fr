@@ -2,11 +2,11 @@ module spark.bindings.sql.DataSet where
 
 import frege.java.Util
 import spark.bindings.JavaRDD
-import spark.bindings.Function
-import spark.bindings.FilterFunction
-import spark.bindings.MapFunction
-import spark.bindings.ReduceFunction
-import spark.bindings.Encoder
+import spark.bindings.custom.Function
+import spark.bindings.custom.FilterFunction
+import spark.bindings.custom.MapFunction
+import spark.bindings.custom.ReduceFunction
+import spark.bindings.custom.Encoders
 import spark.bindings.sql.DataFrameWriter
 
 

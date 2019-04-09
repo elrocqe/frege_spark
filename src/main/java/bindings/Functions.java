@@ -7,6 +7,9 @@ import org.apache.spark.api.java.function.MapFunction;
 import org.apache.spark.api.java.function.ReduceFunction;
 import org.apache.spark.sql.Row;
 
+import frege.run8.Func;
+import frege.run8.Func.U;
+import frege.runtime.Fun1;
 import frege.runtime.Lambda;
 import model.JavaDataSet;
 
@@ -28,10 +31,11 @@ public class Functions {
 		};
 	};
 	
-	public static Function<String, String> createBasicStringMapFunction(final frege.runtime.Lambda f){
+	public static Function<String, String> createBasicStringMapFunction(final Func.U<String, String> f){
 		return new Function<String, String>() {
 			public String call(String x) {
-				return f.apply(x).result().forced(); // TODO
+				U<String, String> a = f;
+				return "mytest";//.apply(x).result().forced(); // TODO
 			}
 		};
 	};

@@ -1,8 +1,8 @@
-module examples.frege.numbers.RDDNumbersExample where
+module examples.frege.numbers.NumbersRDDExample where
 
 import spark.bindings.SparkConf
-import spark.bindings.Function
-import spark.bindings.Function2
+import spark.bindings.custom.Function
+import spark.bindings.custom.Function2
 
 import spark.bindings.JavaSparkContext
 
@@ -19,12 +19,12 @@ computeInFrege = do
   sparkConfig.setAppName "Frege-Spark"
   sc :: MutableIO JavaSparkContext <- JavaSparkContext.new sparkConfig
     
-  currentData <- JavaSparkContext.textFile sc "data/first.csv"
-  filteredData <- currentData.filter  Function.filterThreeOrFive
-  parsedData <- filteredData.map  Function.convertToDouble
-  mappedData <- parsedData.map  Function.addOne
+  currentData <- JavaSparkContext.textFile sc "data/numbers.csv"
+  
+  parsedData <- currentData.map  Function.convertToDouble
+  filteredData <- parsedData.filter  Function.filterThreeOrFive
+  mappedData <- filteredData.map  Function.addOne
   sum <- mappedData.reduce Function2.getSum
-
 
   -- print insights and results
   

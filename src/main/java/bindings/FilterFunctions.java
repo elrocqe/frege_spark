@@ -23,7 +23,13 @@ public class FilterFunctions {
         }
 	};
 	
-	public static Function<String, Boolean> filterThreeOrFive = new Function<String, Boolean>() {
+	public static Function<Double, Boolean> filterThreeOrFive = new Function<Double, Boolean>() {
+        public Boolean call(Double input) {
+            return input == 3 || input == 5;
+        }
+	};
+	
+	public static Function<String, Boolean> filterThreeOrFiveOnString = new Function<String, Boolean>() {
         public Boolean call(String input) {
             return input.equals("3") || input.equals("5");
         }

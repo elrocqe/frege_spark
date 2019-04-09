@@ -1,4 +1,4 @@
-module spark.bindings.MapFunction where
+module spark.bindings.custom.MapFunction where
 
 import spark.bindings.sql.Row
 

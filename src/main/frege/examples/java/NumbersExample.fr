@@ -3,8 +3,8 @@ module examples.java.NumbersExample where
 import spark.bindings.JavaSparkContext
 import spark.bindings.SparkConf
 import spark.bindings.JavaRDD
-import spark.bindings.Function
-import spark.bindings.Function2
+import spark.bindings.custom.Function
+import spark.bindings.custom.Function2
 import frege.test.QuickCheck
 import spark.config.Config
 

@@ -1,4 +1,4 @@
-module spark.bindings.FilterFunction where
+module spark.bindings.custom.FilterFunction where
 
 import spark.bindings.sql.Row
 

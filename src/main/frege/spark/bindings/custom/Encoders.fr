@@ -1,4 +1,4 @@
-module spark.bindings.Encoders where
+module spark.bindings.custom.Encoders where
 
 data Encoder a = pure native "org.apache.spark.sql.Encoder" where
 

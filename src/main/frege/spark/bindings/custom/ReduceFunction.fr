@@ -1,4 +1,4 @@
-module spark.bindings.ReduceFunction where
+module spark.bindings.custom.ReduceFunction where
 
 data ReduceFunction a = pure native "org.apache.spark.api.java.function.ReduceFunction" where
 

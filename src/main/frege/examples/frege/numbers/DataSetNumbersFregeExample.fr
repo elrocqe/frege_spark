@@ -8,9 +8,9 @@ import spark.bindings.sql.DataSet
 import spark.bindings.sql.Row
 import spark.bindings.JavaSparkContext
 import spark.bindings.MapFunction
-import spark.bindings.ReduceFunction
-import spark.bindings.FilterFunction
-import spark.bindings.Encoders
+import spark.bindings.custom.ReduceFunction
+import spark.bindings.custom.FilterFunction
+import spark.bindings.custom.Encoders
 
 import frege.test.QuickCheck
 
@@ -29,15 +29,9 @@ computeInFrege = do
   df1 <- dataFrameReader.format "csv"
   df2 <- df1.option "inferSchema" "true"
   currentData :: MutableIO (DataSet Row) <- df1.load "data/first.csv"
-  --list <- currentData.collectAsList
-  --iterator:: MutableIO (Iterator String) <- (cp.iterator)
-  --list :: [String] <- (iterator.toList)
   
   --filteredData <- currentData.filter "_c0 = '5'"
   filteredData <- currentData.filter FilterFunction.filterThreeOrFiveRow
-
-  --print $ "filtered: "
-  --println $ filtered.first
   
   count <- currentData.count
   print $ "count: "
