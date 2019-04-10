@@ -29,8 +29,8 @@ public class App {
         
         long countForString = resultRddForString.count();
         Double averageTemperatureForString = resultRddForString
-        		.reduce(Functions.getSum);
-          		//.reduce((a, b) -> a + b);
+        		//.reduce(Functions.getSum);
+          		.reduce((a, b) -> a + b);
         
         // for StringArray
         
@@ -41,8 +41,8 @@ public class App {
         
         long countForStringArray = resultRddForStringArray.count();
         Double averageTemperatureForStringArray = resultRddForStringArray
-        		.reduce(Functions.getSum);
-          		//.reduce((a, b) -> a + b);
+        		//.reduce(Functions.getSum);
+          		.reduce((a, b) -> a + b);
         
         // for DataSet
         
@@ -53,8 +53,8 @@ public class App {
         
         long countForDataSet = resultRddForDataSet.count();
         Double averageTemperatureForDataSet = resultRddForDataSet
-        		.reduce(Functions.getSum);
-          		//.reduce((a, b) -> a + b);
+        		//.reduce(Functions.getSum);
+          		.reduce((a, b) -> a + b);
         
         System.out.println("Average temperature of measurements with high rain for String: " + averageTemperatureForString/countForString);
         System.out.println("Average temperature of measurements with high rain for StringArray: " + averageTemperatureForStringArray/countForStringArray);

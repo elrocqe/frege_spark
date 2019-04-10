@@ -5,14 +5,14 @@ import java.io.Serializable;
 
 import frege.run.Kind;
 import frege.run8.Lazy;
-import bindings.Func.U;
+import bindings.FuncI.U;
 
 
 public class MyFunc {
 	
 
 
-	public class U<T1, T2> implements Func.U<String, Boolean>, Serializable {
+	public class U<T1, T2> implements FuncI.U<String, Boolean>, Serializable {
 		private static final long serialVersionUID = -3157507877317885555L;
 		frege.run8.Func.U<String, Boolean> function;
 		public U(frege.run8.Func.U<String, Boolean> f) {

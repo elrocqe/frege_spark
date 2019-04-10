@@ -6,7 +6,7 @@ import java.io.Serializable;
 import org.apache.spark.api.java.function.Function;
 import org.apache.spark.api.java.function.Function2;
 
-import bindings.Func.U;
+import bindings.FuncI.U;
 import frege.run8.Func;
 //import frege.run8.Func.U;
 import frege.run8.Lazy;
@@ -87,18 +87,12 @@ public class Functions {
 	}
 	
 	public static <R> Function<String, Boolean> createTypedFunction(Func.U<String, Boolean> f){
-		MyU<String, Boolean> sf = new MyU<String, Boolean>(f);
+		MySerializableFuncWrapper sf = new MySerializableFuncWrapper(f);
 		return new Function<String, Boolean>() {
-			
-			/**
-			 * 
-			 */
-			private static final long serialVersionUID = 1L;
-
 			public Boolean call(String x) {
 				//System.out.println(sf.toString()); TODO any usage of f or sf in here leads to Exception in thread "main" org.apache.spark.SparkException: Task not serializable
 				//Boolean result = f.apply(Thunk.lazy(x)).call();
-				 return true;
+				 return sf.apply(Thunk.lazy(x)).call();
 
 				//Boolean result = getResult(f, x);
 				//return result.booleanValue(); // TODO
