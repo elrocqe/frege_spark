@@ -1,7 +1,7 @@
 module spark.bindings.JavaRDD where
 
-import spark.bindings.Function
-import spark.bindings.Function2
+import spark.bindings.custom.Function
+import spark.bindings.custom.Function2
 import frege.java.Util
 
 data JavaRDD a = native org.apache.spark.api.java.JavaRDD where
@@ -22,7 +22,5 @@ data JavaRDD a = native org.apache.spark.api.java.JavaRDD where
 
   native reduce           :: Mutable s (JavaRDD a) -> Function2 a a a -> ST s a
 
-
-data JavaRDDLike a = native org.apache.spark.api.java.JavaRDD where
-  
+  -- JavaRDDLike
   native collect          :: Mutable s (JavaRDD a) -> STMutable s (List a)

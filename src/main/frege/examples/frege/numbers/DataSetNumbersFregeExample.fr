@@ -1,0 +1,70 @@
+module examples.frege.numbers.DataSetNumbersFregeExample where
+
+import spark.bindings.SparkConf
+import spark.bindings.sql.SQLContext
+import spark.bindings.sql.DataFrameReader
+import spark.bindings.sql.DataFrameWriter
+import spark.bindings.sql.DataSet
+import spark.bindings.sql.Row
+import spark.bindings.JavaSparkContext
+import spark.bindings.MapFunction
+import spark.bindings.custom.ReduceFunction
+import spark.bindings.custom.FilterFunction
+import spark.bindings.custom.Encoders
+
+import frege.test.QuickCheck
+
+
+main :: IO ()
+main = computeInFrege
+
+computeInFrege :: IO ()
+computeInFrege = do
+  sparkConfig <- SparkConf.new ()
+  sparkConfig.setMaster "local"
+  sparkConfig.setAppName "Frege-Spark"
+  sc :: MutableIO JavaSparkContext <- JavaSparkContext.new sparkConfig
+  sqlContext :: MutableIO SQLContext <- SQLContext.new sc
+  dataFrameReader :: MutableIO (DataFrameReader) <- SQLContext.read sqlContext
+  df1 <- dataFrameReader.format "csv"
+  df2 <- df1.option "inferSchema" "true"
+  currentData :: MutableIO (DataSet Row) <- df1.load "data/first.csv"
+  
+  --filteredData <- currentData.filter "_c0 = '5'"
+  filteredData <- currentData.filter FilterFunction.filterThreeOrFiveRow
+  
+  count <- currentData.count
+  print $ "count: "
+  println $ count
+  filteredCount <- filteredData.count
+  print $ "filteredCount: "
+  println filteredCount
+  
+  -- TODO  how to print Row
+  
+  --filteredFirstRow :: Row <- (filteredData.first).mkString
+  --print $ "filteredFirst: "
+ -- println $ filteredFirst
+  
+  mappedData <- filteredData.map MapFunction.addOneMFRow Encoder.stringEncoder
+  
+  --mappedFirst <- mappedData.first
+  --print $ "mappedFirst: "
+  --println $ mappedFirst
+  result :: String <- mappedData.reduce ReduceFunction.getStringSum
+  print "result: "
+  println result
+
+-- TODO how to convert DataSet<Row> to Integer or String
+
+--  dataAsString :: MutableIO (DataSet String) <- DataSet.as currentData "String"
+  --firstRow :: String <- Row.toString currentData.first
+  --first <- firstRow.getAs "String"
+  --println $ first
+
+  dataFrameWriter :: (MutableIO DataFrameWriter) <- mappedData.write
+  dataFrameWriter <- dataFrameWriter.mode "overwrite"
+  dataFrameWriter <- dataFrameWriter.format "csv"
+  dataFrameWriter <- dataFrameWriter.save "target/out/"
+
+  println "final"

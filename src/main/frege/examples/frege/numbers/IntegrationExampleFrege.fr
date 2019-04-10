@@ -1,0 +1,60 @@
+module examples.frege.numbers.IntegrationExampleFrege where
+
+import spark.bindings.SparkConf
+import spark.bindings.custom.Function
+import spark.bindings.custom.Function2
+import frege.java.Util
+import util.CSVUtil
+
+import spark.bindings.JavaSparkContext
+
+import frege.test.QuickCheck
+
+appendTest :: String -> String
+appendTest x = x ++ "Test"
+
+main :: IO ()
+main = computeInFrege
+
+
+computeInFrege :: IO ()
+computeInFrege = do
+  sparkConfig <- SparkConf.new ()
+  sparkConfig.setMaster "local"
+  sparkConfig.setAppName "Frege-Spark"
+  sc :: MutableIO JavaSparkContext <- JavaSparkContext.new sparkConfig
+    
+  currentData <- JavaSparkContext.textFile sc "data/numbers.csv"
+  --appendedData <- currentData.map Function.appendTest
+  appendedData <- currentData.map $ Function.createBasicStringMapFunction appendTest
+
+
+  -- print insights and results
+
+  currentFirst <- currentData.first
+  
+  print $ "currentFirst: "
+  println $ currentFirst
+
+  
+  appendedFirst <- appendedData.first
+  
+  print $ "appendedFirst: "
+  println $ show $ appendedFirst
+  
+    {-
+  filteredFirst = getValueOfMaybe $ head filteredList
+  
+  print $ "filteredFirst: "
+  println $ filteredFirst
+    
+  mappedFirst = getValueOfMaybe $ head mappedList
+  
+  print $ "mappedFirst: "
+  println $ mappedFirst
+  
+  print $ "sum: "
+  println $ getValueOfMaybe $ sum
+  -}
+
+  println "final"

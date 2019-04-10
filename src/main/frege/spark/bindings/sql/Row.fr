@@ -1,0 +1,6 @@
+module spark.bindings.sql.Row where
+
+data Row = native org.apache.spark.sql.Row where
+  --native getAs :: Mutable s Row -> String -> ST s a 
+  native toString :: Mutable s Row -> ST s String
+  native mkString :: Mutable s Row -> ST s String
