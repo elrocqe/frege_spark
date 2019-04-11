@@ -1,0 +1,7 @@
+module spark.bindings.sql.DataFrameWriter where
+
+data DataFrameWriter = native org.apache.spark.sql.DataFrameWriter where
+  native format :: Mutable s DataFrameWriter -> String -> STMutable s DataFrameWriter
+  native mode :: Mutable s DataFrameWriter -> String -> STMutable s DataFrameWriter
+  native option :: Mutable s DataFrameWriter -> String -> String -> STMutable s DataFrameWriter
+  native save :: Mutable s DataFrameWriter -> String -> ST s ()

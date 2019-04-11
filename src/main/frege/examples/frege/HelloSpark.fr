@@ -10,8 +10,13 @@ logFile = "data/first.csv"
 sparkLocation :: String
 sparkLocation = "~/Documents/Code/spark-2.4.0-bin-hadoop2.7"
 
-main :: IO ()
-main = do
+
+main :: [String] -> IO ()
+main args = do
+  println "World"
+    
+main1 :: IO ()
+main1 = do
   sparkConfig <- SparkConf.new ()
   sparkConfig.setMaster "local"
   sparkConfig.setAppName "Frege-Spark"

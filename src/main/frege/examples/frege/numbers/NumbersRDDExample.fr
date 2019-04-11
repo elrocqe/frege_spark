@@ -1,0 +1,54 @@
+module examples.frege.numbers.NumbersRDDExample where
+
+import spark.bindings.SparkConf
+import spark.bindings.custom.Function
+import spark.bindings.custom.Function2
+
+import spark.bindings.JavaSparkContext
+
+import frege.test.QuickCheck
+
+
+main :: IO ()
+main = computeInFrege
+
+computeInFrege :: IO ()
+computeInFrege = do
+  sparkConfig <- SparkConf.new ()
+  sparkConfig.setMaster "local"
+  sparkConfig.setAppName "Frege-Spark"
+  sc :: MutableIO JavaSparkContext <- JavaSparkContext.new sparkConfig
+    
+  currentData <- JavaSparkContext.textFile sc "data/numbers.csv"
+  
+  parsedData <- currentData.map  Function.convertToDouble
+  filteredData <- parsedData.filter  Function.filterThreeOrFive
+  mappedData <- filteredData.map  Function.addOne
+  sum <- mappedData.reduce Function2.getSum
+
+  -- print insights and results
+  
+  currentFirst <- currentData.first
+  
+  print $ "currentFirst: "
+  println $ currentFirst
+  
+  filteredFirst <- filteredData.first
+  
+  print $ "filteredFirst: "
+  println $ filteredFirst
+  
+  parsedFirst <- parsedData.first
+  
+  print $ "parsedFirst: "
+  println $ show $ parsedFirst
+  
+  mappedFirst <- mappedData.first
+  
+  print $ "mappedFirst: "
+  println $ mappedFirst
+
+  print $ "sum: "
+  println $ sum
+
+  println "final"

@@ -3,8 +3,8 @@ module examples.java.NumbersExample where
 import spark.bindings.JavaSparkContext
 import spark.bindings.SparkConf
 import spark.bindings.JavaRDD
-import spark.bindings.Function
-import spark.bindings.Function2
+import spark.bindings.custom.Function
+import spark.bindings.custom.Function2
 import frege.test.QuickCheck
 import spark.config.Config
 
@@ -33,13 +33,13 @@ main = do
   println $ show $ Long.double all
   --filteredData <- currentData.filter  Function.filterFive
   filteredData <- currentData.filter f'
-  mappedData <- filteredData.map $ Function.createStringMapFunction "Test"
+  --mappedData <- filteredData.map $ Function.createStringMapFunction "Test"
   --function = Function.createBasicStringMapFunction (++ "Test")
   -- TODO pass function
   --mappedData <- filteredData.map function
 
-  currentMapped <- mappedData.first
-  println $ currentMapped
+--  currentMapped <- mappedData.first
+  --println $ currentMapped
 
   count <- filteredData.count
   println $ "Number of elements: "

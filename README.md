@@ -3,6 +3,7 @@
 Runnable modules can be found in src/main/frege
 
 
+
 common issues
 
 if you run into StackOverflowError -> increase HeapSize in Eclipse

@@ -1,0 +1,8 @@
+module spark.bindings.sql.SQLContext where
+
+import spark.bindings.JavaSparkContext
+import spark.bindings.sql.DataFrameReader
+
+data SQLContext = native org.apache.spark.sql.SQLContext where
+  native new :: Mutable s JavaSparkContext -> STMutable s SQLContext
+  native read :: Mutable s SQLContext -> STMutable s DataFrameReader
