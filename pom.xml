@@ -91,11 +91,6 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>com.theoryinpractise.frege</groupId>
-			<artifactId>frege</artifactId>
-			<version>3.21.586-g026e8d7</version>
-		</dependency>
-		<dependency>
 			<groupId>org.apache.spark</groupId>
 			<artifactId>spark-core_2.11</artifactId>
 			<version>2.4.0</version>

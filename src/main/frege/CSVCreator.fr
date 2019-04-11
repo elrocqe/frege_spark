@@ -1,0 +1,37 @@
+module CSVCreator where
+
+filePath :: String
+filePath = "data/numbers.csv"
+
+main :: IO ()
+main = do
+  writer <- setupOpen
+  writer.flush
+  writer <- setupAppend
+  numbers = [1000000,999999..1]
+  printNumbers (\x -> writer.println x) numbers 
+  --printNumbers (\x -> println x) numbers 
+  --printNumbersRec 0
+  writer.flush
+
+    
+setupOpen :: STMutable RealWorld PrintWriter
+setupOpen = openWriter filePath 
+
+setupAppend :: STMutable RealWorld PrintWriter
+setupAppend = appendWriter filePath
+
+printNumbers f [] = do
+				      println "no content"
+
+printNumbers f (x:[]) = f(Integer.toString x)
+printNumbers f (x:xs) = do 
+                       printNumbers f xs
+                       f(Integer.toString x)
+      
+{-
+printNumbersRec 100000 = println $ Integer.toString 100000        
+printNumbersRec x = do
+                      printNumbersRec (x+1) 
+                      println $ Integer.toString x
+-}

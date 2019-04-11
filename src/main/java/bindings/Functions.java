@@ -1,19 +1,60 @@
+package bindings;
 
 import org.apache.spark.api.java.function.Function;
 import org.apache.spark.api.java.function.Function2;
 
+import model.JavaDataSet;
+
 public class Functions {
+	
+
+	public static Function<String, Boolean> createStringFilterFunction(String input){
+		return new Function<String, Boolean>() {
+			public Boolean call(String x) {
+				return x.equals(input); // TODO
+			}
+		};
+	};
+	
+	public static Function<String, String> createStringMapFunction(String input){
+		return new Function<String, String>() {
+			public String call(String x) {
+				return input + x; // TODO
+			}
+		};
+	};
+	
+	public static Function<String, String> createBasicStringMapFunction(final Object f){
+		return new Function<String, String>() {
+			public String call(String x) {
+				return null; // f.apply(x).result().forced(); // TODO
+			}
+		};
+	};
+	
+	
+	public static <A, B> Function<A, B> createFunction(Object f){
+		return new Function<A, B>() {
+			public B call(A x) {
+				return null; // f.apply(x).result().forced(); // TODO
+			}
+		};
+	};
+	
+	public static Function<String, Boolean> createTypedFunction(Object f ){
+		return new Function<String, Boolean>() {
+			public Boolean call(String x) {
+				return null; //  f.apply(x).result().forced(); // TODO
+
+			};
+		};
+	};
+	
 	
 	//
 	// filters
 	//
-	
-	public static Function<String, Boolean> equalsOne = new Function<String, Boolean>() {
-		public Boolean call(String s) {
-			return s.equals("1");
-		}
-	};
-	
+
 	public static Function<String, Boolean> filterHighRainFromString = new Function<String, Boolean>() {
         public Boolean call(String input) {
             try {
@@ -24,6 +65,12 @@ public class Functions {
             } catch (Exception e) {
                 return false;
             }
+        }
+	};
+	
+	public static Function<String, Boolean> filterFive = new Function<String, Boolean>() {
+        public Boolean call(String input) {
+            return input.equals("5");
         }
 	};
 	
@@ -39,9 +86,9 @@ public class Functions {
         }
 	};
 	
-	public static Function<DataSet, Boolean> filterHighRainFromDataSet = new Function<DataSet, Boolean>() {
-        public Boolean call(DataSet dataSet) {
-        		return dataSet.rre150z0 > 5.0;
+	public static Function<JavaDataSet, Boolean> filterHighRainFromDataSet = new Function<JavaDataSet, Boolean>() {
+        public Boolean call(JavaDataSet dataSet) {
+        		return dataSet.getRre150z0() > 5.0;
         }
 	};
 	
@@ -60,9 +107,9 @@ public class Functions {
         	return s.split(",");
         }
     };
-    public static Function<String, DataSet> parseLineToDataSet = new Function<String, DataSet>() {
-        public DataSet call(String s) {
-        	return new DataSet(s);
+    public static Function<String, JavaDataSet> parseLineToDataSet = new Function<String, JavaDataSet>() {
+        public JavaDataSet call(String s) {
+        	return new JavaDataSet(s);
         }
     };
     
@@ -79,9 +126,9 @@ public class Functions {
         }
     };
     
-    public static Function<DataSet, Double> getTemperatureFromDataSet = new Function<DataSet, Double>() {
-        public Double call(DataSet dataSet) {
-        		return dataSet.tre200s0;
+    public static Function<JavaDataSet, Double> getTemperatureFromDataSet = new Function<JavaDataSet, Double>() {
+        public Double call(JavaDataSet dataSet) {
+        		return dataSet.getTre200s0();
         }
     };
     

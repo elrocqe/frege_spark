@@ -26,8 +26,10 @@ convertToStringArray :: [String] -> [[String]]
 convertToStringArray xs = map (CSVUtil.csvParseStringToStringArray) xs
 
 convertToDataSet :: [String] -> [DataSet]
-convertToDataSet xs = map (CSVUtil.convertLineToDataSet . CSVUtil.csvParseString) xs
+convertToDataSet xs = map convertSingleLineToDataSet xs
 
+convertSingleLineToDataSet :: String -> DataSet
+convertSingleLineToDataSet x = (CSVUtil.convertLineToDataSet . CSVUtil.csvParseString) x
  
 convertLineToDataSet :: [[Char]] -> DataSet
 convertLineToDataSet xs =

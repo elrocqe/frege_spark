@@ -1,23 +1,30 @@
-module JavaBindingsOnDataSetExample where
+module examples.java.JavaBindingsOnDataSetExample where
 
 import spark.bindings.JavaSparkContext
 import spark.bindings.SparkConf
 import spark.bindings.JavaRDD
-import util.CSVUtil
-import frege.java.Util
 import spark.bindings.Function
 import spark.bindings.Function2
 import frege.test.QuickCheck
-import model.DataSet
-import computations.FregeFunction
 import spark.config.Config
-
+import util.CSVUtil
+import model.DataSet
 
 main :: IO ()
 main = basicSpark
 
-add :: Double -> Double -> Double
-add a b = a + b
+--add :: Double -> Double -> Double
+--add a b = a + b
+
+--filterFunction = Function.fromLambda (dataSet::DataSet -> dataSet.)
+--parseFunction :: Function String [String]
+--parseFunction = Function.typedFromLambda myParseFunction 
+
+--myParseFunction :: String -> [String]
+--myParseFunction = csvParseStringToStringArray
+
+--f :: Function String Bool
+--f = Function.typedFromLambda (== "1")
 
 basicSpark :: IO ()
 basicSpark = do
@@ -25,14 +32,16 @@ basicSpark = do
   sparkConfig.setMaster "local"
   sparkConfig.setAppName "Frege-Spark"
   sc <- JavaSparkContext.new sparkConfig
-  
+    
+  currentData <- JavaSparkContext.textFile sc  Config.file
+  --parsedData <- currentData.filter f
+
+  --parsedData <- currentData.map parseFunction
+  --filteredData <- parsedData.filter  Function.filterHighRainFromDataSet
+  --mappedData <- filteredData.map  Function.getTemperatureFromDataSet
+  --averageTemperature <- mappedData.reduce  Function2.getSum
   
   {-
-  currentData <- JavaSparkContext.textFile sc  Config.file
-  parsedData <- currentData.map  Function.parseLineToJavaDataSet
-  filteredData <- parsedData.filter  Function.filterHighRainFromJavaDataSet
-  mappedData <- filteredData.map  Function.getTemperatureFromJavaDataSet
-  averageTemperature <- mappedData.reduce  Function2.getSum
 
 
 
@@ -54,5 +63,5 @@ basicSpark = do
   
   --count <- mappedData.count
   --putStrLn $ "Average temperature of measurements with high rain: " ++ (show (averageTemperature / Long.double count))  
-  putStrLn $ ""
+  putStrLn $ "1"
   
