@@ -4,18 +4,26 @@ import java.io.Serializable;
 
 import frege.run8.Func;
 import frege.run8.Lazy;
+import frege.run8.Thunk;
 
-class MySerializableFuncWrapper implements Func.U<String, Boolean>, Serializable {
+class MySerializableFuncWrapper implements Func.U<String, String>, Serializable {
 
-	Func.U<String, Boolean> currentF = null;
-	public MySerializableFuncWrapper(Func.U<String, Boolean> f) {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 618333914034283409L;
+
+	SerializableFunc.U<String, String> a = null;
+	public MySerializableFuncWrapper(Func.U<String, String> f) {
 		super();
-		this.currentF = f;
+		this.a = (x-> f.apply(x));//Thunk.lazy("lazy"));//).apply(x));
 	}
 
 	@Override
-	public Lazy<Boolean> apply(Lazy<String> arg0) {
+	public Lazy<String> apply(Lazy<String> arg0) {
 		// TODO Auto-generated method stub
-		return this.currentF.apply(arg0);
+		return this.a.apply(arg0);
 	}
+	
+
 }

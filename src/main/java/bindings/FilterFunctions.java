@@ -7,7 +7,6 @@ import org.apache.spark.api.java.function.MapFunction;
 import org.apache.spark.api.java.function.ReduceFunction;
 import org.apache.spark.sql.Row;
 
-import frege.runtime.Lambda;
 import model.JavaDataSet;
 
 public class FilterFunctions {

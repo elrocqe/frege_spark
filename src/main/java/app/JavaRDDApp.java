@@ -32,8 +32,11 @@ public class JavaRDDApp {
         
         long countForString = resultRddForString.count();
         Double averageTemperatureForString = resultRddForString
+        		.reduce(ReduceFunctions.getSum);
+
         
         JavaRDD<Double> resultRddForStringArray = rdd
+        .map(MapFunctions.parseLineToStringArray)
         .filter(FilterFunctions.filterHighRainFromStringArray)
 		.map(MapFunctions.getTemperatureFromStringArray);
         

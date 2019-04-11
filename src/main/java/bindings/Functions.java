@@ -12,14 +12,11 @@ import org.apache.spark.sql.Row;
 
 import bindings.FuncI.U;
 import frege.run8.Func;
+
 //import frege.run8.Func.U;
 import frege.run8.Lazy;
 import frege.run8.Thunk;
 import frege.runtime.Value;
-import frege.run8.Func;
-import frege.run8.Func.U;
-import frege.runtime.Fun1;
-import frege.runtime.Lambda;
 import model.JavaDataSet;
 import frege.runtime.*;
 public class Functions {
@@ -40,10 +37,26 @@ public class Functions {
 		};
 	};
 	
-	public static Function<String, String> createBasicStringMapFunction(final Object f){
+	public static Function<String, String> createBasicStringMapFunction(Func.U<String, String> f){
+	
+		MySerializableFuncWrapper sf = new MySerializableFuncWrapper(f);
 		return new Function<String, String>() {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 2432483420800545606L;
+
 			public String call(String x) {
-				return null; // f.apply(x).result().forced(); // TODO
+				//MySerializableFuncWrapper sf1 = sf;
+				//MySerializableLazyWrapper bs = new MySerializableLazyWrapper(sf.apply(Thunk.lazy(x)));
+				//System.out.println(sf.toString()); TODO any usage of f or sf in here leads to Exception in thread "main" org.apache.spark.SparkException: Task not serializable
+				 String result = Thunk.lazy(x).call();
+				 Lazy<String> result1 = sf.apply(Thunk.lazy(x));
+			    // String result2 = result1.call();
+				 return x + "appended";// //(String)bs.call();
+
+				//Boolean result = getResult(f, x);
+				//return result.booleanValue(); // TODO
 			}
 		};
 	};
@@ -94,12 +107,12 @@ public class Functions {
 	}
 	
 	public static <R> Function<String, Boolean> createTypedFunction(Func.U<String, Boolean> f){
-		MySerializableFuncWrapper sf = new MySerializableFuncWrapper(f);
+		//MySerializableFuncWrapper sf = new MySerializableFuncWrapper(f);
 		return new Function<String, Boolean>() {
 			public Boolean call(String x) {
 				//System.out.println(sf.toString()); TODO any usage of f or sf in here leads to Exception in thread "main" org.apache.spark.SparkException: Task not serializable
 				//Boolean result = f.apply(Thunk.lazy(x)).call();
-				 return sf.apply(Thunk.lazy(x)).call();
+				 return true; //sf.apply(Thunk.lazy(x)).call();
 
 				//Boolean result = getResult(f, x);
 				//return result.booleanValue(); // TODO
