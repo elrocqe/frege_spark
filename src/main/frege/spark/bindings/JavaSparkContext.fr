@@ -2,6 +2,7 @@ module spark.bindings.JavaSparkContext where
 
 import spark.bindings.JavaRDD
 import spark.bindings.SparkConf
+import frege.java.Util
 
 
 data JavaSparkContext  = native org.apache.spark.api.java.JavaSparkContext where
@@ -16,3 +17,5 @@ data JavaSparkContext  = native org.apache.spark.api.java.JavaSparkContext where
 
     native appName :: Mutable s JavaSparkContext -> ST s String
     native version :: Mutable s JavaSparkContext -> ST s String
+
+    native parallelize :: Mutable s JavaSparkContext -> Mutable s (List a) -> STMutable s (JavaRDD a)

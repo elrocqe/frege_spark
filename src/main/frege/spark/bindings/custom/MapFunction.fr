@@ -7,3 +7,4 @@ data MapFunction a b = pure native "org.apache.spark.api.java.function.MapFuncti
   -- reduce
   pure native addOneMF    "bindings.MapFunctions.addOneMF"    :: MapFunction Integer Integer
   pure native addOneMFRow "bindings.MapFunctions.addOneMFRow" :: MapFunction Row a
+  pure native addOneMFDouble "bindings.MapFunctions.addOneMFDouble" :: MapFunction Double Double

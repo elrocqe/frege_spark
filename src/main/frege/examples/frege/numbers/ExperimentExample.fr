@@ -1,0 +1,45 @@
+module examples.frege.numbers.ExperimentExample where
+
+import spark.bindings.JavaSparkContext
+import spark.bindings.SparkConf
+import spark.bindings.JavaRDD
+import spark.bindings.custom.Function
+import spark.bindings.custom.Function2
+import frege.java.Util
+
+import frege.test.QuickCheck
+
+--list :: List Double
+--list = Arrays.asList [1.0,2.0,3.0]
+
+emptyList = Collections.empty_list
+
+--list:: STMutable s (List Double)
+list = do 
+         mylist <- (Collections.empty_list)
+         mylist.add 1.0
+         mylist.add 2.0
+         mylist.add 3.0
+         return mylist
+
+boolToString :: Bool -> String
+boolToString True = "TRUE"
+boolToString false = "FALSE"
+
+main :: IO ()
+main = do
+  sparkConfig <- SparkConf.new ()
+  sparkConfig.setMaster "local"
+  sparkConfig.setAppName "Frege-Spark"
+  sc :: MutableIO JavaSparkContext <- JavaSparkContext.new sparkConfig
+  empty <- emptyList
+  emptyRdd <- sc.parallelize empty
+  emptyResult <- emptyRdd.isEmpty
+  putStrLn $ boolToString emptyResult
+  -- TODO create non-empty List Double
+  --currentList <- mylist
+  --rdd <- sc.parallelize $ mylist
+  --result <- rdd.isEmpty
+  --putStrLn $ boolToString result
+
+  println "final"

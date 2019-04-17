@@ -1,7 +1,0 @@
-module spark.bindings.custom.Encoders where
-
-data Encoder a = pure native "org.apache.spark.sql.Encoder" where
-
-  -- reduce
-  native stringEncoder "bindings.Encoders.stringEncoder"  :: Encoder String
-  native intEncoder "bindings.Encoders.intEncoder" :: Encoder Integer

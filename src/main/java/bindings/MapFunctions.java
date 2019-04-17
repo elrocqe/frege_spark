@@ -13,7 +13,7 @@ public class MapFunctions {
 	
 	
 	//
-	// mappers
+	// map (org.apache.spark.api.java.function.Function<A, B>)
 	//
 	
 	public static Function<String, String> appendTest = new Function<String, String>() {
@@ -63,6 +63,11 @@ public class MapFunctions {
 			return Double.parseDouble(s);
 		}
 	};
+	
+	
+	//
+    // map (org.apache.spark.api.java.function.MapFunction<A, B>)
+	//
     
 	public static MapFunction<Integer,Integer> addOneMF = new MapFunction<Integer,Integer>() {
 		 public Integer call(Integer a) {
@@ -73,6 +78,12 @@ public class MapFunctions {
 	public static MapFunction<Row,String> addOneMFRow = new MapFunction<Row,String>() {
 		 public String call(Row a) {
 	        	return Integer.toString(Integer.parseInt(a.mkString()) + 1);
+	      }
+	};
+	
+	public static MapFunction<Double, Double> addOneMFDouble = new MapFunction<Double,Double>() {
+		 public Double call(Double x) {
+	        	return x + 1;
 	      }
 	};
     

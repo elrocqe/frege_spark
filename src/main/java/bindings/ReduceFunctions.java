@@ -21,6 +21,12 @@ public class ReduceFunctions {
 	      }
 	};
 	
+	public static ReduceFunction<Double> getDoubleSum = new ReduceFunction<Double>() {
+		 public Double call(Double a, Double b) {
+	        	return a + b;
+	      }
+	};
+	
 	public static ReduceFunction<String> getStringSum = new ReduceFunction<String>() {
 		 public String call(String a, String b) {
 	        	return Integer.toString(Integer.valueOf(a) + Integer.valueOf(b));

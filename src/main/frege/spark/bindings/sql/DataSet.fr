@@ -8,14 +8,17 @@ import spark.bindings.custom.MapFunction
 import spark.bindings.custom.ReduceFunction
 import spark.bindings.custom.Encoders
 import spark.bindings.sql.DataFrameWriter
+import spark.bindings.sql.Row
 
 
 data DataSet a = native org.apache.spark.sql.Dataset where
 
   native count            :: Mutable s (DataSet a) -> ST s Long
   native first            :: Mutable s (DataSet a) -> ST s a
-  --native as {b}               :: Mutable s (DataSet a) -> String -> STMutable s (DataSet b)
+  native as {b}           :: Mutable s (DataSet a) -> Encoder b -> STMutable s (DataSet b)
  
+  native show             :: MutableIO (DataSet a) -> IO ()
+
   -- TODO creates module error
   native filter           :: Mutable s (DataSet a) -> (FilterFunction a) -> STMutable s (DataSet a)
 
@@ -34,3 +37,6 @@ data DataSet a = native org.apache.spark.sql.Dataset where
  -- TODO returns void / is IO
  -- native show             :: MutableIO s (DataSet a) -> IO ()
   native write            :: Mutable s (DataSet a) -> STMutable s (DataFrameWriter)
+  
+  
+  --agg, select, sum, avg, map, filter, or groupBy
