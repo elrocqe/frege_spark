@@ -9,22 +9,23 @@ import frege.java.Util
 
 import frege.test.QuickCheck
 
---list :: List Double
---list = Arrays.asList [1.0,2.0,3.0]
-
 emptyList = Collections.empty_list
 
---list:: STMutable s (List Double)
-list = do 
-         mylist <- (Collections.empty_list)
-         mylist.add 1.0
-         mylist.add 2.0
-         mylist.add 3.0
-         return mylist
+list :: STMutable a (ArrayList Double)
+list = do 	
+         doubleList <- ArrayList.new ()
+         doubleList.add 1.0
+         doubleList.add 2.0
+         doubleList.add 1.0
+         doubleList.add 3.0
+         doubleList.add 4.0
+         return doubleList
 
 boolToString :: Bool -> String
 boolToString True = "TRUE"
 boolToString false = "FALSE"
+
+weights = undefined
 
 main :: IO ()
 main = do
@@ -36,10 +37,20 @@ main = do
   emptyRdd <- sc.parallelize empty
   emptyResult <- emptyRdd.isEmpty
   putStrLn $ boolToString emptyResult
-  -- TODO create non-empty List Double
-  --currentList <- mylist
-  --rdd <- sc.parallelize $ mylist
-  --result <- rdd.isEmpty
-  --putStrLn $ boolToString result
+  currentList <- list  
+  rdd <- sc.parallelize $ currentList
+  initialCount <- rdd.count
+  putStrLn $ "initialCount: " ++ show (Long.double initialCount)
+  distinctRdd <- rdd.distinct
+  distinctCount <- distinctRdd.count
+  --randomRdds :: ArrayOf RealWorld (JavaRDD Double) <- distinctRdd.randomSplit weights
+  putStrLn $ "distinctCount: " ++ show (Long.double distinctCount)
+  result <- rdd.isEmpty
+  putStrLn $ boolToString result
+  --firstRdd :: JavaRDD Double <- randomRdds.getElemAt 0
+  --curentFirst <- ().first
+  
+  --print $ "currentFirst: "
+  --println $ currentFirst
 
   println "final"

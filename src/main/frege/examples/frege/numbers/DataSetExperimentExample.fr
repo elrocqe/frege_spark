@@ -1,0 +1,106 @@
+module examples.frege.numbers.DataSetExperimentExample where
+
+import spark.bindings.JavaSparkContext
+import spark.bindings.SparkConf
+import spark.bindings.JavaRDD
+import spark.bindings.custom.Function
+import spark.bindings.custom.Function2
+import frege.java.Util
+import spark.bindings.sql.SQLContext
+import spark.bindings.sql.DataFrameReader
+import spark.bindings.sql.DataSet
+import spark.bindings.sql.Row
+import spark.bindings.custom.Encoder
+import model.Person
+import model.Department
+import examples.frege.numbers.FregeHelpers
+
+import frege.test.QuickCheck
+
+boolToString :: Bool -> String
+boolToString True = "TRUE"
+boolToString false = "FALSE"
+
+main :: IO ()
+main = do
+  sparkConfig <- SparkConf.new ()
+  sparkConfig.setMaster "local"
+  sparkConfig.setAppName "Frege-Spark"
+  sc :: MutableIO JavaSparkContext <- JavaSparkContext.new sparkConfig
+  sqlContext :: MutableIO SQLContext <- SQLContext.new sc
+  dataFrameReader :: MutableIO (DataFrameReader) <- SQLContext.read sqlContext
+  dataFrameReader.format "csv"
+  dataFrameReader.option "inferSchema" "true"
+  --currentData :: MutableIO (DataSet Row) <- dataFrameReader.load "data/first.csv"
+  peopleData :: MutableIO (DataSet Row) <- dataFrameReader.load "data/people.csv"
+  departmentData :: MutableIO (DataSet Row) <- dataFrameReader.load "data/department.csv"
+  
+  peopleCount <- peopleData.count
+  print $ "people: "
+  println $ peopleCount
+  
+  departmentCount <- departmentData.count
+  print $ "departments: "
+  println $ departmentCount
+  
+  parsedPersonData :: MutableIO (DataSet Person) <- peopleData.as Encoder.personEncoder
+  -- parsedDepartmentData :: MutableIO (DataSet Department) <- departmentData.as Encoder.departmentEncoder
+  -- parsedData :: MutableIO (DataSet Double) <- peopleData.as Encoder.doubleEncoder -- this does compile though
+  -- CHECK
+  -- causes
+  --	 The parameterized method <Phantom.RealWorld, Row, Person.TPerson>as(Dataset<Row>, 
+  -- Encoder<Person.TPerson>) of type DataSet.TDataSet is not applicable for the arguments (Dataset<Row>,
+  -- Encoder<Person>)
+  -- -> what does the T stand for in TPerson
+  -- -> due to the incorrect mapping to the corresponding java type
+
+  filteredData <- parsedPersonData.filter "_c2 > 30"
+  --joinedData <- filteredData.join departmentData  (people("deptId") === department("id"))
+  --groupedData <-  filteredData.groupBy"gender"
+  --aggregated <-  filteredData.agg(avg(people("age")))
+
+  --filteredData <- parsedPersonData.filter("age > 30") -- make it named by using toDF
+  filteredCount <- filteredData.count
+  print $ "filteredCount: "
+  println $ filteredCount
+
+  --peopleId,name,age,gender,yearsAtCompany,department
+  --departmentId, deptName  
+  
+   --  people.filter("age > 30")
+   --  .join(department, people("deptId") === department("id"))
+   --  .groupBy(department("name"), people("gender"))
+   --  .agg(avg(people("salary")), max(people("age")))
+   
+   
+  {-
+  --filteredData <- currentData.filter "_c0 = '5'"
+--  filteredData <- currentData.filter FilterFunction.filterThreeOrFiveRow
+  
+  count <- currentData.count
+  print $ "count: "
+  println $ count
+  
+  
+  
+  filteredCount <- filteredData.count
+  print $ "filteredCount: "
+  println filteredCount
+  
+  --mappedStringData :: MutableIO (DataSet String) <- filteredData.as(Encoder.stringEncoder)
+  --mappedIntegerData :: MutableIO (DataSet Integer) <- filteredData.as(Encoder.intEncoder)
+  parsedDoubleData :: MutableIO (DataSet Double) <- filteredData.as(Encoder.doubleEncoder)
+  mappedDoubleData :: MutableIO (DataSet Double) <- parsedDoubleData.map MapFunction.addOneMFDouble Encoder.doubleEncoder
+  DataSet.show mappedDoubleData -- TODO why does this not work: mappedDoubleData.show?
+  --result :: String <- mappedStringData.reduce ReduceFunction.getStringSum
+  --result :: Double <- mappedData.reduce ReduceFunction.getIntegerSum
+  result :: Double <- mappedDoubleData.reduce ReduceFunction.getDoubleSum
+  print "result: "
+  println result
+
+  dataFrameWriter :: (MutableIO DataFrameWriter) <- mappedDoubleData.write
+  dataFrameWriter <- dataFrameWriter.mode "overwrite"
+  dataFrameWriter <- dataFrameWriter.format "csv"
+  dataFrameWriter <- dataFrameWriter.save "target/out/"
+-}
+  println "final5"

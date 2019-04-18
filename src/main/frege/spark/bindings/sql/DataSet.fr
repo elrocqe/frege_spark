@@ -6,7 +6,7 @@ import spark.bindings.custom.Function
 import spark.bindings.custom.FilterFunction
 import spark.bindings.custom.MapFunction
 import spark.bindings.custom.ReduceFunction
-import spark.bindings.custom.Encoders
+import spark.bindings.custom.Encoder
 import spark.bindings.sql.DataFrameWriter
 import spark.bindings.sql.Row
 
@@ -19,24 +19,22 @@ data DataSet a = native org.apache.spark.sql.Dataset where
  
   native show             :: MutableIO (DataSet a) -> IO ()
 
-  -- TODO creates module error
   native filter           :: Mutable s (DataSet a) -> (FilterFunction a) -> STMutable s (DataSet a)
-
--- TODO how to overload
---  native filter           :: Mutable s (DataSet a) -> String -> STMutable s (DataSet a)
+                          | Mutable s (DataSet a) -> String -> STMutable s (DataSet a)
+                          
   native map              :: Mutable s (DataSet a) -> (MapFunction a b) -> (Encoder b) -> STMutable s (DataSet b)
-  --<U> Dataset<U>	Experimentalmap(MapFunction<T,U> func, Encoder<U> encoder)
   native reduce           :: Mutable s (DataSet a) -> (ReduceFunction a) -> ST s a
 
---T	Experimentalreduce(ReduceFunction<T> func)
--- TODO how to map String...
-  --native toDF           :: Mutable s (DataSet a) -> String... -> STMutable s (DataSet a)
+-- TODO CHECK how to map String...
+  --native toDF             :: Mutable s (DataSet a) ->  (ArrayOf s String) -> STMutable s (DataSet a)
 
   native collectAsList    :: Mutable s (DataSet a) -> STMutable s (List a) 
   native toJavaRDD        :: Mutable s (DataSet a) -> STMutable s (JavaRDD a)
- -- TODO returns void / is IO
- -- native show             :: MutableIO s (DataSet a) -> IO ()
   native write            :: Mutable s (DataSet a) -> STMutable s (DataFrameWriter)
   
-  
-  --agg, select, sum, avg, map, filter, or groupBy
+  --native agg              :: Mutable s (DataSet a) -> (MapFunction a b) -> (Encoder b) -> STMutable s (DataSet b)
+  --native select           :: Mutable s (DataSet a) -> (MapFunction a b) -> (Encoder b) -> STMutable s (DataSet b)
+  --native sum              :: Mutable s (DataSet a) -> (MapFunction a b) -> (Encoder b) -> STMutable s (DataSet b)
+  --native avg              :: Mutable s (DataSet a) -> (MapFunction a b) -> (Encoder b) -> STMutable s (DataSet b)
+  --native groupBy          :: Mutable s (DataSet a) -> (MapFunction a b) -> (Encoder b) -> STMutable s (DataSet b)
+  --native join               :: Mutable s (DataSet a) -> Mutable s (DataSet a) -> STMutable s (DataSet a)
