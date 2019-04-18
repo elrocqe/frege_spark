@@ -1,0 +1,17 @@
+module model.Person where
+
+import frege.test.QuickCheck
+
+data Person = native model.Person
+
+{-
+data Person = Person
+  { id :: Integer
+  , name    :: String
+  , age :: Integer
+  , gender :: String
+  , yearsAtCompany :: Integer
+  , deptId :: Integer
+
+}
+-}
