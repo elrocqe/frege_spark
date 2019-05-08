@@ -1,0 +1,16 @@
+module numbers.BasicFregeFunction where
+
+import frege.test.QuickCheck
+
+
+myNumber :: Double
+myNumber = 4.0
+
+--
+-- filters
+--
+
+filterThreeOrFive :: Double -> Bool
+filterThreeOrFive 3.0 = true
+filterThreeOrFive 5.0 = true
+filterThreeOrFive _ = false

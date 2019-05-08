@@ -1,5 +1,7 @@
 package bindings;
 
+import java.math.BigInteger;
+
 import org.apache.spark.api.java.function.Function2;
 import org.apache.spark.api.java.function.ReduceFunction;
 
@@ -15,9 +17,15 @@ public class ReduceFunctions {
 	        	return a + b;
 	      }
 	};
-	public static ReduceFunction<Integer> getIntegerSum = new ReduceFunction<Integer>() {
-		 public Integer call(Integer a, Integer b) {
-	        	return a + b;
+	
+	public static Function2<BigInteger, BigInteger, BigInteger> getSumOnInteger = new Function2<BigInteger, BigInteger, BigInteger>() {
+		 public BigInteger call(BigInteger a, BigInteger b) {
+	        	return a.add(b);
+	      }
+	};
+	public static ReduceFunction<BigInteger> getIntegerSum = new ReduceFunction<BigInteger>() {
+		 public BigInteger call(BigInteger a, BigInteger b) {
+	        	return a.add(b);
 	      }
 	};
 	

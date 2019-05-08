@@ -1,4 +1,4 @@
-module spark.bindings.custom.Function where
+module spark.bindings.custom.typed.TypedFunction where
 
 import model.DataSet
 
@@ -14,23 +14,32 @@ data Function a b = pure native "org.apache.spark.api.java.function.Function" wh
   
     -- filters
   pure native filterFive                    "bindings.FilterFunctions.filterFive"                    :: Function String Bool 
-  pure native filterThreeOrFive             "bindings.FilterFunctions.filterThreeOrFive"             :: Function Double Bool 
+  pure native filterThreeOrFiveOnDouble     "bindings.FilterFunctions.filterThreeOrFiveOnDouble"     :: Function Double Bool 
+  pure native filterThreeOrFiveOnInteger    "bindings.FilterFunctions.filterThreeOrFiveOnInteger"    :: Function Integer Bool 
   pure native filterThreeOrFiveOnString     "bindings.FilterFunctions.filterThreeOrFiveOnString"     :: Function String Bool 
 
 
   -- mappers
+  pure native convertToInteger              "bindings.MapFunctions.convertToInteger"              :: Function String Integer
   pure native convertToDouble               "bindings.MapFunctions.convertToDouble"               :: Function String Double
   pure native addOne                        "bindings.MapFunctions.addOne"                        :: Function Double Double
+  pure native addOneOnInteger               "bindings.MapFunctions.addOneOnInteger"               :: Function Integer Integer
   pure native addOneOnString                "bindings.MapFunctions.addOneOnString"                :: Function String String
   pure native appendTest                    "bindings.MapFunctions.appendTest"                    :: Function String String
 
   -- integration
   
-  pure native createFunction                "bindings.Functions.createFunction"  {a,b}         :: (a -> b) -> Function a b
-  pure native createTypedFunction           "bindings.Functions.createTypedFunction"           :: (String -> Bool) -> Function String Bool
-  pure native createStringFilterFunction    "bindings.Functions.createStringFilterFunction"    :: String -> Function String Bool
-  pure native createStringMapFunction       "bindings.Functions.createStringMapFunction"       :: String -> Function String String
-  pure native createBasicStringMapFunction  "bindings.Functions.createBasicStringMapFunction"  :: (String -> String) -> Function String String
+  pure native createTypedFunction           "bindings.Functions.createTypedFunction"              :: (String -> Bool) -> Function String Bool
+  pure native createStringTypedFunction     "bindings.Functions.createStringTypedFunction"        :: (String -> String) -> Function String String
+  pure native createDoubleTypedFilterFunction     "bindings.Functions.createDoubleTypedFilterFunction"        :: (Double -> Bool) -> Function Double Bool
+  pure native createDoubleFunction          "bindings.Functions.createDoubleFunction"             :: (Double -> Double) -> Function Double Double
+  --pure native createStringFilterFunction    "bindings.Functions.createStringFilterFunction"    :: String -> Function String Bool
+  --pure native createStringMapFunction       "bindings.Functions.createStringMapFunction"       :: String -> Function String String
+  --pure native createBasicStringMapFunction  "bindings.Functions.createBasicStringMapFunction"  :: (String -> String) -> Function String String
+  pure native createStringMapFunction       "bindings.StringFunctions.createStringMapFunction"     :: String -> String -> Function String String
+  pure native createStringFilterFunction    "bindings.StringFunctions.createStringFilterFunction"  :: String -> String -> Function String Bool
+  pure native createDoubleMapFunction       "bindings.DoubleFunctions.createDoubleMapFunction"     :: String -> String -> Function Double Double
+  pure native createDoubleFilterFunction    "bindings.DoubleFunctions.createDoubleFilterFunction"  :: String -> String -> Function Double Bool
 
   -- weatherdata
   

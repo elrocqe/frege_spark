@@ -1,5 +1,7 @@
 package bindings;
 
+import java.math.BigInteger;
+
 import org.apache.spark.api.java.function.FilterFunction;
 import org.apache.spark.api.java.function.Function;
 import org.apache.spark.api.java.function.Function2;
@@ -58,9 +60,21 @@ public class MapFunctions {
 		}
 	};
 	
+	public static Function<BigInteger, BigInteger> addOneOnInteger = new Function<BigInteger, BigInteger>() {
+		public BigInteger call(BigInteger s) {
+			return s.add(new BigInteger("1"));
+		}
+	};
+	
 	public static Function<String, Double> convertToDouble = new Function<String, Double>() {
 		public Double call(String s) {
 			return Double.parseDouble(s);
+		}
+	};
+	
+	public static Function<String, BigInteger> convertToInteger = new Function<String, BigInteger>() {
+		public BigInteger call(String s) {
+			return new BigInteger(s);
 		}
 	};
 	

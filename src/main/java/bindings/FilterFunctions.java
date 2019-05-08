@@ -1,5 +1,7 @@
 package bindings;
 
+import java.math.BigInteger;
+
 import org.apache.spark.api.java.function.FilterFunction;
 import org.apache.spark.api.java.function.Function;
 import org.apache.spark.api.java.function.Function2;
@@ -22,9 +24,15 @@ public class FilterFunctions {
         }
 	};
 	
-	public static Function<Double, Boolean> filterThreeOrFive = new Function<Double, Boolean>() {
+	public static Function<Double, Boolean> filterThreeOrFiveOnDouble = new Function<Double, Boolean>() {
         public Boolean call(Double input) {
             return input == 3 || input == 5;
+        }
+	};
+	
+	public static Function<BigInteger, Boolean> filterThreeOrFiveOnInteger = new Function<BigInteger, Boolean>() {
+        public Boolean call(BigInteger input) {
+            return input.equals(new BigInteger("3")) || input.equals(new BigInteger("5"));
         }
 	};
 	

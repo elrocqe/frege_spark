@@ -4,5 +4,5 @@ data ReduceFunction a = pure native "org.apache.spark.api.java.function.ReduceFu
 
   -- reduce
   --pure native getIntegerSum "bindings.ReduceFunctions.getIntegerSum" :: ReduceFunction BigInteger
-  pure native getDoubleSum "bindings.ReduceFunctions.getDoubleSum" :: ReduceFunction Double
+  pure native getDoubleSum "bindings.ReduceFunctions.getDoubleSum"   :: ReduceFunction Double
   pure native getStringSum  "bindings.ReduceFunctions.getStringSum"  :: ReduceFunction String

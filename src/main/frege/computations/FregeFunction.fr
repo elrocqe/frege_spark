@@ -3,11 +3,18 @@ module computations.FregeFunction where
 import model.DataSet
 import frege.test.QuickCheck
 
+
+myNumber :: Double
+myNumber = 4.0
+
 --
 -- filters
 --
 
-
+filterThreeOrFive :: Double -> Bool
+filterThreeOrFive 4.0 = true
+--filterThreeOrFive 5.0 = true
+filterThreeOrFive _ = false
 
 filterHighRain :: DataSet -> Bool
 filterHighRain ds = case (ds.rre150z0) of (Nothing) -> false
