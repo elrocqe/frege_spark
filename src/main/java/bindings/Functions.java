@@ -13,6 +13,9 @@ import java.io.Serializable;
 import java.lang.invoke.SerializedLambda;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.util.UUID;
 
 import org.apache.spark.api.java.function.FilterFunction;
 import org.apache.spark.api.java.function.Function;
@@ -33,6 +36,7 @@ import frege.run8.Lazy;
 import frege.run8.Thunk;
 import frege.runtime.Value;
 import model.JavaDataSet;
+import scala.annotation.StaticAnnotation;
 import frege.runtime.*;
 public class Functions {
 	
@@ -334,19 +338,68 @@ public class Functions {
 		}
 	}
 	
-	public static class FuncUWrapper <A, B> implements Serializable  {
+	/*public class FuncUWrapper <A, B> implements Serializable  {
+	    frege.run8.Func.U function;
+	    FuncUWrapper(frege.run8.Func.U<A, B> f) {
+			function = f;
+			// TODO Auto-generated constructor stub
+		}
+	}*/
+	public static class MapFuncUWrapper <A, B> implements Serializable  {
 	    static frege.run8.Func.U function;
-		public FuncUWrapper(frege.run8.Func.U<A, B> f) {
+		public MapFuncUWrapper(frege.run8.Func.U<A, B> f) {
 			function = f;
 			// TODO Auto-generated constructor stub
 		}
 	}
 	
-	public static <A, B> Function<A, B> createGenericFunction(Func.U<A, B> f){
+		
+		public static <A, B> Function<A, B> createGenericFilterFunction(final Func.U<A, B> f){
+			UUID i = FuncUWrapper.add(f);
+			//FuncUWrapper funcUWrapper = FuncUWrapper.add(f, current);
+			//Function newF = funcUWrapper.getFunction();
+			
+			Function<A, B> newF = new Function<A, B>() {
+				public B call(A x) {
+					//System.out.println(sf.toString()); TODO any usage of f or sf in here leads to Exception in thread "main" org.apache.spark.SparkException: Task not serializable
+					
+					return (B) FuncUWrapper.getFunction(i).apply(Thunk.lazy(x)).call();
+					//return clazz.cast(funcUWrapper.function.apply(Thunk.lazy(x)).call());
+					 //return myEU.getFunction().apply(Thunk.lazy(x)).call();
+
+					//Boolean result = getResult(f, x);
+					//return result.booleanValue(); // TODO
+				}
+			};
+			return newF;
+		};
+	public static <A, B> Function<A, B> createGenericFilterFunction(Func.U<A, B> f, Class<B> clazz){
 		//final Func.U<String, String> sf =  (Func.U<String, String> & Serializable) f;
 		//MyEU myEU = new MyEU(f);
-		FuncUWrapper funcUWrapper = new FuncUWrapper(f);
-		System.out.println("createGenericFunction");
+		FuncUWrapper funcUWrapper = new FuncUWrapper();
+		System.out.println("createGenericFilterFunction");
+		//MySerializableFuncWrapper sf = new MySerializableFuncWrapper(f);
+		Function<A, B> newF = new Function<A, B>() {
+			public B call(A x) {
+				//System.out.println(sf.toString()); TODO any usage of f or sf in here leads to Exception in thread "main" org.apache.spark.SparkException: Task not serializable
+				return null; //clazz.cast(funcUWrapper.function.apply(Thunk.lazy(x)).call());
+				//return clazz.cast(funcUWrapper.function.apply(Thunk.lazy(x)).call());
+				 //return myEU.getFunction().apply(Thunk.lazy(x)).call();
+
+				//Boolean result = getResult(f, x);
+				//return result.booleanValue(); // TODO
+			}
+		};
+		//Function<String, String> newSF = (Function<String, String> & Serializable) newF;
+		return newF;
+	};
+	
+
+	public static <A, B> Function<A, B> createGenericMapFunction(Func.U<A, B> f){
+		//final Func.U<String, String> sf =  (Func.U<String, String> & Serializable) f;
+		//MyEU myEU = new MyEU(f);
+		MapFuncUWrapper funcUWrapper = new MapFuncUWrapper(f);
+		System.out.println("createGenericMapFunction");
 		//MySerializableFuncWrapper sf = new MySerializableFuncWrapper(f);
 		Function<A, B> newF = new Function<A, B>() {
 			public B call(A x) {

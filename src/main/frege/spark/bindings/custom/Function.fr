@@ -1,4 +1,5 @@
-module spark.bindings.custom.typed.TypedFunction where
+module spark.bindings.custom.Function where
+
 
 import model.DataSet
 
@@ -8,7 +9,12 @@ import model.DataSet
 -- TODO difference between java and frege object(which gets used?)
 data JavaDataSet = pure native "model.JavaDataSet"
 
+
 data Function a b = pure native "org.apache.spark.api.java.function.Function" where
+  
+  pure native createFunction                "bindings.Functions.createFunction"  {a,b}            :: (a -> b) -> Function a b
+  pure native create   "bindings.Functions.create" {a,b}       :: (a -> b) -> Function a b
+
 
   -- numbers
   

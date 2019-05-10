@@ -1,9 +1,14 @@
 package bindings;
 
 import java.math.BigInteger;
+import java.util.UUID;
 
+import org.apache.spark.api.java.function.Function;
 import org.apache.spark.api.java.function.Function2;
 import org.apache.spark.api.java.function.ReduceFunction;
+
+import frege.run8.Func;
+import frege.run8.Thunk;
 
 public class ReduceFunctions {
 	
@@ -39,5 +44,16 @@ public class ReduceFunctions {
 		 public String call(String a, String b) {
 	        	return Integer.toString(Integer.valueOf(a) + Integer.valueOf(b));
 	      }
+	};
+	
+	public static <A, B, C> Function2<A, B, C> create(Func.U<A, Func.U<B, C>> f){
+		UUID i = FuncUWrapper.add(f);
+		return new Function2<A, B, C>() {
+			@Override
+			public C call(A v1, B v2) throws Exception {
+				Func.U<A, Func.U <B, C>> f = FuncUWrapper.getFunction(i);
+				return (C) f.apply(Thunk.lazy(v1)).call().apply(Thunk.lazy(v2)).call();
+			}
+		};
 	};
 }
