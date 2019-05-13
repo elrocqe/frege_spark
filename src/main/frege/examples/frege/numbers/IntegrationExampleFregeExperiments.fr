@@ -60,10 +60,7 @@ computeInFrege = do
   --filteredData <- parsedData.filter $ Function.createDoubleFilterFunction "computations.BasicFregeFunction" "filterThreeOrFive"
   --filteredData <- parsedData.filter $ Function.createTypedFunction filterFour  
 --  filteredData <- parsedData.filter $ funcWrapper
-  filteredData <- parsedData.filter $ Function.createGenericFilterFunction filterThreeOrFive
-  mappedData <- filteredData.map $ Function.createGenericFilterFunction addOne  
-  mappedData2 <- mappedData.map $ Function.createGenericFilterFunction times10  
-  mappedData3 <- mappedData2.map $ Function.createGenericFilterFunction times2  
+
   --mappedData <- filteredData.map $ mapFuncWrapper
 
 --  mappedData <- filteredData.map $ Function.createGenericFilterFunction addOne
@@ -71,12 +68,12 @@ computeInFrege = do
   --replacedData <- appendedData.map $ Function.createDoubleFunction replaceWithZero
 
   --sum <- parsedData.reduce $ Function2.createDoubleReduceFunction "computations.BasicFregeFunction" "getSum"
-  sum <- mappedData3.reduce $ Function2.createGenericReduceFunction mySum
+  --sum <- mappedData3.reduce $ Function2.createGenericReduceFunction mySum
   --sum <- mappedData2.reduce $ Function2.getSum
 
 
   -- print insights and results
-
+{-
   currentFirst <- currentData.first
   
   print $ "currentFirst: "
@@ -97,7 +94,7 @@ computeInFrege = do
   print $ "sum: "
   println $ sum
   
-  
+  -}
         {-
   mappedFirst = getValueOfMaybe $ head mappedList
   
@@ -107,5 +104,6 @@ computeInFrege = do
   print $ "sum: "
   println $ getValueOfMaybe $ sum
   -}
+  
 
   println "final"

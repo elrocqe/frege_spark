@@ -32,18 +32,21 @@ mySum x y = x + y
 main :: IO ()
 main = do
   sparkConfig <- SparkConf.new ()
+  list <- arrayFromListST ["frege-spark.jar", "frege3.25.84.jar"]
   sparkConfig.setMaster "local"
+  --sparkConfig.setMaster "spark://Damians-MacBook.local:7077"
   sparkConfig.setAppName "Frege-Spark"
+  sparkConfig.setJars list
   sc :: MutableIO JavaSparkContext <- JavaSparkContext.new sparkConfig
 
   currentData <- JavaSparkContext.textFile sc "data/first.csv"
   parsedData <- currentData.map Function.convertToDouble
 
-  filteredData <- parsedData.filter $ Function.createGenericFilterFunction filterThreeOrFive
-  mappedData <- filteredData.map $ Function.createGenericFilterFunction addOne  
-  mappedData2 <- mappedData.map $ Function.createGenericFilterFunction times10  
-  mappedData3 <- mappedData2.map $ Function.createGenericFilterFunction times2  
-  sum <- mappedData3.reduce $ Function2.createGenericReduceFunction mySum
+  filteredData <- parsedData.filter $ Function.createSerializableFunction filterThreeOrFive
+  --mappedData <- filteredData.map $ Function.create addOne  
+  --mappedData2 <- mappedData.map $ Function.create times10  
+  --mappedData3 <- mappedData2.map $ Function.create times2  
+  --sum <- mappedData3.reduce $ Function2.create mySum
 
   -- print insights and results
 
@@ -63,19 +66,24 @@ main = do
   
   print $ "filteredFirst: "
   println $ show $ filteredFirst
-  
-  print $ "sum: "
-  println $ sum
-  
-  
-        {-
-  mappedFirst = getValueOfMaybe $ head mappedList
+  {-
+  mappedFirst <- mappedData.first
   
   print $ "mappedFirst: "
   println $ mappedFirst
   
+  mapped2First <- mappedData2.first
+  
+  print $ "mapped2First: "
+  println $ mapped2First
+  
+  mapped3First <- mappedData3.first
+  
+  print $ "mapped3First: "
+  println $ mapped3First
+  
   print $ "sum: "
-  println $ getValueOfMaybe $ sum
-  -}
-
-  println "final"
+  println $ sum
+  
+-}
+  println "final2"

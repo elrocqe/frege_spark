@@ -47,11 +47,11 @@ public class ReduceFunctions {
 	};
 	
 	public static <A, B, C> Function2<A, B, C> create(Func.U<A, Func.U<B, C>> f){
-		UUID i = FuncUWrapper.add(f);
+		UUID i = FunctionPool.add(f);
 		return new Function2<A, B, C>() {
 			@Override
 			public C call(A v1, B v2) throws Exception {
-				Func.U<A, Func.U <B, C>> f = FuncUWrapper.getFunction(i);
+				Func.U<A, Func.U <B, C>> f = FunctionPool.getFunction(i);
 				return (C) f.apply(Thunk.lazy(v1)).call().apply(Thunk.lazy(v2)).call();
 			}
 		};

@@ -25,7 +25,7 @@ import org.apache.spark.sql.types.StructField;
 import org.apache.spark.sql.types.StructType;
 import org.junit.Assert;
 
-import bindings.Functions;
+import bindings.FunctionHelper;
 import model.WeatherData;
 
 public class JavaDataSetApp {

@@ -5,5 +5,5 @@ data Function2 a b c = pure native "org.apache.spark.api.java.function.Function2
   -- reduce
   pure native getSum "bindings.ReduceFunctions.getSum" :: Function2 Double Double Double
   pure native getSumOnInteger "bindings.ReduceFunctions.getSumOnInteger" :: Function2 Integer Integer Integer
-  pure native create "bindings.ReduceFunctions.create" {a, b, c}  :: (a -> b -> c) -> Function2 a b c
+  pure native create "bindings.Function2Helper.createFunction2" {a, b, c}  :: (a -> b -> c) -> Function2 a b c
 

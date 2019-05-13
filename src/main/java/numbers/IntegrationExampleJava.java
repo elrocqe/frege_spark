@@ -4,7 +4,7 @@ import java.lang.reflect.Method;
 
 import org.apache.spark.api.java.*;
 import org.apache.spark.api.java.function.Function;
-import bindings.Functions;
+import bindings.FunctionHelper;
 import frege.run7.Func;
 
 public class IntegrationExampleJava {

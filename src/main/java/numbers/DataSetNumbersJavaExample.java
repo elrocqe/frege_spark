@@ -27,7 +27,7 @@ import org.apache.spark.sql.types.StructField;
 import org.apache.spark.sql.types.StructType;
 import org.junit.Assert;
 
-import bindings.Functions;
+import bindings.FunctionHelper;
 import bindings.MapFunctions;
 import bindings.ReduceFunctions;
 import bindings.FilterFunctions;
@@ -61,8 +61,8 @@ public class DataSetNumbersJavaExample {
 	    System.out.println(filteredInteger.first());
 	    
        	Dataset<Integer> mappedInteger = filteredInteger.map(MapFunctions.addOneMF, Encoders.INT());
-	    Integer result = mappedInteger.reduce(ReduceFunctions.getIntegerSum);
-//	    Integer result = mappedInteger.reduce((a,b) -> a + b);
+	    //Integer result = mappedInteger.reduce(ReduceFunctions.getIntegerSum);
+	    Integer result = mappedInteger.reduce((a,b) -> a + b);
 	    System.out.println("Result: " + result);
        // 	List<Integer> list = resultDataSet.collectAsList();
         	

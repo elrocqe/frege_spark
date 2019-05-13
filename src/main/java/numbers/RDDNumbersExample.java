@@ -3,7 +3,7 @@ package numbers;
 import org.apache.spark.api.java.*;
 import org.apache.spark.api.java.function.Function;
 
-import bindings.Functions;
+import bindings.FunctionHelper;
 
 public class RDDNumbersExample {
 

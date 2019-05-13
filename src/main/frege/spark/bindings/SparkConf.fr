@@ -1,5 +1,7 @@
 module spark.bindings.SparkConf where
 
+import frege.java.Util
+
 data SparkConf  = native org.apache.spark.SparkConf where
     native new             :: () -> STMutable s (SparkConf)
     
@@ -7,7 +9,8 @@ data SparkConf  = native org.apache.spark.SparkConf where
     native setMaster       :: Mutable s SparkConf -> String -> STMutable s SparkConf
     native setAppName      :: Mutable s SparkConf -> String -> STMutable s SparkConf
     native setSparkHome    :: Mutable s SparkConf -> String -> STMutable s SparkConf
-    
+    native setJars         :: Mutable s SparkConf -> (ArrayOf s String)  -> STMutable s SparkConf
+
     native get             :: Mutable s SparkConf -> String -> ST s String
     -- native getAll          :: Mutable s SparkConf -> STMutable s (JArray (String, String)) -- how to map array and list types?
 

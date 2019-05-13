@@ -1,32 +1,50 @@
 package bindings;
-import static org.junit.Assert.assertNotNull;
 
+import frege.run8.Func.U;
+
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
-import frege.run.Kind;
+import frege.run8.Func;
 import frege.run8.Lazy;
-import bindings.FuncI.U;
 
-
-public class MyFunc {
+public class MyFunc implements frege.run8.Func.U, Serializable {
+	
+	protected frege.run8.Func.U current;
+	
 	
 
+	public MyFunc(U current) {
+		//this.current = (Func.U & Serializable )current;
 
-	public class U<T1, T2> implements FuncI.U<String, Boolean>, Serializable {
-		private static final long serialVersionUID = -3157507877317885555L;
-		frege.run8.Func.U<String, Boolean> function;
-		public U(frege.run8.Func.U<String, Boolean> f) {
-			this.function = f;
-			// TODO Auto-generated constructor stub
-		}
+		this.current = (Func.U & Serializable) current;
+}
 
-		@Override
-		public Lazy<Boolean> apply(Lazy<String> a) {
-			// TODO how to implement apply?
-			return this.function.apply(a);
-		}
+
+
+	@Override
+	public Lazy apply(Lazy arg0) {
+		return current.apply(arg0);
 	}
 
-	// TODO is this the way to go to make Func.U serializable?
-    
-  }
+	/*
+	private void writeObject(ObjectOutputStream out) throws IOException {
+		  // not required the default write object
+		  // ----> out.defaultWriteObject();
+		  out.writeObject(this);
+	 }
+
+	 private void readObject(ObjectInputStream in) throws IOException {
+	  // not required the default read object
+	  // ----> in.defaultReadObject();
+	  try {
+	   MyFunc c = (MyFunc)in.readObject();
+	   this.current = c;
+	  } catch (ClassNotFoundException e) {
+	   e.printStackTrace();
+	  }
+	 }
+	  */
+}

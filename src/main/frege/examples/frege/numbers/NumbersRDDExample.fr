@@ -1,5 +1,7 @@
 module examples.frege.numbers.NumbersRDDExample where
 
+import frege.java.Util
+
 import spark.bindings.SparkConf
 import spark.bindings.custom.Function
 import spark.bindings.custom.Function2
@@ -11,38 +13,45 @@ import frege.test.QuickCheck
 
 main :: IO ()
 main = computeInFrege
+         
 
+            
 computeInFrege :: IO ()
 computeInFrege = do
+  list <- arrayFromListST ["frege-spark.jar"]
   sparkConfig <- SparkConf.new ()
-  sparkConfig.setMaster "local"
+  sparkConfig.setMaster "spark://Damians-MacBook.local:7077"
   sparkConfig.setAppName "Frege-Spark"
+  sparkConfig.setJars list
+
   sc :: MutableIO JavaSparkContext <- JavaSparkContext.new sparkConfig
     
-  currentData <- JavaSparkContext.textFile sc "data/numbers.csv"
-  
+  currentData <- JavaSparkContext.textFile sc "data/first.csv"
   parsedData <- currentData.map  Function.convertToDouble
-  filteredData <- parsedData.filter  Function.filterThreeOrFive
+
+  filteredData <- parsedData.filter  Function.filterThreeOrFiveOnDouble
   mappedData <- filteredData.map  Function.addOne
   sum <- mappedData.reduce Function2.getSum
 
   -- print insights and results
   
   currentFirst <- currentData.first
-  
+
   print $ "currentFirst: "
   println $ currentFirst
-  
-  filteredFirst <- filteredData.first
-  
-  print $ "filteredFirst: "
-  println $ filteredFirst
-  
+
   parsedFirst <- parsedData.first
   
   print $ "parsedFirst: "
   println $ show $ parsedFirst
+
   
+    
+  filteredFirst <- filteredData.first
+  
+  print $ "filteredFirst: "
+  println $ filteredFirst
+
   mappedFirst <- mappedData.first
   
   print $ "mappedFirst: "
@@ -51,4 +60,4 @@ computeInFrege = do
   print $ "sum: "
   println $ sum
 
-  println "final"
+  println "finalRDD"
