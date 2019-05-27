@@ -1,22 +1,36 @@
-package rundk;
+package bindings;
 import java.io.Serializable;
 
 import frege.run.Kind;
 import frege.run8.Lazy;
 
 public class Func  {
-  @FunctionalInterface public interface U<𝓐, 𝓑> 
-    extends Lazy<Func.U<𝓐, 𝓑>>, Kind.U<Func.U<𝓐, ?>, 𝓑>, Kind.B<Func.U<?, ?>, 𝓐, 𝓑>, Serializable
+  @FunctionalInterface public interface SU<𝓐, 𝓑> extends Serializable, frege.run8.Func.U<𝓐, 𝓑>
+   /* extends Lazy<Func.U<𝓐, 𝓑>>, Kind.U<Func.U<𝓐, ?>, 𝓑>, Kind.B<Func.U<?, ?>, 𝓐, 𝓑>*/
    {
     public Lazy<𝓑> apply(final Lazy<𝓐> a) ;
-    public default Func.U<𝓐, 𝓑> call() {
+    public default Func.SU<𝓐, 𝓑> call() {
       return this;
     }
     public default boolean isShared() {
       return true;
     }
   }
-  @FunctionalInterface public interface B<𝓐, 𝓑, 𝓒> 
+   
+   @FunctionalInterface public interface SUW<𝓐, 𝓑> extends Serializable, frege.run8.Func.U<𝓐, 𝓑>
+   /* extends Lazy<Func.U<𝓐, 𝓑>>, Kind.U<Func.U<𝓐, ?>, 𝓑>, Kind.B<Func.U<?, ?>, 𝓐, 𝓑>*/
+   {
+	   
+    public Lazy<𝓑> apply(final Lazy<𝓐> a) ;
+    public default Func.SUW<𝓐, 𝓑> call() {
+      return this;
+    }
+    public default boolean isShared() {
+      return true;
+    }
+  }
+  
+ /* @FunctionalInterface public interface B<𝓐, 𝓑, 𝓒> 
     extends Lazy<Func.B<𝓐, 𝓑, 𝓒>>, Kind.U<Func.B<𝓐, 𝓑, ?>, 𝓒>,
       Kind.B<Func.B<𝓐, ?, ?>, 𝓑, 𝓒>, Kind.T<Func.B<?, ?, ?>, 𝓐, 𝓑, 𝓒>
    {
@@ -7563,5 +7577,5 @@ public class Func  {
           𝓐, 𝓑, 𝓒, 𝓓, 𝓔, 𝓕, 𝓖, 𝓗, 𝓘, 𝓙, 𝓚, 𝓛, 𝓜, 𝓝, 𝓞,
           𝓟, 𝓠, 𝓡, 𝓢, 𝓣, 𝓤, 𝓥, 𝓦, 𝓧, 𝓨, 𝓩, Ω
         >)it;
-  }
+  }*/
 }
