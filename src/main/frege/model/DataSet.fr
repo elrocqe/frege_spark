@@ -1,5 +1,5 @@
 module model.DataSet where
-import frege.test.QuickCheck
+--import frege.test.QuickCheck
 
 -- TODO derive not working when using the NumberFormatException type
 --derive Show DataSet

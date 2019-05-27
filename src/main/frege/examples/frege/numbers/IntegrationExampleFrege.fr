@@ -32,17 +32,27 @@ mySum x y = x + y
 main :: IO ()
 main = do
   sparkConfig <- SparkConf.new ()
-  list <- arrayFromListST ["frege-spark.jar", "frege3.25.84.jar"]
-  sparkConfig.setMaster "local"
-  --sparkConfig.setMaster "spark://Damians-MacBook.local:7077"
+  --"frege3.24.405.jar"
+  println "frege3.24.405.jar"
+  list <- arrayFromListST ["frege-spark.jar", "frege3.24.405.jar", "frege-interpreter-core-1.3-SNAPSHOT.jar"]
+  --sparkConfig.setMaster "local"
+  sparkConfig.setMaster "spark://Damians-MacBook.local:7077"
   sparkConfig.setAppName "Frege-Spark"
   sparkConfig.setJars list
   sc :: MutableIO JavaSparkContext <- JavaSparkContext.new sparkConfig
 
   currentData <- JavaSparkContext.textFile sc "data/first.csv"
+--  mappedData <- currentData.map $ Function.createInterpretedFunction ()
   parsedData <- currentData.map Function.convertToDouble
-
-  filteredData <- parsedData.filter $ Function.createSerializableFunction filterThreeOrFive
+  --mappedData <- parsedData.map $ Function.createInterpretedDoubleFunction ("f x = x + 3")
+  --mappedData <- parsedData.map $ Function.create addOne
+  --parsedData <- currentData.map Function.convertToDouble
+  --myF <- FunctionWrapper.new filterThreeOrFive
+  --filteredData <- parsedData.filter $ myF
+  mappedData <- parsedData.map $ Function.createInterpretedFunction ("timesTen")
+  filteredData <- mappedData.filter $ Function.createInterpretedFunction ("filterThirty")
+  mappedData1 <- filteredData.map $ Function.createInterpretedFunction ("addOne")
+  --filteredData <- parsedData.filter $ Function.createSerializableFunction filterThreeOrFive
   --mappedData <- filteredData.map $ Function.create addOne  
   --mappedData2 <- mappedData.map $ Function.create times10  
   --mappedData3 <- mappedData2.map $ Function.create times2  
@@ -55,23 +65,31 @@ main = do
   print $ "currentFirst: "
   println $ currentFirst
 
+
   
   parsedFirst <- parsedData.first
   
   print $ "parsedFirst: "
   println $ show $ parsedFirst
+  
 
-  
-  filteredFirst <-  filteredData.first
-  
-  print $ "filteredFirst: "
-  println $ show $ filteredFirst
-  {-
-  mappedFirst <- mappedData.first
+  mappedFirst :: Double <- mappedData.first
   
   print $ "mappedFirst: "
   println $ mappedFirst
   
+  filteredFirst :: Double <-  filteredData.first
+  
+  print $ "filteredFirst: "
+  println $ show $ filteredFirst
+  
+  
+  mapped1First :: Double <- mappedData1.first
+  
+  print $ "mapped1First: "
+  println $ mapped1First
+  
+  {-
   mapped2First <- mappedData2.first
   
   print $ "mapped2First: "
@@ -84,6 +102,8 @@ main = do
   
   print $ "sum: "
   println $ sum
-  
--}
+  -}
+
+  scMaster :: String <- sc.master
+  println $ "calculated with master: " ++ scMaster
   println "final2"

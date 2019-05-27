@@ -1,0 +1,19 @@
+module FunctionPool where
+
+  addOne :: Double -> Double
+  addOne x = x + 1.0
+
+  timesTen :: Double -> Double
+  timesTen x = x * 10.0
+    
+  filterThirty :: Double -> Bool
+  filterThirty 30.0 = true
+  filterThirty _ = false
+  
+  timesTenOnString :: String -> String
+  timesTenOnString x = x ++ "0"
+  
+  filterThreeOnString :: String -> Bool
+  filterThreeOnString "3" = true
+  filterThreeOnString _ = false
+  

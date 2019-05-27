@@ -7,14 +7,19 @@ import model.DataSet
 --https://github.com/Frege/frege/blob/master/frege/java/Lang.fr#L89
 
 -- TODO difference between java and frege object(which gets used?)
-data JavaDataSet = pure native "model.JavaDataSet"
+--data JavaDataSet = pure native "model.JavaDataSet"
 
+data FunctionWrapper a b = pure native "bindings.FunctionWrapper" where
+     native new :: (a -> b) -> ST s (FunctionWrapper a b)
 
 data Function a b = pure native "org.apache.spark.api.java.function.Function" where
   
   pure native create   "bindings.FunctionHelper.createFunction" {a,b}       :: (a -> b) -> Function a b
   pure native createLambda   "bindings.FunctionHelper.createLambda" {a,b}       :: (a -> b) -> Function a b
-  pure native createSerializableFunction           "bindings.FunctionHelper.createSerializableFunction" {a,b}             :: (a -> b) -> Function a b
+  pure native createInterpretedFunction   "bindings.FunctionHelper.createInterpretedFunction"      {a,b} :: (String) -> Function a b
+  pure native createInterpretedDoubleFunction   "bindings.FunctionHelper.createInterpretedDoubleFunction"       :: String -> Function Double Double
+--  pure native createSerializableFunction           "bindings.FunctionHelper.createSerializableFunction" {a,b}             :: (a -> b) -> Function a b
+--  pure native createSerializableFunction           "bindings.Functionwrapper" {a,b}             :: (a -> b) -> Function a b
 
 
   -- numbers
@@ -54,15 +59,15 @@ data Function a b = pure native "org.apache.spark.api.java.function.Function" wh
   pure native filterHighRainFromString      "bindings.FilterFunctions.filterHighRainFromString"      :: Function String Bool 
   pure native filterHighRainFromStringArray "bindings.FilterFunctions.filterHighRainFromStringArray" :: Function (JArray String) Bool 
   pure native filterHighRainFromDataSet     "bindings.FilterFunctions.filterHighRainFromDataSet"     :: Function DataSet Bool
-  pure native filterHighRainFromJavaDataSet "bindings.FilterFunctions.filterHighRainFromDataSet"     :: Function JavaDataSet Bool 
+  --pure native filterHighRainFromJavaDataSet "bindings.FilterFunctions.filterHighRainFromDataSet"     :: Function JavaDataSet Bool 
 
   -- mappers
   pure native parseLineToStringArray        "bindings.MapFunctions.parseLineToStringArray"        :: Function String (JArray String)
   pure native parseLineToDataSet            "bindings.MapFunctions.parseLineToDataSet"            :: Function String DataSet
-  pure native parseLineToJavaDataSet        "bindings.MapFunctions.parseLineToDataSet"            :: Function String JavaDataSet
+  --pure native parseLineToJavaDataSet        "bindings.MapFunctions.parseLineToDataSet"            :: Function String JavaDataSet
   pure native getTemperatureFromString      "bindings.MapFunctions.getTemperatureFromString"      :: Function String Double
   pure native getTemperatureFromStringArray "bindings.MapFunctions.getTemperatureFromStringArray" :: Function (JArray String) Double
   pure native getTemperatureFromDataSet     "bindings.MapFunctions.getTemperatureFromDataSet"     :: Function DataSet Double
-  pure native getTemperatureFromJavaDataSet "bindings.MapFunctions.getTemperatureFromDataSet"     :: Function JavaDataSet Double 
+  --pure native getTemperatureFromJavaDataSet "bindings.MapFunctions.getTemperatureFromDataSet"     :: Function JavaDataSet Double 
 
   

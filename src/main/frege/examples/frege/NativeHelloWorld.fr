@@ -1,0 +1,22 @@
+module examples.frege.NativeHelloWorld where
+  
+native module where {
+    public static class NativeJavaClass {
+    public static Double runJava(Double value) {
+    		System.out.println("Hello World From Java");
+        System.out.println("value = " + value);
+        return value + 1.0;
+    }
+}
+}
+
+native runJava  NativeHelloWorld.NativeJavaClass.runJava :: (Double) -> IO (Double)
+
+main :: [String] -> IO ()
+main args = do
+  result = 1.0 + 1.0
+  println "Hello World" 
+  updatedValue <-runJava result
+  println updatedValue
+
+  

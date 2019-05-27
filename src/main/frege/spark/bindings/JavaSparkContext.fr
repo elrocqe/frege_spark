@@ -15,6 +15,7 @@ data JavaSparkContext  = native org.apache.spark.api.java.JavaSparkContext where
     native textFile :: Mutable s JavaSparkContext -> String -> STMutable s (JavaRDD String)
     --native parallelize :: Mutable s JavaSparkContext -> ST s (JArray String) -> STMutable s (JavaRDD String)
 
+    native master :: Mutable s JavaSparkContext -> ST s String
     native appName :: Mutable s JavaSparkContext -> ST s String
     native version :: Mutable s JavaSparkContext -> ST s String
 

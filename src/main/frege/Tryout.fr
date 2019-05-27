@@ -3,7 +3,10 @@ module Tryout where
   test :: a->a
   test = id (\x -> x)
     
-  test1 :: String -> Bool
-  test1 = (== "5")
+  filterFive :: String -> Bool
+  filterFive = (== "5")
   
+  addOne :: Double -> Double
+  addOne x = x + 1.0
+
   
