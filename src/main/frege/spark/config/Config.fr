@@ -1,5 +1,11 @@
 module spark.config.Config where 
 
 file :: String
-file = "data/cassandraData.csv"
+file = "data/first.csv"
+
+fregecJar :: String
+fregecJar = "frege3.24.405.jar"
+
+applicationJar :: String
+applicationJar = "frege-spark.jar"
 

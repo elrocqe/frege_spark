@@ -1,3 +1,5 @@
+-- module for minor experiments (to see what gets compiled)
+
 module Tryout where
 
   test :: a->a
@@ -8,5 +10,22 @@ module Tryout where
   
   addOne :: Double -> Double
   addOne x = x + 1.0
-
   
+  addOne1 :: Double -> Double
+  addOne1 = (+ 1.0)
+  
+  addOne2 :: Double -> Double
+  addOne2 = (add 1.0)
+
+  add x y = x + y
+  filterFive1 :: String -> Bool
+  filterFive1 x = x == "5"
+  
+  filterFive2 :: String -> Bool
+  filterFive2 x = "5" == x
+  
+  append :: String -> String
+  append x = x ++ "x"
+  
+  append1 :: String -> String
+  append1 = (++ "x")

@@ -1,0 +1,10 @@
+module spark.bindings.custom.JavaSparkContextFromImmutableConf where
+
+import spark.bindings.JavaSparkContext
+import spark.bindings.custom.ImmutableSparkConf
+
+data JavaSparkContextFromImmutableConf  = native bindings.JavaSparkContextFromImmutableConf where
+
+    -- TODO how to map constructors with different parameters
+    native new :: Mutable s ImmutableSparkConf -> STMutable s (JavaSparkContextFromImmutableConf)
+    native getSparkContext :: Mutable s (JavaSparkContextFromImmutableConf) -> STMutable s (JavaSparkContext)

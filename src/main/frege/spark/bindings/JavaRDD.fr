@@ -1,7 +1,7 @@
 module spark.bindings.JavaRDD where
 
-import spark.bindings.custom.Function
-import spark.bindings.custom.Function2
+import bindings.Function
+import bindings.Function2
 import frege.java.Util
 
 data JavaRDD a = native org.apache.spark.api.java.JavaRDD where

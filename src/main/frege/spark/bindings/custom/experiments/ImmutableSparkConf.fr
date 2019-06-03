@@ -1,0 +1,5 @@
+module spark.bindings.custom.ImmutableSparkConf where
+
+data ImmutableSparkConf  = native bindings.ImmutableSparkConf where
+    --pure native new             :: () -> ImmutableSparkConf 
+    pure native new               :: String -> ImmutableSparkConf
