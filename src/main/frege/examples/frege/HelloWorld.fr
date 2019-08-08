@@ -1,7 +1,0 @@
-module examples.frege.HelloWorld where
-
-main :: [String] -> IO ()
-main args = do
-  result = 1.0 + 1.0
-  println "Hello World"  
-  println result

@@ -1,26 +1,20 @@
 module examples.frege.numbers.NumbersRDDExample where
 
-import frege.java.Util
-
 import spark.bindings.SparkConf
-import spark.bindings.custom.Function
 import spark.bindings.custom.Function2
-
+import spark.bindings.custom.CustomFunction
+import spark.bindings.custom.TestBindings
 import spark.bindings.JavaSparkContext
-
-import frege.test.QuickCheck
-
 
 main :: IO ()
 main = computeInFrege
-         
 
-            
 computeInFrege :: IO ()
 computeInFrege = do
   list <- arrayFromListST ["frege-spark.jar"]
   sparkConfig <- SparkConf.new ()
-  sparkConfig.setMaster "spark://Damians-MacBook.local:7077"
+  --sparkConfig.setMaster "spark://Damians-MacBook.local:7077"
+  sparkConfig.setMaster "local"
   sparkConfig.setAppName "Frege-Spark"
   sparkConfig.setJars list
 
@@ -32,32 +26,19 @@ computeInFrege = do
   filteredData <- parsedData.filter  Function.filterThreeOrFiveOnDouble
   mappedData <- filteredData.map  Function.addOne
   sum <- mappedData.reduce Function2.getSum
-
-  -- print insights and results
   
   currentFirst <- currentData.first
-
-  print $ "currentFirst: "
-  println $ currentFirst
+  assertEquals currentFirst "1"
 
   parsedFirst <- parsedData.first
-  
-  print $ "parsedFirst: "
-  println $ show $ parsedFirst
-
-  
+  assertEquals parsedFirst 1.0
     
   filteredFirst <- filteredData.first
-  
-  print $ "filteredFirst: "
-  println $ filteredFirst
+  assertEquals filteredFirst 3.0
 
   mappedFirst <- mappedData.first
+  assertEquals mappedFirst 4.0
   
-  print $ "mappedFirst: "
-  println $ mappedFirst
+  assertEquals sum 10.0
 
-  print $ "sum: "
-  println $ sum
-
-  println "finalRDD"
+  println "final"

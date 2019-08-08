@@ -2,8 +2,12 @@
 
 module FunctionPool where
 
+  import funcions.ImportFunctionPool
+
   addOne :: Double -> Double
   addOne x = x + 1.0
+  
+  addValue x = x + value where value = 2
 
   timesTen :: Double -> Double
   timesTen x = x * 10.0

@@ -1,4 +1,4 @@
-package examples.app;
+package experiments.examples.java;
 
 
 /**
@@ -25,7 +25,6 @@ public class JavaRDDApp {
         JavaRDD<String> rdd = sc.textFile(file);
 
         // for String
-        
         JavaRDD<Double> resultRddForString = rdd
                 .filter(FilterFunctions.filterHighRainFromString)
         		.map(MapFunctions.getTemperatureFromString);
@@ -46,7 +45,6 @@ public class JavaRDDApp {
           		//.reduce((a, b) -> a + b);
         
         // for DataSet
-        
         JavaRDD<Double> resultRddForDataSet = rdd
                 .map(MapFunctions.parseLineToDataSet)
                 .filter(FilterFunctions.filterHighRainFromDataSet)

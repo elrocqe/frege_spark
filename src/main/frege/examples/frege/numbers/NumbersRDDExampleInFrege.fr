@@ -1,10 +1,9 @@
-module examples.frege.numbers.NumbersRDDExampleFrege where
+module examples.frege.numbers.NumbersRDDExampleInFrege where
 
 import spark.bindings.SparkConf
-import spark.bindings.custom.Function
 import spark.bindings.custom.Function2
 import frege.java.Util
-import util.CSVUtil
+--import util.CSVUtil
 import examples.frege.numbers.FregeHelpers
 
 import spark.bindings.JavaSparkContext
@@ -18,7 +17,8 @@ main = do
   sparkConfig.setAppName "Frege-Spark"
   sc :: MutableIO JavaSparkContext <- JavaSparkContext.new sparkConfig
     
-  currentData <- JavaSparkContext.textFile sc "data/numbers.csv"
+  currentData <- JavaSparkContext.textFile sc "data/first.csv"
+  --currentData <- JavaSparkContext.textFile sc "data/numbers.csv"
   
   cp::Mutable t (List String) <- currentData.collect
   elem::Maybe String <- cp.get 0

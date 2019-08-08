@@ -1,7 +1,6 @@
 module examples.frege.numbers.FregeHelpers where
 
 import frege.java.Util
-import util.CSVUtil
 
 import spark.bindings.JavaSparkContext
 
@@ -32,7 +31,8 @@ getSumM (Nothing) (Just y) = Just y
 getSumM (Just x) (Just y) = Just (x + y)
 
 readString :: String -> Maybe Double
-readString x = readValue $ String.double x
+readString x = undefined -- TODO
+--readValue $ String.double x
 
 getValueOfMaybe (Just x) = x
 

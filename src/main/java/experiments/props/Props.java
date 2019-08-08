@@ -23,13 +23,13 @@ public class Props {
 		    }
 		MyInnerF mif = new MyInnerF();
 		*/
-		bindings.Func.SU t = (bindings.Func.SU) f;
+		//bindings.Func.SU t = (bindings.Func.SU) f;
 		//FunctionWrapper fw = new FunctionWrapper(f);
 		return new Function<A, B>() {
 			public B call(A x) {
 				frege.run8.Lazy<A> la = frege.run8.Thunk.lazy(x);
-				B b = (B) t.apply(la).call();
-				return b;
+				//B b = (B) t.apply(la).call();
+				return null;// b;
 			}
 		};
 	};

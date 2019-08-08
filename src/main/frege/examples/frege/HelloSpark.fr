@@ -3,8 +3,8 @@ module examples.frege.HelloSpark where
 import spark.bindings.JavaSparkContext
 import spark.bindings.SparkConf
 import spark.bindings.JavaRDD
-import spark.bindings.custom.ImmutableSparkConf
-import spark.bindings.custom.JavaSparkContextFromImmutableConf
+--import spark.bindings.custom.ImmutableSparkConf
+--import spark.bindings.custom.JavaSparkContextFromImmutableConf
 
 logFile :: String
 logFile = "data/first.csv"
@@ -19,18 +19,18 @@ sparkLocation = "~/Documents/Code/spark-2.4.0-bin-hadoop2.7"
     
 main :: IO ()
 main = do
-  --sparkConfig <- SparkConf.new ()
-  --sparkConfig.setMaster "local"
-  --sparkConfig.setAppName "Frege-Spark"
-  --sparkConfig.setSparkHome sparkLocation
+  sparkConfig <- SparkConf.new ()
+  sparkConfig.setMaster "local"
+  sparkConfig.setAppName "Frege-Spark"
+  sparkConfig.setSparkHome sparkLocation
 
-  --sc <- JavaSparkContext.new sparkConfig
+  sc <- JavaSparkContext.new sparkConfig
   
   -- create context from immutable config
-  immutableSparkConf = ImmutableSparkConf.new "isc-test"
+  --immutableSparkConf = ImmutableSparkConf.new "isc-test"
 
-  isc <-JavaSparkContextFromImmutableConf.new (mutable immutableSparkConf)
-  sc <-isc.getSparkContext
+  --isc <-JavaSparkContextFromImmutableConf.new (mutable immutableSparkConf)
+  --sc <-isc.getSparkContext
 
   scVersion :: String <- sc.version
   scAppName :: String <- sc.appName

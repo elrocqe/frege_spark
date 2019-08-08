@@ -1,4 +1,4 @@
-module spark.experiments.props.custom.CustomFunction where
+module spark.bindings.custom.CustomFunction where
 
 
 import experiments.model.DataSet

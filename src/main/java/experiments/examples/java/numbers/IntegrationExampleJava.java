@@ -1,4 +1,4 @@
-package examples.numbers;
+package experiments.examples.java.numbers;
 
 import java.lang.reflect.Method;
 
@@ -27,8 +27,8 @@ public class IntegrationExampleJava {
 			}
 		};
 	};*/
-	public static Function<Double, Boolean> createNonSerializableFunction(){		
-		NonSerializableObject test = new NonSerializableObject();
+	public static Function<Double, Boolean> createNonSerializableFunction(){
+		//NonSerializableObject test = new NonSerializableObject();
 
 		return new Function<Double, Boolean>() {
 			@Override
@@ -49,13 +49,13 @@ public class IntegrationExampleJava {
         JavaRDD<Double> resultRdd = rdd
     		        .map(line -> Double.parseDouble(line));
                 //.filter(value -> value == 5 || value == 3);
-        System.out.println(computations.BasicFregeFunction.myNumber);
+        /*System.out.println(computations.BasicFregeFunction.myNumber);
     	    Function<Double, Boolean> filterThreeOrFive = new Function<Double, Boolean>() {
             public Boolean call(Double input) {
                 return computations.BasicFregeFunction.filterThreeOrFive(input);
                 //.filterThreeOrFive.apply(input).call();
             }
-    	    };
+    	    };*/
     	    
     	    
     	    

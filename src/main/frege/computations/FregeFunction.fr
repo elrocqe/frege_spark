@@ -1,6 +1,6 @@
 module computations.FregeFunction where
 
-import model.DataSet
+--import model.DataSet
 import frege.test.QuickCheck
 
 
@@ -16,10 +16,12 @@ filterThreeOrFive 4.0 = true
 --filterThreeOrFive 5.0 = true
 filterThreeOrFive _ = false
 
+{-
 filterHighRain :: DataSet -> Bool
 filterHighRain ds = case (ds.rre150z0) of (Nothing) -> false
                                           (Just d) -> d > 5
-                                          
+-}
+                                
 filterHighRainFromStringArray :: [String] -> Bool
 filterHighRainFromStringArray xs = case (String.double(xs!!9)) of (Left e)  -> false
                                                                   (Right d) -> d > 5
@@ -29,10 +31,13 @@ filterHighRainFromStringArray xs = case (String.double(xs!!9)) of (Left e)  -> f
 -- mappers
 --
 
-mapGetTemperature :: DataSet -> Double
+{-mapGetTemperature :: DataSet -> Double
 mapGetTemperature ds = case (ds.tre200s0) of (Nothing) -> 0 -- TODO filter out invalid results
                                              (Just d) -> d
+     
                                              
+-}
+                                                                                     
 mapGetTemperatureFromStringArray :: [String] -> Double
 mapGetTemperatureFromStringArray xs = case (String.double(xs!!10)) of (Left e)  -> 0
                                                                       (Right d) -> d

@@ -1,0 +1,4 @@
+module spark.bindings.custom.TestBindings where
+  
+  native assertEquals "org.junit.Assert.assertEquals"   ::  String -> String-> IO() | double -> double -> IO()
+ 

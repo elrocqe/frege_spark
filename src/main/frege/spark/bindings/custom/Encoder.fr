@@ -1,7 +1,7 @@
 module spark.bindings.custom.Encoder where
 
-import model.Person
-import model.Department
+--import model.Person
+--import model.Department
 
 data Encoder a = pure native "org.apache.spark.sql.Encoder" where
 
@@ -10,7 +10,7 @@ data Encoder a = pure native "org.apache.spark.sql.Encoder" where
   -- TODO fix Integer/BigInteger
   native integerEncoder     "org.apache.spark.sql.Encoders.INT()"       :: Encoder Integer
   native doubleEncoder      "org.apache.spark.sql.Encoders.DOUBLE()"    :: Encoder Double
-  native personEncoder      "bindings.Encoders.personDataEncoder"       :: Encoder Person
-  native departmentEncoder  "bindings.Encoders.departmentDataEncoder"   :: Encoder Department
-  native getEncoder         "bindings.Encoders.getEncoder"              :: Encoder Department
+  --native personEncoder      "bindings.Encoders.personDataEncoder"       :: Encoder Person
+  --native departmentEncoder  "bindings.Encoders.departmentDataEncoder"   :: Encoder Department
+  --native getEncoder         "bindings.Encoders.getEncoder"              :: Encoder Department
 

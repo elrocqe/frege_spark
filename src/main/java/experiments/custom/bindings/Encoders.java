@@ -1,4 +1,4 @@
-package bindings.custom;
+package experiments.custom.bindings;
 
 import org.apache.spark.sql.Encoder;
 

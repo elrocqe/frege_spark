@@ -1,5 +1,6 @@
-package examples.app;
+package examples.java;
 import static org.apache.spark.sql.functions.*;
+import static org.junit.Assert.assertEquals;
 
 import java.util.Arrays;
 import java.util.List;
@@ -18,7 +19,7 @@ import org.apache.spark.sql.types.DataTypes;
 import org.apache.spark.sql.types.StructField;
 import org.apache.spark.sql.types.StructType;
 
-public class JavaDataFrameApp {
+public class JavaDataFrameNumbersExample {
 
     public static void main(String[] args) {
         String file = "data/first.csv"; // Should be some file on your system
@@ -29,7 +30,7 @@ public class JavaDataFrameApp {
         //sparkLocation, new String[]{appJar});
         JavaRDD<String> rdd = sc.textFile(file);
         
-     // Creates a DataFrame having a single column named "line"
+        // Creates a DataFrame having a single column named "line"
         JavaRDD<Row> rowRDD = rdd.map(RowFactory::create);
         List<StructField> fields = Arrays.asList(
           DataTypes.createStructField("line", DataTypes.StringType, true));
@@ -41,9 +42,8 @@ public class JavaDataFrameApp {
         errors.count();
         // Counts errors mentioning MySQL
         long countAll = df.count();
-        System.out.println(countAll);        
+        assertEquals(countAll, 6L);
         long count = df.filter(col("line").like("%5%")).count();
-        System.out.println(count);
-
+        assertEquals(count, 1L);
    };
-    }
+}

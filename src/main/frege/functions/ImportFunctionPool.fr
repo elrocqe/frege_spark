@@ -1,0 +1,7 @@
+-- module that contains functions which can be executed on spark nodes
+
+module funcions.ImportFunctionPool where
+
+  addThree :: Double -> Double
+  addThree x = x + 3.0
+  

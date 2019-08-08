@@ -1,4 +1,4 @@
-module examples.frege.numbers.IntegrationExampleFrege where
+module examples.frege.numbers.TryoutIntegrationExampleFrege where
 
 import spark.bindings.SparkConf
 import bindings.Function
@@ -7,6 +7,25 @@ import spark.bindings.custom.CustomFunction
 import spark.bindings.custom.TestBindings
 import spark.bindings.JavaSparkContext
 import spark.config.Config
+
+{- failed native experiment
+native module where {
+    public static class NativeFunction {
+    public static Function<Double, Double> createFunction() {
+
+		return new Function() {
+			public Double call(Double x) throws Exception  {
+		        System.out.println("Hello World From Java");
+                System.out.println("value = " + x);
+                return x * 10.0;
+			}
+		};
+	};
+  }
+}
+
+native createFunction  TryoutIntegrationExampleFrege.NativeFunction.createFunction {a, b } :: () -> ST s (Function a b)
+-}
 
 main :: IO ()
 main = do
@@ -18,38 +37,22 @@ main = do
   sparkConfig.setMaster "local"
   --sparkConfig.setMaster "spark://Damians-MacBook.local:7077"
   sc :: MutableIO JavaSparkContext <- JavaSparkContext.new sparkConfig
-
+  
   currentData <- JavaSparkContext.textFile sc "data/first.csv"
   parsedData <- currentData.map CustomFunction.Function.convertToDouble
-  mappedData <- parsedData.map $ Function.Function.createInterpretedFunction "timesTen"
-  filteredData <- mappedData.filter $ Function.Function.createInterpretedFunction "filterThirtyOrFifty"
-  --mappedData1 <- filteredData.map $ Function.Function.createInterpretedFunction "addOne"
-  mappedData2 <- filteredData.map $ Function.Function.createJavaFunction "addTwo"
-
-  mappedData3 <- mappedData2.map $ Function.Function.createInterpretedFunction "addThree"
-  sum <- mappedData2.reduce $ Function2.createInterpretedFunction "sum"
+  --mappedData <- parsedData.map $ Function.Function.createInterpretedFunction "timesTen"
+  mappedData <- parsedData.map $ Function.Function.createFunction ()
+ 
+  sum <- mappedData.reduce $ Function2.createInterpretedFunction "sum"
 
   currentFirst <- currentData.first
   assertEquals currentFirst "1"
 
   parsedFirst <- parsedData.first
   assertEquals parsedFirst 1.0
-    
-  filteredFirst <- filteredData.first
-  assertEquals 30.0 filteredFirst
 
   mappedFirst <- mappedData.first
   assertEquals 10.0 mappedFirst 
-  
-  mapped2First <- mappedData2.first
-  assertEquals 32.0 mapped2First 
-  
-  println $ mapped2First
-  
-  mapped3First <- mappedData3.first
-  assertEquals 35.0 mapped3First 
-  
-  println $ mapped3First
 
   assertEquals 84.0 sum
 

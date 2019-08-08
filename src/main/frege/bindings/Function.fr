@@ -3,3 +3,5 @@ module bindings.Function where
 data Function a b = pure native "org.apache.spark.api.java.function.Function" where
   
   pure native createInterpretedFunction   "bindings.FunctionHelper.createInterpretedFunction"      {a,b} :: (String) -> Function a b
+  pure native createJavaFunction   "bindings.FunctionHelper.createJavaFunction"                    {a,b} :: (String) -> Function a b
+  pure native createFunction   "bindings.FunctionHelper.createFunction"                                  :: () -> Function Double Double

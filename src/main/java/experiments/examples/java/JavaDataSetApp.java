@@ -1,4 +1,4 @@
-package examples.app;
+package experiments.examples.java;
 
 import static org.apache.spark.sql.functions.col;
 

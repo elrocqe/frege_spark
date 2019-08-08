@@ -18,5 +18,3 @@ main args = do
   println "Hello World" 
   updatedValue <-runJava result
   println updatedValue
-
-  
