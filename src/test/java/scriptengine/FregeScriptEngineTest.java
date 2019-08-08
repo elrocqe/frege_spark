@@ -24,10 +24,21 @@ public class FregeScriptEngineTest {
     @Before
     public void beforeTest() {
     
-        final FregeScriptEngineFactory factory = new 	FregeScriptEngineFactory();
-        this.frege = factory.getScriptEngine();
+       /* final FregeScriptEngineFactory factory = new 	FregeScriptEngineFactory();
+        this.frege = factory.getScriptEngine();*/
+        
+		final ScriptEngineManager factory = new ScriptEngineManager();
+	    frege = factory.getEngineByName("frege");
     }
 
+    @Test
+    public void myTest() throws ScriptException {
+        frege.eval("myFunc x = x + 22");
+        final Object actual = frege.eval("myFunc 2");
+        final Object expected = 24;
+        assertEquals(expected, actual);
+    }
+    
     @Test
     public void testExpression() throws ScriptException {
         final Object actual = frege.eval("show $ take 10 [2,4..]");
