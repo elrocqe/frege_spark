@@ -2,10 +2,9 @@ module spark.bindings.custom.FilterFunction where
 
 import spark.bindings.sql.Row
 
-
 data FilterFunction a = pure native "org.apache.spark.api.java.function.FilterFunction" where
 
   -- filter
-  pure native filterThreeOrFive       "bindings.FilterFunctions.filterFunctionThreeOrFive"       :: FilterFunction Integer
+  pure native filterThreeOrFiveDouble "bindings.FilterFunctions.filterFunctionThreeOrFive"       :: FilterFunction Double
   pure native filterThreeOrFiveString "bindings.FilterFunctions.filterFunctionThreeOrFiveString" :: FilterFunction String
   pure native filterThreeOrFiveRow    "bindings.FilterFunctions.filterFunctionThreeOrFiveRow"    :: FilterFunction Row

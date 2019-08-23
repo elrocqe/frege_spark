@@ -1,33 +1,27 @@
 package examples.java.numbers;
 
-
 import static org.junit.Assert.assertEquals;
 
 import org.apache.spark.api.java.*;
-import org.apache.spark.api.java.function.Function;
-
-import bindings.FunctionHelper;
 
 public class JavaRDDNumbersExample {
 
     public static void main(String[] args) {
-
-        String file = "data/first.csv";
-
         JavaSparkContext sc = new JavaSparkContext("local", "JavaRDD Numbers Example");
-        JavaRDD<String> rdd = sc.textFile(file);
+        JavaRDD<String> rdd = sc.textFile("data/first.csv");
         
-        JavaRDD<Integer> resultRdd = rdd
-    		        .map(line -> Integer.parseInt(line))
-                .filter(value -> value == 3 || value == 5)
+        JavaRDD<Double> resultRdd = rdd
+    		        .map(line -> Double.parseDouble(line))
+                .filter(value -> value == 3.0 || value == 5.0)
                 .map(x -> x + 1);
-        Integer result = resultRdd.reduce((a,b) -> a + b);
+        Double result = resultRdd.reduce((a,b) -> a + b);
         long allCount = rdd.count();
-        assertEquals(allCount, 6L);
+        assertEquals(6L, allCount);
         long resultCount = resultRdd.count();
-        assertEquals(resultCount, 2L);
-        Integer resultFirst = resultRdd.first();
-        assertEquals(resultFirst, Integer.valueOf(4));
-        assertEquals(result, Integer.valueOf(10));
-    		};
-    }
+        assertEquals(2L, resultCount);
+        Double resultFirst = resultRdd.first();
+        assertEquals(4.0,resultFirst, 0); // 0 = delta precision loss
+        assertEquals(10.0, result, 0);
+        sc.close();
+    	};
+}

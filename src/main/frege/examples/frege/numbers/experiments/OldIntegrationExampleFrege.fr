@@ -1,0 +1,58 @@
+module examples.frege.numbers.IntegrationExampleFrege where
+
+import spark.bindings.SparkConf
+import bindings.Function
+import bindings.Function2
+import spark.bindings.custom.CustomFunction
+import spark.bindings.custom.TestBindings
+import spark.bindings.JavaSparkContext
+import spark.config.Config
+
+main :: IO ()
+main = do
+  sparkConfig <- SparkConf.new ()
+  println fregecJar
+  list <- arrayFromListST [applicationJar, fregecJar, "frege-interpreter-core-1.3-SNAPSHOT.jar"]
+  sparkConfig.setAppName "Frege-Spark"
+  sparkConfig.setJars list
+  sparkConfig.setMaster "local"
+  --sparkConfig.setMaster "spark://Damians-MacBook.local:7077"
+  sc :: MutableIO JavaSparkContext <- JavaSparkContext.new sparkConfig
+
+  currentData <- JavaSparkContext.textFile sc "data/first.csv"
+  parsedData = currentData.map CustomFunction.Function.convertToDouble
+  mappedData = parsedData.map $ Function.Function.createPureInterpretStringFunction "timesTen"
+  filteredData = mappedData.filter $ Function.Function.createInterpretedFunction "filterThirtyOrFifty"
+  --mappedData1 = filteredData.map $ Function.Function.createInterpretedFunction "addOne"
+  --mappedData2 = filteredData.map $ Function.Function.createJavaFunction ()--"addTwo"
+
+  --mappedData3 = mappedData2.map $ Function.Function.createInterpretedFunction "addThree"
+  sum <- mappedData.reduce $ Function2.createInterpretedFunction "sum"
+
+  currentFirst = currentData.first
+  assertEquals "1" currentFirst
+
+  parsedFirst = parsedData.first
+  assertEquals 1.0 parsedFirst
+    
+  filteredFirst <- filteredData.first
+  assertEquals 30.0 filteredFirst
+
+  mappedFirst <- mappedData.first
+  assertEquals 10.0 mappedFirst 
+  
+  --mapped2First = mappedData2.first
+  --assertEquals 32.0 mapped2First 
+  
+  --println $ mapped2First
+  
+  --mapped3First <- mappedData3.first
+  --assertEquals 35.0 mapped3First 
+  
+  --println $ mapped3First
+
+  assertEquals 84.0 sum
+
+  scMaster :: String <- sc.master
+  println $ "calculated with master: " ++ scMaster
+  println "final3"

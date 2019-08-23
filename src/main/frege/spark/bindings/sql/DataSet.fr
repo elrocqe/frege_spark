@@ -28,7 +28,7 @@ data DataSet a = native org.apache.spark.sql.Dataset where
   --native toDF             :: Mutable s (DataSet a) ->  (ArrayOf s String) -> STMutable s (DataSet a)
 
   native collectAsList    :: Mutable s (DataSet a) -> STMutable s (List a) 
-  native toJavaRDD        :: Mutable s (DataSet a) -> STMutable s (JavaRDD a)
+  pure native toJavaRDD   :: DataSet a -> JavaRDD a
   native write            :: Mutable s (DataSet a) -> STMutable s (DataFrameWriter)
   
   --native agg              :: Mutable s (DataSet a) -> (MapFunction a b) -> (Encoder b) -> STMutable s (DataSet b)

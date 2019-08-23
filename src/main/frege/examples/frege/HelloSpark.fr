@@ -35,8 +35,8 @@ main = do
   scVersion :: String <- sc.version
   scAppName :: String <- sc.appName
 
-  javaRDD <- JavaSparkContext.textFile sc logFile
-  count :: long <- javaRDD.count
+  javaRDD = JavaSparkContext.textFile sc logFile
+  count  = javaRDD.count
   
   -- println $ (show javaRDD.count) -- how to print IO types?
 

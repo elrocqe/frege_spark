@@ -1,0 +1,109 @@
+module examples.frege.numbers.IntegrationExampleFregeExperiments where
+
+import spark.bindings.SparkConf
+import spark.bindings.custom.Function
+import spark.bindings.custom.Function2
+import frege.java.Util
+import util.CSVUtil
+
+import computations.NativeFregeFunction
+import spark.bindings.JavaSparkContext
+
+import frege.test.QuickCheck
+
+appendTest :: String -> String
+appendTest x = x ++ "Testdkaa"
+
+filterThreeOrFive :: Double -> Bool
+filterThreeOrFive 3.0 = true
+filterThreeOrFive 5.0 = true
+filterThreeOrFive _ = false
+
+replaceWithZero :: Double -> Double
+replaceWithZero _ = 0.0
+
+addOne :: Double -> Double
+addOne x = x + 1.0
+
+times2 :: Double -> Double
+times2 x = x * 2.0
+
+times10 :: Double -> Double
+times10 x = x * 10.0
+
+mySum :: Double -> Double -> Double
+mySum x y = x + y
+
+--myClass :: Class Double
+--myClass = Class 0.0
+
+
+main :: IO ()
+main = computeInFrege
+
+
+computeInFrege :: IO ()
+computeInFrege = do
+  sparkConfig <- SparkConf.new ()
+  sparkConfig.setMaster "local"
+  sparkConfig.setAppName "Frege-Spark"
+  sc :: MutableIO JavaSparkContext <- JavaSparkContext.new sparkConfig
+
+  currentData <- JavaSparkContext.textFile sc "data/first.csv"
+  parsedData <- currentData.map Function.convertToDouble
+
+  --appendedData <- currentData.map Function.appendTest
+--  appendedData <- currentData.map $ Function.createBasicStringMapFunctionFromString "computations.BasicFregeFunction" "appendTestReflect"
+  --appendedData <- currentData.map $ Function.createStringTypedFunction appendTest  
+  --appendedData <- currentData.map $ Function.createStringMapFunction "computations.BasicFregeFunction" "filterFour"
+  --filteredData <- currentData.filter $ Function.createStringFilterFunction "computations.BasicFregeFunction" "filterFour"
+  --filteredData <- parsedData.filter $ Function.createDoubleFilterFunction "computations.BasicFregeFunction" "filterThreeOrFive"
+  --filteredData <- parsedData.filter $ Function.createTypedFunction filterFour  
+--  filteredData <- parsedData.filter $ funcWrapper
+
+  --mappedData <- filteredData.map $ mapFuncWrapper
+
+--  mappedData <- filteredData.map $ Function.createGenericFilterFunction addOne
+  --appendedData <- filteredData.map $ Function.createDoubleMapFunction "computations.BasicFregeFunction" "addOne"
+  --replacedData <- appendedData.map $ Function.createDoubleFunction replaceWithZero
+
+  --sum <- parsedData.reduce $ Function2.createDoubleReduceFunction "computations.BasicFregeFunction" "getSum"
+  --sum <- mappedData3.reduce $ Function2.createGenericReduceFunction mySum
+  --sum <- mappedData2.reduce $ Function2.getSum
+
+
+  -- print insights and results
+{-
+  currentFirst <- currentData.first
+  
+  print $ "currentFirst: "
+  println $ currentFirst
+
+  
+  parsedFirst <- parsedData.first
+  
+  print $ "parsedFirst: "
+  println $ show $ parsedFirst
+
+  
+  filteredFirst <-  filteredData.first
+  
+  print $ "filteredFirst: "
+  println $ show $ filteredFirst
+  
+  print $ "sum: "
+  println $ sum
+  
+  -}
+        {-
+  mappedFirst = getValueOfMaybe $ head mappedList
+  
+  print $ "mappedFirst: "
+  println $ mappedFirst
+  
+  print $ "sum: "
+  println $ getValueOfMaybe $ sum
+  -}
+  
+
+  println "final"

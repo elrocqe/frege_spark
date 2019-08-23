@@ -1,0 +1,5 @@
+module model.Person where
+
+import frege.test.QuickCheck
+
+data Person = native model.Person

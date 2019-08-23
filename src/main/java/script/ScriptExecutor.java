@@ -16,15 +16,38 @@ import org.apache.hadoop.yarn.webapp.hamlet.HamletSpec.A;
 
 public class ScriptExecutor {
 
-	static ScriptEngine frege;
+	public static ScriptEngine frege;
 	
 	public static <A, B> B executeFunction(String functionName, A x) throws IOException, ScriptException {
 		loadFunctions();
 		return (B) frege.eval(functionName + " " + x.toString());
 	}
+	
+	public static void loadFunction(String function) throws IOException, ScriptException {
+		loadScriptEngine();
+		frege.eval(function);
+	}
+	
+	public static <A, B> B executeScriptFunction(A x) throws IOException, ScriptException {
+		return (B) frege.eval("f " + x.toString());
+	}
+	
+	public static <A, B> B loadAndExecuteScriptFunction(String function, A x) {
+		try {
+			loadFunction(function);
+			//System.out.println("loadedFunction");
+			return (B) frege.eval("f " + x.toString());
+		} catch (IOException | ScriptException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+		
+	}
 
 	public static <A, B, C> C executeFunction2(String functionName, A v1, B v2) throws ScriptException, IOException {
 		loadFunctions();
+		System.out.println(v1.toString() + " " + v2.toString());
 		return (C) frege.eval(functionName + " " + v1.toString() + " " + v2.toString());
 	}
 
@@ -46,8 +69,17 @@ public class ScriptExecutor {
 	 *  
 	 *  https://stackoverflow.com/questions/1463192/reading-content-of-a-jar-file-at-runtime
 	 */
-	static void loadFunctions() throws IOException, ScriptException {
+	
+	public static void loadScriptEngine() throws IOException, ScriptException {
 		if (frege == null) {
+			final ScriptEngineManager factory = new ScriptEngineManager();
+			frege = factory.getEngineByName("frege");
+		}
+	}
+	
+	public static void loadFunctions() throws IOException, ScriptException {
+		if (frege == null) {
+			// TODO refactor
 			final ScriptEngineManager factory = new ScriptEngineManager();
 			frege = factory.getEngineByName("frege");
 			JarFile jarFile = new JarFile("frege-spark.jar");
@@ -57,14 +89,14 @@ public class ScriptExecutor {
 				final JarEntry entry = entries.nextElement();
 				if (entry.getName().contains(".")) {
 					// System.out.println("File : " + entry.getName());
-					if (entry.getName().contains("FunctionPool.fr")) {
+					if (entry.getName().contains("FunctionPoolEntryPoint.fr")) {
 						JarEntry fileEntry = jarFile.getJarEntry(entry.getName());
 						InputStream input = jarFile.getInputStream(fileEntry);
 						InputStreamReader isr = new InputStreamReader(input);
 						BufferedReader reader = new BufferedReader(isr);
 						String line;
 						while ((line = reader.readLine()) != null) {
-							if (isFunctionDefinition(line)) {
+							if (isFunctionDefinition(line) || isImport(line)) {
 								String script = line.trim();
 								frege.eval(script);
 								// System.out.println(script);
@@ -84,5 +116,8 @@ public class ScriptExecutor {
 	 */
 	private static boolean isFunctionDefinition(String line) {
 		return line.contains("=");
+	}
+	private static boolean isImport(String line) {
+		return line.contains("import");
 	}
 }

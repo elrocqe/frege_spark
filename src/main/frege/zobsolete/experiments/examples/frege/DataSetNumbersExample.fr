@@ -1,0 +1,57 @@
+module examples.frege.numbers.DataSetNumbersExample where
+
+import spark.bindings.SparkConf
+import spark.bindings.sql.SQLContext
+import spark.bindings.sql.DataFrameReader
+import spark.bindings.sql.DataFrameWriter
+import spark.bindings.sql.DataSet
+import spark.bindings.sql.Row
+import spark.bindings.JavaSparkContext
+import spark.bindings.custom.MapFunction
+import spark.bindings.custom.ReduceFunction
+import spark.bindings.custom.FilterFunction
+import spark.bindings.custom.Encoder
+
+import frege.test.QuickCheck
+
+
+
+main :: IO ()
+main = do
+  sparkConfig <- SparkConf.new ()
+  sparkConfig.setMaster "local"
+  sparkConfig.setAppName "Frege-Spark"
+  sc :: MutableIO JavaSparkContext <- JavaSparkContext.new sparkConfig
+  sqlContext :: MutableIO SQLContext <- SQLContext.new sc
+  dataFrameReader :: MutableIO (DataFrameReader) <- SQLContext.read sqlContext
+  df1 <- dataFrameReader.format "csv"
+  df2 <- df1.option "inferSchema" "true"
+  currentData :: MutableIO (DataSet Row) <- df1.load "data/first.csv"
+  
+  --filteredData <- currentData.filter "_c0 = '5'"
+  filteredData <- currentData.filter FilterFunction.filterThreeOrFiveRow
+  
+  count <- currentData.count
+  print $ "count: "
+  println $ count
+  filteredCount <- filteredData.count
+  print $ "filteredCount: "
+  println filteredCount
+  
+  --mappedStringData :: MutableIO (DataSet String) <- filteredData.as(Encoder.stringEncoder)
+  --mappedIntegerData :: MutableIO (DataSet Integer) <- filteredData.as(Encoder.intEncoder)
+  parsedDoubleData :: MutableIO (DataSet Double) <- filteredData.as(Encoder.doubleEncoder)
+  mappedDoubleData :: MutableIO (DataSet Double) <- parsedDoubleData.map MapFunction.addOneMFDouble Encoder.doubleEncoder
+  DataSet.show mappedDoubleData -- TODO why does this not work: mappedDoubleData.show?
+  --result :: String <- mappedStringData.reduce ReduceFunction.getStringSum
+  --result :: Double <- mappedData.reduce ReduceFunction.getIntegerSum
+  result :: Double <- mappedDoubleData.reduce ReduceFunction.getDoubleSum
+  print "result: "
+  println result
+
+  dataFrameWriter :: (MutableIO DataFrameWriter) <- mappedDoubleData.write
+  dataFrameWriter <- dataFrameWriter.mode "overwrite"
+  dataFrameWriter <- dataFrameWriter.format "csv"
+  dataFrameWriter <- dataFrameWriter.save "target/out/"
+
+  println "final5"

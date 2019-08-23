@@ -4,8 +4,11 @@ file :: String
 file = "data/first.csv"
 
 fregecJar :: String
-fregecJar = "frege3.24.405.jar"
+fregecJar = "jars/frege3.24.405.jar"
 
 applicationJar :: String
 applicationJar = "frege-spark.jar"
+
+interpreterJar :: String
+interpreterJar = "jars/frege-interpreter-core-1.3-SNAPSHOT.jar"
 

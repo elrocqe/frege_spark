@@ -1,7 +1,8 @@
 module examples.frege.numbers.NumbersRDDExampleInFrege where
 
 import spark.bindings.SparkConf
-import spark.bindings.custom.Function2
+import spark.bindings.custom.CustomFunction
+import spark.bindings.custom.CustomFunction2
 import frege.java.Util
 --import util.CSVUtil
 import examples.frege.numbers.FregeHelpers
@@ -18,20 +19,24 @@ main = do
   sc :: MutableIO JavaSparkContext <- JavaSparkContext.new sparkConfig
     
   currentData <- JavaSparkContext.textFile sc "data/first.csv"
+  --parsedData = currentData.map  Function.convertToDouble
+
   --currentData <- JavaSparkContext.textFile sc "data/numbers.csv"
   
-  cp::Mutable t (List String) <- currentData.collect
-  elem::Maybe String <- cp.get 0
-  iterator:: MutableIO (Iterator String) <- (cp.iterator)
-  currentList :: [String] <- (iterator.toList)
+  cp <- currentData.collect
+  cp0 <- cp.get 0
+  println $ show $ cp0
+  --elem::Maybe String <- cp.get 0
+  iterator <- (cp.iterator)
+  currentList <- (iterator.toList)
 
   parsedList = map readString currentList
-  filteredList = filter (\x -> isThreeOrFiveM x) parsedList
-  mappedList = map addOneM filteredList
-  sum = foldr getSumM (Just 0.0) mappedList
+ -- filteredList = filter (\x -> isThreeOrFiveM x) parsedList
+ -- mappedList = map addOneM filteredList
+ -- sum = foldr getSumM (Just 0.0) mappedList
 
   -- print insights and results
-
+{-
   currentFirst = head currentList
   
   print $ "currentFirst: "
@@ -55,5 +60,5 @@ main = do
   print $ "sum: "
   println $ getValueOfMaybe $ sum
   
-
+-}
   println "final"

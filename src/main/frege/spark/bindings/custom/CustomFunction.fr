@@ -1,7 +1,7 @@
 module spark.bindings.custom.CustomFunction where
 
 
-import experiments.model.DataSet
+--import experiments.model.DataSet
 
 -- runnable
 --https://github.com/Frege/frege/blob/master/frege/java/Lang.fr#L89
@@ -9,10 +9,10 @@ import experiments.model.DataSet
 -- TODO difference between java and frege object(which gets used?)
 --data JavaDataSet = pure native "model.JavaDataSet"
 
-data FunctionWrapper a b = pure native "experiments.props.FunctionWrapper" where
-     native new :: (a -> b) -> ST s (FunctionWrapper a b)
+--data FunctionWrapper a b = pure native "experiments.props.FunctionWrapper" where
+--     native new :: (a -> b) -> ST s (FunctionWrapper a b)
 
-data Function a b = pure native "org.apache.spark.api.java.function.Function" where
+data Function a b = native "org.apache.spark.api.java.function.Function" where
   
   pure native create   "experiments.props.FunctionHelper.createFunction" {a,b}       :: (a -> b) -> Function a b
   pure native createLambda   "experiments.props.FunctionHelper.createLambda" {a,b}       :: (a -> b) -> Function a b
@@ -21,12 +21,16 @@ data Function a b = pure native "org.apache.spark.api.java.function.Function" wh
 
 
   -- numbers
+-- TODO nonPure Functions
+  --native nonPureFunction                    "experiments.props.FilterFunctions.filterFive"                    :: IO (Function String Bool) 
 
     -- filters
   pure native filterFive                    "experiments.props.FilterFunctions.filterFive"                    :: Function String Bool 
   pure native filterThreeOrFiveOnDouble     "experiments.props.FilterFunctions.filterThreeOrFiveOnDouble"     :: Function Double Bool 
   pure native filterThreeOrFiveOnInteger    "experiments.props.FilterFunctions.filterThreeOrFiveOnInteger"    :: Function Integer Bool 
   pure native filterThreeOrFiveOnString     "experiments.props.FilterFunctions.filterThreeOrFiveOnString"     :: Function String Bool 
+
+  pure native filterThreeOrFiveFrege     "experiments.props.FilterFunctions.filterThreeOrFiveFrege"     :: (Double -> Bool) -> Function Double Bool 
 
 
   -- mappers
@@ -36,6 +40,7 @@ data Function a b = pure native "org.apache.spark.api.java.function.Function" wh
   pure native addOneOnInteger               "experiments.props.MapFunctions.addOneOnInteger"               :: Function Integer Integer
   pure native addOneOnString                "experiments.props.MapFunctions.addOneOnString"                :: Function String String
   pure native appendTest                    "experiments.props.MapFunctions.appendTest"                    :: Function String String
+  pure native timesTen                      "experiments.props.MapFunctions.timesTen"                      :: Function Double Double
 
   -- integration
     
@@ -50,22 +55,3 @@ data Function a b = pure native "org.apache.spark.api.java.function.Function" wh
   pure native createStringFilterFunction    "experiments.props.StringFunctions.createStringFilterFunction"  :: String -> String -> Function String Bool
   pure native createDoubleMapFunction       "experiments.props.DoubleFunctions.createDoubleMapFunction"     :: String -> String -> Function Double Double
   pure native createDoubleFilterFunction    "experiments.props.DoubleFunctions.createDoubleFilterFunction"  :: String -> String -> Function Double Bool
-
-  -- weatherdata
-  
-  -- filters
-  pure native filterHighRainFromString      "experiments.props.FilterFunctions.filterHighRainFromString"      :: Function String Bool 
-  pure native filterHighRainFromStringArray "experiments.props.FilterFunctions.filterHighRainFromStringArray" :: Function (JArray String) Bool 
-  pure native filterHighRainFromDataSet     "experiments.props.FilterFunctions.filterHighRainFromDataSet"     :: Function DataSet Bool
-  --pure native filterHighRainFromJavaDataSet "experiments.props.FilterFunctions.filterHighRainFromDataSet"     :: Function JavaDataSet Bool 
-
-  -- mappers
-  pure native parseLineToStringArray        "experiments.props.MapFunctions.parseLineToStringArray"        :: Function String (JArray String)
-  pure native parseLineToDataSet            "experiments.props.MapFunctions.parseLineToDataSet"            :: Function String DataSet
-  --pure native parseLineToJavaDataSet        "experiments.props.MapFunctions.parseLineToDataSet"            :: Function String JavaDataSet
-  pure native getTemperatureFromString      "experiments.props.MapFunctions.getTemperatureFromString"      :: Function String Double
-  pure native getTemperatureFromStringArray "experiments.props.MapFunctions.getTemperatureFromStringArray" :: Function (JArray String) Double
-  pure native getTemperatureFromDataSet     "experiments.props.MapFunctions.getTemperatureFromDataSet"     :: Function DataSet Double
-  --pure native getTemperatureFromJavaDataSet "experiments.props.MapFunctions.getTemperatureFromDataSet"     :: Function JavaDataSet Double 
-
-  

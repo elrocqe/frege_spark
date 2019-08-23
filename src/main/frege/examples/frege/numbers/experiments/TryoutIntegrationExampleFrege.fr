@@ -1,0 +1,187 @@
+module examples.frege.numbers.TryoutIntegrationExampleFrege where
+
+import spark.bindings.SparkConf
+import bindings.Function
+import bindings.Function2
+import spark.bindings.custom.CustomFunction
+import spark.bindings.custom.TestBindings
+import spark.bindings.JavaSparkContext
+import spark.config.Config
+
+{-
+native module where {
+    public static class NativeJavaClass {
+    public static String runJava(Double value) {
+    		System.out.println("Hello World From Java");
+        System.out.println("value = " + value);
+        return "HelloFromNativeModule";
+    }
+}
+}
+native runJava  TryoutIntegrationExampleFrege.NativeJavaClass.runJava :: (Double) -> IO (String)
+-}
+
+{-native module where {
+
+    public static class NativeFunction {
+    public static Function<Double, Boolean> createNativeJavaFunction() {
+		return new Function() {
+			public Boolean call(Double x) throws Exception  {
+		        System.out.println("Hello World From Java");
+                System.out.println("value = " + x);
+                return (x == 3);
+			}
+		};
+	};
+  };
+}
+
+-}
+{- failed native experiment-}
+{-native module where {
+    public static class NativeFunction {
+    public static Function<Double, Boolean> createNativeJavaFunction() {
+		return new Function() {
+			public Boolean call(Double x) throws Exception  {
+		        System.out.println("Hello World From Java");
+                System.out.println("value = " + x);
+                return x == 3;
+			}
+		};
+	};
+  }
+}
+-}
+
+--native createNativeJavaFunction TryoutIntegrationExampleFrege.NativeFunction.createNativeJavaFunction :: () -> IO (Function Double Bool)
+
+-- TODO how to create a native method that returns a Function (either generic or not)
+
+--native createFunction  TryoutIntegrationExampleFrege.NativeFunction.createFunction :: () -> ST s (Function Double Double)
+
+
+{-
+pure native createNativeJavaFunction  TryoutIntegrationExampleFrege.NativeFunction.createNativeJavaFunction {a, b } :: () -> Function a b
+-}
+
+
+--native createNativeJavaFunction  TryoutIntegrationExampleFrege.NativeFunction.creatNativeJavaFunction {a, b } :: () -> IO (Function a b)
+
+
+native module where {
+  public static class NativeFunction {
+  {-
+    public <A, B> Function<A, B> createNativeJavaFunction() {
+		return new Function<A, B>() {
+			public B call(A x) {
+		        System.out.println("Hello World From Java");
+                System.out.println("value = " + x);
+                if (x == null) {
+                    return null;
+                }
+                if (x instanceof Double) {
+                    return (B) new Double(x.doubleValue() * 10);
+                } else if (x instanceof Integer) {
+                    return (B) new Integer(x.intValue() * 10);
+                } else {
+                    throw new IllegalArgumentException("Type " + x.getClass() + " is not supported by this method");
+                }
+			}
+		};
+
+	};
+-}
+
+	{-public static <A, B> org.apache.spark.api.java.function.Function<A, B> createNativeFunction() {
+
+		return new org.apache.spark.api.java.function.Function<A, B>() {
+			public B call(A x) {	
+				System.out.println("printed from native function");
+                return (B) x;
+                //return (B) (((Double) x) * 10.0);
+                //return (B) (x * ((A) 10.0));
+                // 	-Cannot cast from double to B
+                // The operator * is undefined for the argument type(s) A, A
+			   //-Cannot cast from double to A
+
+    			}
+		};
+	};-}
+
+	{-public static <A extends Number> org.apache.spark.api.java.function.Function<A, A> createNativeFunction() {
+
+		return new org.apache.spark.api.java.function.Function<A, A>() {
+			public A call(A x) {	
+				System.out.println("printed from native function");
+                return (A) (x * x);
+    			}
+		};
+	};-}
+
+	public static <A> org.apache.spark.api.java.function.Function<A, Boolean> createNativeFilterFunction() {
+
+		return new org.apache.spark.api.java.function.Function<A, Boolean>() {
+			public Boolean call(A x) {	
+				System.out.println("printed from native filter function");
+				return (Boolean) (((Double) x) == 30.0);
+			}
+		};
+	};
+  }
+}
+
+{-//return (B) (((Double) x) * 10.0);
+                //return (B) (x * ((A) 10.0));
+                // 	-Cannot cast from double to B
+                // The operator * is undefined for the argument type(s) A, A
+			   //-Cannot cast from double to A
+-}
+--pure native createNativeFunction        TryoutIntegrationExampleFrege.NativeFunction.createNativeFunction            {a} :: () -> Function a a
+--pure native createNativeFunction        TryoutIntegrationExampleFrege.NativeFunction.createNativeFunction            {a, b} :: () -> Function a b
+pure native createNativeFilterFunction        TryoutIntegrationExampleFrege.NativeFunction.createNativeFilterFunction      {a} :: () -> Function a Bool
+
+
+-- TODO how to create a frege method that returns a Function
+
+main :: IO ()
+main = do
+  --result <- runJava 3.0
+  --println "fromFrege"
+  --println result
+
+  --myFunction <-
+  sparkConfig <- SparkConf.new ()
+  println fregecJar
+  list <- arrayFromListST [applicationJar, fregecJar, interpreterJar]
+  sparkConfig.setAppName "Frege-Spark"
+  sparkConfig.setJars list
+  --sparkConfig.setMaster "local"
+  sparkConfig.setMaster "spark://Damians-MacBook.local:7077"
+  sc :: MutableIO JavaSparkContext <- JavaSparkContext.new sparkConfig
+  
+  currentData <- JavaSparkContext.textFile sc "data/first.csv"
+  parsedData = currentData.map CustomFunction.Function.convertToDouble
+  mappedData = parsedData.map CustomFunction.Function.timesTen
+  --mappedData <- parsedData.map $ Function.Function.createInterpretedFunction "timesTen"
+  --mappedData <- parsedData.map $ createNativeFunction ()
+  --mappedData <- parsedData.map $ Function.Function.createFunction ()
+  --mappedData <- parsedData.filter $ createNativeJavaFunction ()
+  filteredData = mappedData.filter $ createNativeFilterFunction ()
+  --mappedData <- parsedData.map $ Function.Function.createInterpretStringFunction "f x = x * 10.0"
+ 
+  sum = filteredData.reduce $ Function2.createInterpretedFunction "sum"
+
+  currentFirst = currentData.first
+  assertEquals currentFirst "1"
+
+  parsedFirst = parsedData.first
+  assertEquals parsedFirst 1.0
+
+  mappedFirst = mappedData.first
+  assertEquals 10.0 mappedFirst 
+
+  assertEquals 210.0 sum
+
+  scMaster :: String <- sc.master
+  println $ "calculated with master: " ++ scMaster
+  println "final3"

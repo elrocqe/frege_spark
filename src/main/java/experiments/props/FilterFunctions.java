@@ -11,12 +11,20 @@ import org.apache.spark.sql.Row;
 
 import experiments.model.JavaDataSet;
 
+import frege.run8.Func.U;
+import frege.run8.Lazy;
+import frege.run8.Thunk;
+import java.io.Serializable;
+
 public class FilterFunctions {
 	
 	
 	/*
 	 *  numbers 
 	 */
+	
+	static frege.run8.Func.U<Double,Boolean> staticF = null;
+
 	
 	public static Function<String, Boolean> filterFive = new Function<String, Boolean>() {
         public Boolean call(String input) {
@@ -29,6 +37,25 @@ public class FilterFunctions {
             return input == 3.0 || input == 5.0;
         }
 	};
+	
+	public static Function<Double, Boolean> filterThreeOrFiveFrege(frege.run8.Func.U<Double,Boolean> f) {
+		staticF = f;
+		return new Function<Double, Boolean>() {
+        public Boolean call(Double input) {
+    		    return (Boolean)staticF.apply(Thunk.lazy(input)).call();
+        }
+		};
+	};
+	
+	/*public static Function<Double, Boolean> filterThreeOrFiveFrege(Object f) {
+		System.out.println("filterThreeOrFiveFrege");
+		return new Function<Double, Boolean>() {
+        public Boolean call(Double input) {
+    		System.out.println("filterThreeOrFiveFreg in call");
+    		    return null;
+        }
+		};
+	};*/
 	
 	public static Function<BigInteger, Boolean> filterThreeOrFiveOnInteger = new Function<BigInteger, Boolean>() {
         public Boolean call(BigInteger input) {

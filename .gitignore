@@ -5,3 +5,4 @@ classpath.conf
 .classpath
 P9spark
 /bin/
+/jars/

@@ -1,0 +1,32 @@
+module computations.BasicFregeFunction where
+
+import frege.test.QuickCheck
+
+
+myNumber :: Double
+myNumber = 6.0
+
+--
+-- filters
+--
+
+filterFour :: String -> Bool
+filterFour "4" = true
+filterFour _ = false
+
+filterThreeOrFive :: Double -> Bool
+filterThreeOrFive 3.0 = true
+filterThreeOrFive 5.0 = true
+filterThreeOrFive _ = false
+
+getSum :: Double -> Double -> Double
+getSum x y = x + y
+
+addOne :: Double -> Double
+addOne x = x + 1.0
+
+appendTest :: String -> String
+appendTest x = x ++ "appendedInFrege"
+
+appendTestReflect :: String -> String
+appendTestReflect x = x ++ "appendedInFregeReflect"

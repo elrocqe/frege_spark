@@ -1,26 +1,44 @@
 module spark.bindings.JavaRDD where
 
 import spark.bindings.custom.CustomFunction
-import spark.bindings.custom.Function2
+import spark.bindings.custom.CustomFunction2
 import frege.java.Util
 
-data JavaRDD a = native org.apache.spark.api.java.JavaRDD where
+data JavaRDD a = pure native org.apache.spark.api.java.JavaRDD where
   
-  native name             :: Mutable s (JavaRDD a) -> ST s String
-  native count            :: Mutable s (JavaRDD a) -> ST s Long
-  native first            :: Mutable s (JavaRDD a) -> ST s a
-  native toString         :: Mutable s (JavaRDD a) -> ST s String
-  native isEmpty          :: Mutable s (JavaRDD a) -> ST s Bool
+  pure native name          :: JavaRDD a -> String
+  pure native count         :: JavaRDD a -> Long
+  pure native first         :: JavaRDD a -> a
+  pure native toString      :: JavaRDD a -> String
+  pure native isEmpty       :: JavaRDD a -> Bool
 
-  native filter           :: Mutable s (JavaRDD a) -> Function a Bool-> STMutable s (JavaRDD a)
-  native map              :: Mutable s (JavaRDD a) -> Function a b -> STMutable s (JavaRDD b)
-  native distinct         :: Mutable s (JavaRDD a) -> STMutable s (JavaRDD a)
-  
-  native saveAsTextFile   :: Mutable s (JavaRDD a) -> String -> ST s ()
-  native saveAsObjectFile :: Mutable s (JavaRDD a) -> String -> ST s ()
-  native randomSplit      :: Mutable s (JavaRDD a) -> (ArrayOf s Double) -> STMutable s ((JArray (JavaRDD a)))
-
-  native reduce           :: Mutable s (JavaRDD a) -> Function2 a a a -> ST s a
+  pure native filter        :: JavaRDD a -> Function a Bool-> JavaRDD a
+  pure native map           :: JavaRDD a -> Function a b -> JavaRDD b
+  pure native reduce        :: JavaRDD a -> Function2 a a a -> a
 
   -- JavaRDDLike
-  native collect          :: Mutable s (JavaRDD a) -> STMutable s (List a)
+  native collect       :: JavaRDD a -> STMutable s (List a)
+  
+   {-
+ -- impure
+  --native name             :: Mutable s (JavaRDD a) -> ST s String
+  --native count            :: Mutable s (JavaRDD a) -> ST s Long
+  --native first            :: Mutable s (JavaRDD a) -> ST s a
+  --native toString         :: Mutable s (JavaRDD a) -> ST s String
+ -- native isEmpty          :: Mutable s (JavaRDD a) -> ST s Bool
+
+  --native filter           :: Mutable s (JavaRDD Double) -> Function Double Bool-> STMutable s (JavaRDD Double)
+--  native filter           :: Mutable s (JavaRDD a) -> Function a Bool-> STMutable s (JavaRDD a)
+  --native map              :: Mutable s (JavaRDD a) -> Function a b -> STMutable s (JavaRDD b)
+  --native map              :: Mutable s (JavaRDD Double) -> Function Double Double -> STMutable s (JavaRDD Double)
+ -- native distinct         :: Mutable s (JavaRDD a) -> STMutable s (JavaRDD a)
+  
+ -- native saveAsTextFile   :: Mutable s (JavaRDD a) -> String -> ST s ()
+ -- native saveAsObjectFile :: Mutable s (JavaRDD a) -> String -> ST s ()
+ -- native randomSplit      :: Mutable s (JavaRDD a) -> (ArrayOf s Double) -> STMutable s ((JArray (JavaRDD a)))
+
+ -- native reduce           :: Mutable s (JavaRDD a) -> Function2 a a a -> ST s a
+
+  -- JavaRDDLike
+ -- native collect          :: Mutable s (JavaRDD a) -> STMutable s (List a)
+ -}

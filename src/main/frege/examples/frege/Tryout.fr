@@ -1,6 +1,6 @@
 -- module for minor experiments (to see what gets compiled)
 
-module Tryout where
+module examples.frege.Tryout where
 
   test :: a->a
   test = id (\x -> x)

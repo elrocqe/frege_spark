@@ -60,6 +60,12 @@ public class MapFunctions {
 		}
 	};
 	
+	public static Function<Double, Double> timesTen = new Function<Double, Double>() {
+		public Double call(Double s) {
+			return s * 10.0;
+		}
+	};
+	
 	public static Function<BigInteger, BigInteger> addOneOnInteger = new Function<BigInteger, BigInteger>() {
 		public BigInteger call(BigInteger s) {
 			return s.add(new BigInteger("1"));

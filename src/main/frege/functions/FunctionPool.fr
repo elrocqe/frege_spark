@@ -1,11 +1,14 @@
 -- module that contains functions which can be executed on spark nodes
 
-module FunctionPool where
+module functions.FunctionPool where
 
-  import funcions.ImportFunctionPool
+  import functions.NestedImportFunctionPool
 
   addOne :: Double -> Double
   addOne x = x + 1.0
+  
+  addOneInteger :: Integer -> Integer
+  addOneInteger x = x + 1
   
   addValue x = x + value where value = 2
 
@@ -26,3 +29,7 @@ module FunctionPool where
   filterThreeOnString :: String -> Bool
   filterThreeOnString "3" = true
   filterThreeOnString _ = false
+  
+  multilineFunction x = x + y + z where
+    y = 2.0
+    z = 3.0

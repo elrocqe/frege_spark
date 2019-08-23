@@ -1,23 +1,9 @@
 package scriptengine;
 
-import org.junit.Before;
 import org.junit.Test;
-
-import javax.script.Bindings;
-import javax.script.Compilable;
-import javax.script.CompiledScript;
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
-
 import java.io.IOException;
-import java.math.BigInteger;
-
-import static javax.script.ScriptContext.ENGINE_SCOPE;
 import static org.junit.Assert.assertEquals;
-
-import  frege.scriptengine.FregeScriptEngine;
-import  frege.scriptengine.FregeScriptEngineFactory;
 import script.ScriptExecutor;
 
 public class ScriptExecutorTests {
@@ -132,4 +118,58 @@ public class ScriptExecutorTests {
     		Double result = ScriptExecutor.executeFunction("addThree", 0.0);
     		assertEquals(Double.valueOf(3.0), result);
     }
+
+    
+    @Test
+    public void testLoadAndExecuteFunction() throws ScriptException, IOException {
+    		Double result = ScriptExecutor.loadAndExecuteScriptFunction("f x = x * 10.0", 1.0);
+    		assertEquals(Double.valueOf(10.0), result);
+    }
+    
+    @Test
+    public void testLoadAndExecuteStepsFunction() throws ScriptException, IOException {
+      	ScriptExecutor scriptExecutor = new ScriptExecutor();
+      	scriptExecutor.loadScriptEngine();
+		scriptExecutor.frege.eval("f x = x * 10.0");
+		Double x = 1.0;
+		Double result = (Double) scriptExecutor.frege.eval("f " + x.toString());    		
+		assertEquals(Double.valueOf(10.0), result);
+    }
+    
+    
+    /*@Test
+    public void testLoadAndExecuteFunctionSteps() throws ScriptException, IOException {
+		frege.eval("f x = x * 10");
+		Double x = 1.0;
+		return (B) frege.eval("f " + x.toString());
+    }*/
+
+    
+    @Test
+    public void loadTypeDefinition() throws ScriptException, IOException {
+      	ScriptExecutor scriptExecutor = new ScriptExecutor();
+      	scriptExecutor.loadScriptEngine();
+		Object result = scriptExecutor.frege.eval("test3 :: Int -> Int");
+		System.out.println(result);
+		System.out.println(result.toString());
+    }
+    
+    @Test
+    public void testImportedModule() throws ScriptException, IOException {
+      	ScriptExecutor scriptExecutor = new ScriptExecutor();
+      	scriptExecutor.loadFunctions();
+		Object result = scriptExecutor.frege.eval("addOne 1");
+		System.out.println(result);
+    }
+    
+    @Test
+    public void multilineTest() throws ScriptException, IOException {
+      	ScriptExecutor scriptExecutor = new ScriptExecutor();
+      	scriptExecutor.loadFunctions();
+		Object result = scriptExecutor.frege.eval("multilineFunction 1.0");
+		System.out.println(result);
+		assertEquals(Double.valueOf(6.0), result);
+
+    }
+    
 }

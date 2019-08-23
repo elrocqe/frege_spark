@@ -1,0 +1,41 @@
+module examples.java.JavaBindingsExample where
+
+import spark.bindings.JavaSparkContext
+import spark.bindings.SparkConf
+import spark.bindings.JavaRDD
+import spark.bindings.custom.Function
+import spark.bindings.custom.Function2
+import frege.test.QuickCheck
+import spark.config.Config
+
+main :: IO ()
+main = basicSpark
+
+add :: Double -> Double -> Double
+add a b = a + b
+
+basicSpark :: IO ()
+basicSpark = do
+  sparkConfig <- SparkConf.new ()
+  sparkConfig.setMaster "local"
+  sparkConfig.setAppName "Frege-Spark"
+  sc <- JavaSparkContext.new sparkConfig
+  
+  
+  currentData <- JavaSparkContext.textFile sc  Config.file
+  parsedData <- currentData.map  Function.parseLineToStringArray
+  filteredData <- parsedData.filter  Function.filterHighRainFromStringArray
+  mappedData <- filteredData.map  Function.getTemperatureFromStringArray
+  averageTemperature <- mappedData.reduce  Function2.getSum
+  
+  {-
+  currentData <- JavaSparkContext.textFile sc Config.file
+  parsedData <- currentData.map  Function.parseLineToStringArray
+  averageTemperature <- currentData.map  Function.parseLineToStringArray >>= 
+   _.filter  Function.filterHighRainFromStringArray >>=
+   _.map  Function.getTemperatureFromStringArray
+   _.reduce  Function2.getSum
+  -}
+  
+  count <- mappedData.count
+  putStrLn $ "Average temperature of measurements with high rain: " ++ (show (averageTemperature / Long.double count))

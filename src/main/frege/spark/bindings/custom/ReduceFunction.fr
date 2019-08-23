@@ -3,6 +3,5 @@ module spark.bindings.custom.ReduceFunction where
 data ReduceFunction a = pure native "org.apache.spark.api.java.function.ReduceFunction" where
 
   -- reduce
-  --pure native getIntegerSum "bindings.ReduceFunctions.getIntegerSum" :: ReduceFunction BigInteger
   pure native getDoubleSum "bindings.ReduceFunctions.getDoubleSum"   :: ReduceFunction Double
   pure native getStringSum  "bindings.ReduceFunctions.getStringSum"  :: ReduceFunction String

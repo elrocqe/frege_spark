@@ -1,9 +1,5 @@
 module examples.frege.numbers.FregeHelpers where
 
-import frege.java.Util
-
-import spark.bindings.JavaSparkContext
-
 import frege.test.QuickCheck
 
 -- filter
@@ -30,13 +26,22 @@ getSumM (Just x) Nothing = Just x
 getSumM (Nothing) (Just y) = Just y
 getSumM (Just x) (Just y) = Just (x + y)
 
-readString :: String -> Maybe Double
-readString x = undefined -- TODO
+readStringM :: String -> Maybe Double
+readStringM x = undefined -- TODO
 --readValue $ String.double x
 
-getValueOfMaybe (Just x) = x
 
-parseTest = once $ map readString ["0", "1", "2", "3", "4", "5", "6", "7"] == [(Just 0.0), (Just 1.0), (Just 2.0), (Just 3.0), (Just 4.0), (Just 5.0), (Just 6.0), (Just 7.0)]
+readString :: String -> Double
+readString x = getValue $ String.double x
+
+getValue :: (NumberFormatException | Double) -> Double
+getValue (Right x) = x
+getValue (Left x) = 0.0
+  
+
+--getValueOfMaybe (Just x) = x
+
+--parseTest = once $ map readString ["0", "1", "2", "3", "4", "5", "6", "7"] == [(Just 0.0), (Just 1.0), (Just 2.0), (Just 3.0), (Just 4.0), (Just 5.0), (Just 6.0), (Just 7.0)]
 filterTest = once $ filter (\x -> isThreeOrFiveM x) [(Just 0.0), (Just 1.0), (Just 2.0), (Just 3.0), (Just 4.0), (Just 5.0), (Just 6.0), (Just 7.0)] == [(Just 3.0), (Just 5.0)]
 mapTest = once $ map addOneM [(Just 3.0), (Just 5.0)] == [(Just 4.0), (Just 6.0)]
 sumTest = once $ foldr getSumM (Just 0.0) [(Just 4.0), (Just 6.0)] == (Just 10.0)

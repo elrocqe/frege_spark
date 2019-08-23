@@ -1,7 +1,47 @@
 module bindings.Function where
 
+
 data Function a b = pure native "org.apache.spark.api.java.function.Function" where
   
-  pure native createInterpretedFunction   "bindings.FunctionHelper.createInterpretedFunction"      {a,b} :: (String) -> Function a b
-  pure native createJavaFunction   "bindings.FunctionHelper.createJavaFunction"                    {a,b} :: (String) -> Function a b
-  pure native createFunction   "bindings.FunctionHelper.createFunction"                                  :: () -> Function Double Double
+  pure native createInterpretedFunction       "bindings.FunctionHelper.createInterpretedFunction"      {a,b} :: (String) -> Function a b
+  pure native createInterpretScriptFunction   "bindings.FunctionHelper.createInterpretScriptFunction"  {a,b} :: (String) -> Function a b
+  pure native createJavaFunction              "bindings.FunctionHelper.createJavaFunction"             {a}   :: () -> Function a a
+  pure native createFunction                  "bindings.FunctionHelper.createFunction"                       :: () -> Function Double Double
+  pure native createGenericFunction           "bindings.FunctionHelper.createGenericFunction"          {a,b} :: (String) -> Function a b
+  pure native preloadAndExecuteFunction       "bindings.FunctionHelper.preloadAndExecuteFunction"      {a,b} :: (String) -> Function a b
+
+  pure native createNativeFunction             Function.NativeFunction.createNativeFunction            {a,b} :: () -> Function a b
+
+native module where {
+  public static class NativeFunction {
+  {-
+    public <A, B> Function<A, B> createNativeJavaFunction() {
+		return new Function<A, B>() {
+			public B call(A x) {
+		        System.out.println("Hello World From Java");
+                System.out.println("value = " + x);
+                if (x == null) {
+                    return null;
+                }
+                if (x instanceof Double) {
+                    return (B) new Double(x.doubleValue() * 10);
+                } else if (x instanceof Integer) {
+                    return (B) new Integer(x.intValue() * 10);
+                } else {
+                    throw new IllegalArgumentException("Type " + x.getClass() + " is not supported by this method");
+                }
+			}
+		};
+
+	};
+-}
+
+	public static <A, B> org.apache.spark.api.java.function.Function<A, B> createNativeFunction() {
+		return new org.apache.spark.api.java.function.Function<A, B>() {
+			public B call(A x) {	
+				return (B) x;
+			}
+		};
+	};
+  }
+}
