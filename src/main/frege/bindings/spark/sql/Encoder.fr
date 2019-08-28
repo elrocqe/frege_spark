@@ -1,0 +1,6 @@
+module bindings.spark.sql.Encoder where
+
+data Encoder a = pure native "org.apache.spark.sql.Encoder" where
+
+  native stringEncoder      "org.apache.spark.sql.Encoders.STRING()"    :: Encoder String
+  native doubleEncoder      "org.apache.spark.sql.Encoders.DOUBLE()"    :: Encoder Double

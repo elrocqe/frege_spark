@@ -1,4 +1,4 @@
-module examples.frege.numbers.NumbersRDDExampleInFrege where
+module examples.NumbersRDDExampleInFrege where
 
 import spark.bindings.SparkConf
 import spark.bindings.custom.CustomFunction

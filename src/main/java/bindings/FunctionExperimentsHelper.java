@@ -23,6 +23,16 @@ public class FunctionExperimentsHelper {
 	};
 	
 	
+	public static <A, B> Function<A, B> createIOFunction() {
+		return new Function<A, B>() {
+			public B call(A x) {
+				System.out.println("This function logs to the console");
+				return (B) x;
+			}
+		};
+	};
+	
+	
 	public static <A, B> Function<A, B> preloadAndExecuteFunction(String function) {
 		try {
 			ScriptExecutor.loadFunction(function);

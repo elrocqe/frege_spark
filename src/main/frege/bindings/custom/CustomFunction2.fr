@@ -1,0 +1,7 @@
+module bindings.custom.CustomFunction2 where
+
+data Function2 a b c = pure native "org.apache.spark.api.java.function.Function2" where
+
+  -- reduce
+  pure native getSum "bindings.custom.ReduceFunctions.getSumDouble"            :: Function2 Double Double Double
+

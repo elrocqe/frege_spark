@@ -5,6 +5,10 @@ data Function a b = pure native "org.apache.spark.api.java.function.Function" wh
   
   pure native createInterpretedFunction       "bindings.FunctionHelper.createInterpretedFunction"      {a,b} :: (String) -> Function a b
   pure native createInterpretScriptFunction   "bindings.FunctionHelper.createInterpretScriptFunction"  {a,b} :: (String) -> Function a b
+  
+  pure native create   "bindings.FunctionHelper.createFunction" {a,b}       :: (a -> b) -> Function a b
+
+  
   pure native createJavaFunction              "bindings.FunctionHelper.createJavaFunction"             {a}   :: () -> Function a a
   pure native createFunction                  "bindings.FunctionHelper.createFunction"                       :: () -> Function Double Double
   pure native createGenericFunction           "bindings.FunctionHelper.createGenericFunction"          {a,b} :: (String) -> Function a b

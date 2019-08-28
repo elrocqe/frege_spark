@@ -1,0 +1,18 @@
+module bindings.spark.JavaSparkContext where
+
+import bindings.spark.MutableJavaRDD
+import bindings.spark.JavaRDD
+import bindings.spark.SparkConf
+
+data JavaSparkContext  = native org.apache.spark.api.java.JavaSparkContext where
+
+    native new :: Mutable s (SparkConf) -> STMutable s (JavaSparkContext) | String -> String -> STMutable s (JavaSparkContext)
+    
+    native textFile :: Mutable s JavaSparkContext -> String -> ST s (JavaRDD String)
+    --native textFile :: Mutable s JavaSparkContext -> String -> STMutable s (MutableJavaRDD String)
+
+    native master :: Mutable s JavaSparkContext -> ST s String
+    native appName :: Mutable s JavaSparkContext -> ST s String
+    native version :: Mutable s JavaSparkContext -> ST s String
+
+    --native parallelize :: Mutable s JavaSparkContext -> Mutable s (List a) -> STMutable s (JavaRDD a)

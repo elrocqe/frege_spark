@@ -1,0 +1,46 @@
+module examples.frege.HelloSpark where
+
+import bindings.spark.JavaSparkContext
+import bindings.spark.SparkConf
+import bindings.spark.JavaRDD
+--import spark.bindings.custom.ImmutableSparkConf
+--import spark.bindings.custom.JavaSparkContextFromImmutableConf
+
+logFile :: String
+logFile = "data/first.csv"
+
+--main :: [String] -> IO ()
+--main args = do
+--  println "World"
+    
+main :: IO ()
+main = do
+  sparkConfig <- SparkConf.new ()
+  sparkConfig.setMaster "local"
+  sparkConfig.setAppName "Frege-Spark"
+  --sparkConfig.setSparkHome sparkLocation
+
+  sc <- JavaSparkContext.new sparkConfig
+  
+  -- create context from immutable config
+  --immutableSparkConf = ImmutableSparkConf.new "isc-test"
+
+  --isc <-JavaSparkContextFromImmutableConf.new (mutable immutableSparkConf)
+  --sc <-isc.getSparkContext
+
+  scVersion :: String <- sc.version
+  scAppName :: String <- sc.appName
+
+  javaRDD <- JavaSparkContext.textFile sc logFile
+  count = javaRDD.count
+  println $ show $ count
+
+  firstElement = javaRDD.first
+  println $ firstElement 
+
+  -- JavaRDD.saveAsTextFile filteredData ("target/testOutput") -- TODO fix error "directory already exists"
+
+  println "Hello Spark from Frege"
+  println $ "Version: " ++ scVersion
+  println $ "AppName: " ++ scAppName
+  println $ "Count: " ++ show (Long.double count)

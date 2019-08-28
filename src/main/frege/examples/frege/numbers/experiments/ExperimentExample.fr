@@ -1,4 +1,4 @@
-module examples.frege.numbers.ExperimentExample where
+module examples.ExperimentExample where
 
 import spark.bindings.SparkConf
 import bindings.Function

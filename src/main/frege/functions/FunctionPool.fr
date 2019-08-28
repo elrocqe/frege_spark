@@ -18,10 +18,10 @@ module functions.FunctionPool where
   sum :: Double -> Double -> Double
   sum x y = x + y
     
-  filterThirtyOrFifty :: Double -> Bool
-  filterThirtyOrFifty 30.0 = true
-  filterThirtyOrFifty 50.0 = true
-  filterThirtyOrFifty _ = false
+  filterThreeOrFive :: Double -> Bool
+  filterThreeOrFive 3.0 = true
+  filterThreeOrFive 5.0 = true
+  filterThreeOrFive _ = false
   
   timesTenOnString :: String -> String
   timesTenOnString x = x ++ "0"

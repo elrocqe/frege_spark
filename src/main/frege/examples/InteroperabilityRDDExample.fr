@@ -1,0 +1,42 @@
+module examples.InteroperabilityRDDExample where
+
+import bindings.spark.SparkConf
+import bindings.custom.CustomFunction
+import bindings.custom.CustomFunction2
+import bindings.testing.TestBindings
+import bindings.spark.JavaSparkContext
+import config.Config
+
+main :: IO ()
+main = do
+  sparkConfig <- SparkConf.new ()
+  println fregecJar
+  list <- arrayFromListST [applicationJar, fregecJar, interpreterJar]
+  sparkConfig.setAppName "Frege-Spark"
+  sparkConfig.setJars list
+  sparkConfig.setMaster "local"
+  --sparkConfig.setMaster distributedSparkMaster
+  sc :: MutableIO JavaSparkContext <- JavaSparkContext.new sparkConfig
+
+  currentData <- JavaSparkContext.textFile sc "data/first.csv"
+  parsedData = currentData.map  Function.convertToDouble
+  filteredData = parsedData.filter  Function.filterThreeOrFiveDouble
+  mappedData = filteredData.map  Function.timesTenDouble
+  sum = mappedData.reduce Function2.getSum
+  currentFirst = currentData.first
+  assertEquals "1" currentFirst
+
+  parsedFirst = parsedData.first
+  assertEquals 1.0 parsedFirst
+    
+  filteredFirst = filteredData.first
+  assertEquals 3.0 filteredFirst
+
+  mappedFirst = mappedData.first
+  assertEquals 30.0 mappedFirst 
+
+  assertEquals 80.0 sum
+
+  scMaster :: String <- sc.master
+  println $ "calculated with master: " ++ scMaster
+  println "finished IntegrationRDDExample"

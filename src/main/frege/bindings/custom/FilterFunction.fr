@@ -1,0 +1,10 @@
+module bindings.custom.FilterFunction where
+
+import bindings.spark.sql.Row
+
+data FilterFunction a = pure native "org.apache.spark.api.java.function.FilterFunction" where
+
+  -- filter
+  pure native filterThreeOrFiveDouble "experiments.props.FilterFunctions.filterFunctionThreeOrFiveDouble"       :: FilterFunction Double
+  pure native filterThreeOrFiveString "experiments.props.FilterFunctions.filterFunctionThreeOrFiveString" :: FilterFunction String
+  pure native filterThreeOrFiveRow    "experiments.props.FilterFunctions.filterFunctionThreeOrFiveRow"    :: FilterFunction Row

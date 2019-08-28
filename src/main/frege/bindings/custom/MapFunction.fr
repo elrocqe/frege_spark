@@ -1,0 +1,10 @@
+module bindings.custom.MapFunction where
+
+import bindings.spark.sql.Row
+
+data MapFunction a b = pure native "org.apache.spark.api.java.function.MapFunction" where
+
+  -- reduce
+  pure native addOneMFRow      "bindings.custom.MapFunctions.addOneMFRow"       :: MapFunction Row a
+  pure native addOneMFDouble   "bindings.custom.MapFunctions.addOneMFDouble"    :: MapFunction Double Double
+  pure native timesTenMFDouble "bindings.custom.MapFunctions.timesTenMFDouble"  :: MapFunction Double Double
