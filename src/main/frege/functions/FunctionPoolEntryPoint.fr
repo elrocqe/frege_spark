@@ -1,6 +1,0 @@
--- module that will load the FunctionPool module
-
-module functions.FunctionPoolEntryPoint where
-
-  import functions.FunctionPool
-

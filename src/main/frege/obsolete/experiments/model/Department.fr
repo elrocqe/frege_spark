@@ -1,8 +1,0 @@
-module model.Department where
-
-import frege.test.QuickCheck
-
-data Department = Department
-  { deptId :: Integer
-  , name    :: String
-}

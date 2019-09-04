@@ -1,7 +1,0 @@
-module spark.bindings.JavaRDDWrapper where
-  
-data JavaRDDWrapper a = native experiments.props.JavaRDDWrapper
-  
-  --native randomSplit      :: Mutable s (JavaRDD String) -> ST s (JArray Double)-> STMutable s (JavaRDD a)
- -- native randomSplit        "JavaRDDWrapper.randomSplit" {String} :: Mutable s (JavaRDD String) -> STMutable s (JArray (JavaRDD a))
-  --pure native equalsOne     "JavaRDDWrapper.equalsOne" :: Function String Bool
