@@ -1,0 +1,7 @@
+module snippets.HelloWorld where
+
+main :: [String] -> IO ()
+main args = do
+  result = 1.0 + 1.0
+  println result
+  println "Hello World" 

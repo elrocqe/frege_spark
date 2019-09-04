@@ -3,6 +3,8 @@ module examples.IntegrationRDDExample where
 import bindings.spark.SparkConf
 import bindings.custom.CustomFunction
 import bindings.custom.CustomFunction2
+--import bindings.Function
+--import bindings.Function2
 import bindings.testing.TestBindings
 import bindings.spark.JavaSparkContext
 import config.Config
@@ -13,10 +15,13 @@ filterThreeOrFive 3 = True
 filterThreeOrFive 5 = True
 filterThreeOrFive _ = false
 
+getSum :: Double -> Double -> Double
+getSum x y = x + y
+
+
 main :: IO ()
 main = do
   sparkConfig <- SparkConf.new ()
-  println fregecJar
   list <- arrayFromListST [applicationJar, fregecJar, interpreterJar]
   sparkConfig.setAppName "Frege-Spark"
   sparkConfig.setJars list
@@ -26,11 +31,14 @@ main = do
 
   currentData <- JavaSparkContext.textFile sc "data/first.csv"
   parsedData = currentData.map  Function.convertToDouble
-  filteredData = parsedData.filter (Function.createFilterFunction filterThreeOrFive)
+  filteredData = parsedData.filter  Function.filterThreeOrFiveDouble
+  --filteredData = parsedData.filter (Function.createFilterFunction filterThreeOrFive)
   -- -> causes Exception in thread "main" org.apache.spark.SparkException: Task not serializable
   --           Caused by: java.io.NotSerializableException: examples.frege.numbers.IntegrationRDDExample$$Lambda$68/1281361915
   mappedData = filteredData.map  Function.timesTenDouble
   sum = mappedData.reduce Function2.getSum
+  --sum = mappedData.reduce $ Function2.createFunction2 (getSum)
+
   currentFirst = currentData.first
   assertEquals "1" currentFirst
 

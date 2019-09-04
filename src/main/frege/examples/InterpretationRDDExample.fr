@@ -12,8 +12,7 @@ import config.Config
 main :: IO ()
 main = do
   sparkConfig <- SparkConf.new ()
-  println fregecJar
-  list <- arrayFromListST [applicationJar, fregecJar, interpreterJar]
+  list <- arrayFromListST [applicationJar, fregecJar, interpreterJar] --
   sparkConfig.setAppName "Frege-Spark"
   sparkConfig.setJars list
   sparkConfig.setMaster "local"
@@ -48,4 +47,4 @@ main = do
 
   scMaster :: String <- sc.master
   println $ "calculated with master: " ++ scMaster
-  println "finished InterpretationExampleFrege"
+  println "finished InterpretationRDDExample"

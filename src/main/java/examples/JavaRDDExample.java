@@ -1,10 +1,10 @@
-package examples.java.numbers;
+package examples;
 
 import static org.junit.Assert.assertEquals;
 
 import org.apache.spark.api.java.*;
 
-public class JavaRDDNumbersExample {
+public class JavaRDDExample {
 
     public static void main(String[] args) {
         JavaSparkContext sc = new JavaSparkContext("local", "JavaRDD Numbers Example");

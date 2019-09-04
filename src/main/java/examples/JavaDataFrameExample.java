@@ -1,4 +1,4 @@
-package examples.java;
+package examples;
 import static org.apache.spark.sql.functions.*;
 import static org.junit.Assert.assertEquals;
 
@@ -19,7 +19,7 @@ import org.apache.spark.sql.types.DataTypes;
 import org.apache.spark.sql.types.StructField;
 import org.apache.spark.sql.types.StructType;
 
-public class JavaDataFrameNumbersExample {
+public class JavaDataFrameExample {
 
     public static void main(String[] args) {
         String file = "data/first.csv"; // Should be some file on your system

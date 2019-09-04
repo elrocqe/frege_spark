@@ -1,0 +1,7 @@
+module HelloWorld where
+
+-- the output of this module will be overwritten be the java class with the same name
+
+main :: IO ()
+main = do
+  println "Hello World From Frege"

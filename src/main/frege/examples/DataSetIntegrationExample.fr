@@ -1,0 +1,69 @@
+module examples.DataSetIntegrationExample where
+
+import bindings.spark.SparkConf
+import bindings.spark.sql.SQLContext
+import bindings.spark.sql.DataFrameReader
+import bindings.spark.sql.DataSet
+import bindings.spark.sql.Row
+import bindings.spark.JavaSparkContext
+import bindings.custom.MapFunction
+import bindings.custom.ReduceFunction
+import bindings.custom.FilterFunction
+import bindings.spark.sql.Encoder
+import bindings.testing.TestBindings
+
+import frege.test.QuickCheck
+
+main :: IO ()
+main = do
+  sparkConfig <- SparkConf.new ()
+  sparkConfig.setMaster "local"
+  sparkConfig.setAppName "Frege-Spark"
+  sc :: MutableIO JavaSparkContext <- JavaSparkContext.new sparkConfig
+  sqlContext :: MutableIO SQLContext <- SQLContext.new sc
+  dataFrameReader :: MutableIO (DataFrameReader) <- SQLContext.read sqlContext
+  df1 <- dataFrameReader.format "csv"
+  df2 <- df1.option "inferSchema" "true"
+  currentData :: MutableIO (DataSet Row) <- df1.load "data/first.csv"
+  
+  --filteredData <- currentData.filter "_c0 = '5'"
+  --filteredData <- currentData.filter FilterFunction.filterThreeOrFiveRow
+  
+  count <- currentData.count
+  print $ "count: "
+  println $ count
+  --filteredCount <- filteredData.count
+  --print $ "filteredCount: "
+  --println filteredCount
+  
+  --mappedStringData :: MutableIO (DataSet String) <- filteredData.as(Encoder.stringEncoder)
+  parsedDoubleData :: MutableIO (DataSet Double) <- currentData.as(Encoder.doubleEncoder)
+  filteredDoubleData <- parsedDoubleData.filter FilterFunction.filterThreeOrFiveDouble
+
+  mappedDoubleData <- filteredDoubleData.map MapFunction.timesTenMFDouble Encoder.doubleEncoder
+  --DataSet.show mappedDoubleData -- TODO why does this not work: mappedDoubleData.show?
+
+  sum :: Double <- mappedDoubleData.reduce ReduceFunction.getSumDouble
+  
+  parsedFirst <- parsedDoubleData.first
+  assertEquals 1.0 parsedFirst
+    
+  filteredFirst <- filteredDoubleData.first
+  assertEquals 3.0 filteredFirst
+
+  mappedFirst <- mappedDoubleData.first
+  assertEquals 30.0 mappedFirst 
+
+  assertEquals 80.0 sum
+  
+  print "sum: "
+  println sum
+
+  {-
+  dataFrameWriter :: (MutableIO DataFrameWriter) <- mappedDoubleData.write
+  dataFrameWriter <- dataFrameWriter.mode "overwrite"
+  dataFrameWriter <- dataFrameWriter.format "csv"
+  dataFrameWriter <- dataFrameWriter.save "target/out/"
+  -}
+
+  println "finished DataSetIntegrationExample"

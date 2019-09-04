@@ -2,7 +2,7 @@ module examples.FregeRDDExample where
 
 import bindings.spark.SparkConf
 import frege.java.Util
-import examples.frege.numbers.FregeHelpers
+import examples.helpers.FregeHelpers
 import bindings.spark.JavaSparkContext
 import frege.test.QuickCheck
 
@@ -19,12 +19,12 @@ main = do
   currentData <- JavaSparkContext.textFile sc "data/first.csv"
   -- collectedData :: MutableIO (List String)
   collectedData <- currentData.collect
-  
+
   -- collectedDataEntry :: Maybe String
   collectedDataEntry <- collectedData.get 0
   print "collectedDataEntry: "
   println $ show $ collectedDataEntry
-  
+
   -- iterator :: MutableIO (Iterator String)
   iterator <- (collectedData.iterator)
   -- currentList :: [String]

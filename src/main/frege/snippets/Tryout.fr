@@ -8,6 +8,9 @@ module snippets.Tryout where
   filterFive :: String -> Bool
   filterFive = (== "5")
   
+  add :: Double -> Double -> Double
+  add x y = x + y
+
   addOne :: Double -> Double
   addOne x = x + 1.0
   
@@ -17,7 +20,9 @@ module snippets.Tryout where
   addOne2 :: Double -> Double
   addOne2 = (add 1.0)
 
-  add x y = x + y
+  addOnePF :: Double -> Double
+  addOnePF = (+ 1.0)
+
   filterFive1 :: String -> Bool
   filterFive1 x = x == "5"
   

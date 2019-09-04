@@ -1,9 +1,9 @@
 -- module that contains functions which can be executed on spark nodes
 
 module functions.FunctionPool where
-
-  import functions.NestedImportFunctionPool
-
+  
+  --import functions.NestedImportFunctionPool
+  
   addOne :: Double -> Double
   addOne x = x + 1.0
   
@@ -30,6 +30,17 @@ module functions.FunctionPool where
   filterThreeOnString "3" = true
   filterThreeOnString _ = false
   
-  multilineFunction x = x + y + z where
-    y = 2.0
-    z = 3.0
+  multilineFunction :: Double -> Double
+  multilineFunction x = x * y where
+    y = 6
+  
+  pureFunction :: Double -> Double
+  pureFunction x = x * 100.0
+  
+  impureFunction :: Double -> IO Double
+  impureFunction x = do
+    putStrLn "This function prints something and is impure!"
+    return (x + 10000.0)
+    
+  -- use function from imported module  
+  -- addThreeTwiceFP = addThree . addThree

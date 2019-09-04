@@ -1,4 +1,4 @@
--- module that contains functions which can be executed on spark nodes
+-- module that contains functions which can be executed on spark nodes, to be imported in other modules
 
 module functions.NestedImportFunctionPool where
 

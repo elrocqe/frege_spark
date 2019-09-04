@@ -1,0 +1,10 @@
+module snippets.JavaHelloWorldIntegration where
+
+native runJava  JavaHelloWorld.runJava :: (Double) -> IO (Double)
+
+main :: [String] -> IO ()
+main args = do
+  result = 1.0 + 1.0
+  println "Hello World from Frege" 
+  updatedValue <-runJava result
+  println updatedValue

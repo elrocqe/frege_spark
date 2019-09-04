@@ -10,7 +10,6 @@ import config.Config
 main :: IO ()
 main = do
   sparkConfig <- SparkConf.new ()
-  println fregecJar
   list <- arrayFromListST [applicationJar, fregecJar, interpreterJar]
   sparkConfig.setAppName "Frege-Spark"
   sparkConfig.setJars list
@@ -39,4 +38,4 @@ main = do
 
   scMaster :: String <- sc.master
   println $ "calculated with master: " ++ scMaster
-  println "finished IntegrationRDDExample"
+  println "finished InteroperabilityRDDExample"

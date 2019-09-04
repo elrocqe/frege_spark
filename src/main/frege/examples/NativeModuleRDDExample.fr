@@ -1,42 +1,44 @@
-module examples.IOIntegrationExample where
+module examples.NativeModuleRDDExample where
 
 import bindings.spark.SparkConf
+import bindings.Function
 import bindings.custom.CustomFunction
 import bindings.custom.CustomFunction2
 import bindings.testing.TestBindings
 import bindings.spark.JavaSparkContext
 import config.Config
 
+
+filterThreeOrFive :: Double -> Bool
+filterThreeOrFive 3 = True
+filterThreeOrFive 5 = True
+filterThreeOrFive _ = false
+
 main :: IO ()
 main = do
   sparkConfig <- SparkConf.new ()
-  println fregecJar
   list <- arrayFromListST [applicationJar, fregecJar, interpreterJar]
   sparkConfig.setAppName "Frege-Spark"
   sparkConfig.setJars list
-  sparkConfig.setMaster "local"
-  --sparkConfig.setMaster "spark://Damians-MacBook.local:7077"
+  --sparkConfig.setMaster "local"
+  sparkConfig.setMaster "spark://Damians-MacBook.local:7077"
   sc :: MutableIO JavaSparkContext <- JavaSparkContext.new sparkConfig
 
   currentData <- JavaSparkContext.textFile sc "data/first.csv"
-  parsedData = currentData.map (Function.createIOFunction ())
-  -- > compiler throws error here
-  -- type error in expression createIOFunction () type is : IO (Function t2 t1) expected: Function String t1
-  sum = parsedData.reduce Function2.getSum
+  parsedData = currentData.map  CustomFunction.Function.convertToDouble
+  mappedData = parsedData.map $ Function.Function.createNativeFunction ()
+  sum = mappedData.reduce Function2.getSum
   currentFirst = currentData.first
   assertEquals "1" currentFirst
 
   parsedFirst = parsedData.first
   assertEquals 1.0 parsedFirst
-    
-  filteredFirst = filteredData.first
-  assertEquals 30.0 filteredFirst
 
   mappedFirst = mappedData.first
-  assertEquals 10.0 mappedFirst 
+  assertEquals 1.0 mappedFirst 
 
-  assertEquals 84.0 sum
+  assertEquals 21.0 sum
 
   scMaster :: String <- sc.master
   println $ "calculated with master: " ++ scMaster
-  println "finished IntegrationRDDExample"
+  println "finished NativeModuleRDDExample"
