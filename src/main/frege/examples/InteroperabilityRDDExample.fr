@@ -17,10 +17,15 @@ main = do
   --sparkConfig.setMaster distributedSparkMaster
   sc :: MutableIO JavaSparkContext <- JavaSparkContext.new sparkConfig
 
+  -- currentData :: JavaRDD.JavaRDD String
   currentData <- JavaSparkContext.textFile sc "data/first.csv"
+  -- parsedData :: JavaRDD.JavaRDD Double
   parsedData = currentData.map  Function.convertToDouble
+  -- filteredData :: JavaRDD.JavaRDD Double
   filteredData = parsedData.filter  Function.filterThreeOrFiveDouble
+  -- mappedData :: JavaRDD.JavaRDD Double
   mappedData = filteredData.map  Function.timesTenDouble
+  -- sum :: Double
   sum = mappedData.reduce Function2.getSum
   currentFirst = currentData.first
   assertEquals "1" currentFirst

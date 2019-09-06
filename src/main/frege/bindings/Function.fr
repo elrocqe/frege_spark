@@ -2,19 +2,24 @@ module bindings.Function where
 
 
 data Function a b = pure native "org.apache.spark.api.java.function.Function" where
-  
-  pure native createInterpretedFunction       "bindings.FunctionHelper.createInterpretedFunction"      {a,b} :: (String) -> Function a b
-  pure native createInterpretScriptFunction   "bindings.FunctionHelper.createInterpretScriptFunction"  {a,b} :: (String) -> Function a b
-  
-  pure native create   "bindings.FunctionHelper.createFunction" {a,b}       :: (a -> b) -> Function a b
+   
+  pure native create                          "bindings.FunctionHelper.createFunction"                            {a,b} :: (a -> b) -> Function a b
 
+  pure native createFilterFunction            "bindings.FunctionHelper.createFilterFunction"                        {a} :: (a -> Bool) -> Function a b
+  pure native createFilterFunctionDouble      "bindings.FunctionHelper.createFilterFunctionDouble"                      :: (Double -> Bool) -> Function Double Bool
+ 
+  pure native createInterpretedFunction       "bindings.FunctionHelper.createInterpretedFunction"                 {a,b} :: (String) -> Function a b
+  pure native createInterpretScriptFunction   "bindings.FunctionHelper.createInterpretScriptFunction"             {a,b} :: (String) -> Function a b
   
-  pure native createJavaFunction              "bindings.FunctionHelper.createJavaFunction"             {a}   :: () -> Function a a
-  pure native createFunction                  "bindings.FunctionHelper.createFunction"                       :: () -> Function Double Double
-  pure native createGenericFunction           "bindings.FunctionHelper.createGenericFunction"          {a,b} :: (String) -> Function a b
-  pure native preloadAndExecuteFunction       "bindings.FunctionHelper.preloadAndExecuteFunction"      {a,b} :: (String) -> Function a b
+  pure native createJavaFunction              "bindings.FunctionExperimentsHelper.createJavaFunction"                          {a} :: () -> Function a a
+  pure native createGenericFunction           "bindings.FunctionExperimentsHelper.createGenericFunction"          {a,b} :: (String) -> Function a b
+  pure native preloadAndExecuteFunction       "bindings.FunctionExperimentsHelper.preloadAndExecuteFunction"      {a,b} :: (String) -> Function a b
+  pure native createJavaReflectionFunction    "bindings.FunctionExperimentsHelper.createJavaReflectionFunction"     {a} :: (String) -> Function a Bool
+  pure native createReflectionFilterFunction  "bindings.FunctionExperimentsHelper.createReflectionFilterFunction"   {a} :: (String) -> Function a Bool
 
-  pure native createNativeFunction             Function.NativeFunction.createNativeFunction            {a,b} :: () -> Function a b
+  native createIOFunction                     "bindings.FunctionExperimentsHelper.createIOFunction"               {a,b} :: () -> IO (Function a b)
+
+  pure native createNativeFunction             Function.NativeFunction.createNativeFunction                       {a,b} :: () -> Function a b
 
 native module where {
   public static class NativeFunction {
@@ -43,6 +48,7 @@ native module where {
 	public static <A, B> org.apache.spark.api.java.function.Function<A, B> createNativeFunction() {
 		return new org.apache.spark.api.java.function.Function<A, B>() {
 			public B call(A x) {	
+				//System.out.println("Function called from Native Module");
 				return (B) x;
 			}
 		};

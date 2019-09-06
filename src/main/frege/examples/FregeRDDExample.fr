@@ -32,9 +32,9 @@ main = do
   -- parsedList :: [Double]
   parsedList = map readString currentList
   --filteredList :: [Double]
-  filteredList = filter (isThreeOrFive) parsedList
+  filteredList = filter isThreeOrFive parsedList
   -- mappedList :: [Double]
-  mappedList = map addOne filteredList
+  mappedList = map timesTen filteredList
   -- sum :: Double
   sum = foldr getSum 0.0 mappedList
 

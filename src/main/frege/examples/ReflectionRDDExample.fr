@@ -1,6 +1,7 @@
 module examples.ReflectionRDDExample where
 
 import bindings.spark.SparkConf
+import bindings.Function
 import bindings.custom.CustomFunction
 import bindings.custom.CustomFunction2
 import bindings.testing.TestBindings
@@ -18,10 +19,10 @@ main = do
   sc :: MutableIO JavaSparkContext <- JavaSparkContext.new sparkConfig
 
   currentData <- JavaSparkContext.textFile sc "data/first.csv"
-  parsedData = currentData.map  Function.convertToDouble
-  --filteredData = parsedData.filter  Function.filterThreeOrFiveDouble
-  filteredData = parsedData.filter $ Function.createReflectionFilterFunction "filterThreeOrFive"
-  mappedData = filteredData.map  Function.timesTenDouble
+  parsedData = currentData.map  CustomFunction.Function.convertToDouble
+  --filteredData = parsedData.filter  CustomFunction.Function.filterThreeOrFiveDouble
+  filteredData = parsedData.filter $ Function.Function.createReflectionFilterFunction "filterThreeOrFive"
+  mappedData = filteredData.map  CustomFunction.Function.timesTenDouble
   sum = mappedData.reduce Function2.getSum
   currentFirst = currentData.first
   assertEquals "1" currentFirst

@@ -22,9 +22,9 @@ main = do
   currentData <- JavaSparkContext.textFile sc "data/first.csv"
   parsedData = currentData.map CustomFunction.Function.convertToDouble
   filteredData = parsedData.filter $ Function.Function.createInterpretedFunction "filterThreeOrFive"
-  mappedData = filteredData.map $ Function.Function.createInterpretScriptFunction "f x = x * 10.0" 
+  --mappedData = filteredData.map $ Function.Function.createInterpretScriptFunction "f x = x * 10.0" 
 
-  --mappedData <- parsedData.map $ Function.Function.createInterpretedFunction "timesTen"
+  mappedData = parsedData.map $ Function.Function.createInterpretedFunction "timesTen"
   --mappedData <- parsedData.map $ Function.Function.createFunction ()
   --mappedData <- parsedData.map $ Function.Function.createJavaFunction ()
 

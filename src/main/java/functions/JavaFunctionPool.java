@@ -19,4 +19,15 @@ public class JavaFunctionPool {
               throw new IllegalArgumentException("Type " + x.getClass() + " is not supported by this method");
           }	  
 	  }
+	  
+	  final public static boolean filterThreeOrFive(final double arg$1) {
+		  if (3.0D == arg$1) {
+		    return true;
+		  }
+		  if (5.0D == arg$1) {
+		    return true;
+		  }
+		  return false;
+		}
+
 }

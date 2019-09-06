@@ -30,7 +30,7 @@ module snippets.Tryout where
   filterFive2 x = "5" == x
   
   append :: String -> String
-  append x = x ++ "x"
+  append x = x ++ "y"
   
   append1 :: String -> String
-  append1 = (++ "x")
+  append1 = (++ "y")

@@ -12,16 +12,6 @@ import functions.JavaFunctionPool;
 import script.ScriptExecutor;
 
 public class FunctionExperimentsHelper {
-
-	public static <A, B> Function<A, B> createPureInterpretStringFunction(String function) {
-		return new Function<A, B>() {
-			public B call(A x) {
-				//System.out.println("newFunction");
-				return null;
-			}
-		};
-	};
-	
 	
 	public static <A, B> Function<A, B> createIOFunction() {
 		return new Function<A, B>() {
@@ -74,6 +64,34 @@ public class FunctionExperimentsHelper {
 			}
 		};
 	};
+	
+	public static <A> Function<A, Boolean> createReflectionFilterFunction(String functionName) {
+
+		return new Function<A, Boolean>() {
+			public Boolean call(A x) throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, ClassNotFoundException {
+				
+				Method method = Class.forName("functions.FunctionPool").getMethod(functionName, double.class);
+				Double value = (Double) x;
+				Boolean result = (Boolean) method.invoke(null, value);
+				return result;
+			}
+		};
+	};
+	
+	
+	public static <A> Function<A, Boolean> createJavaReflectionFilterFunction(String functionName) {
+
+		return new Function<A, Boolean>() {
+			public Boolean call(A x) throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, ClassNotFoundException {
+				
+				Method method = Class.forName("functions.JavaFunctionPool").getMethod(functionName, double.class);
+				Double value = (Double) x;
+				Boolean result = (Boolean) method.invoke(null, value);
+				return result;
+			}
+		};
+	};
+	
 	
 	public static <A extends Number, B extends Number> Function<A, B> createGenericFunction() {
 

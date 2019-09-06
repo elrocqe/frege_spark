@@ -14,6 +14,8 @@ import javax.script.ScriptException;
 
 import org.apache.hadoop.yarn.webapp.hamlet.HamletSpec.A;
 
+import scala.reflect.internal.AnnotationInfos.LazyAnnotationInfo;
+
 public class ScriptExecutor {
 
 	public static ScriptEngine frege;
@@ -32,22 +34,13 @@ public class ScriptExecutor {
 		return (B) frege.eval("f " + x.toString());
 	}
 	
-	public static <A, B> B loadAndExecuteScriptFunction(String function, A x) {
-		try {
-			loadFunction(function);
-			//System.out.println("loadedFunction");
-			return (B) frege.eval("f " + x.toString());
-		} catch (IOException | ScriptException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return null;
-		}
-		
+	public static <A, B> B loadAndExecuteScriptFunction(String function, A x) throws IOException, ScriptException {
+			loadFunction(function); // i
+			return executeScriptFunction(x);
 	}
 
 	public static <A, B, C> C executeFunction2(String functionName, A v1, B v2) throws ScriptException, IOException {
 		loadFunctions();
-		System.out.println(v1.toString() + " " + v2.toString());
 		return (C) frege.eval(functionName + " " + v1.toString() + " " + v2.toString());
 	}
 
@@ -79,45 +72,29 @@ public class ScriptExecutor {
 	
 	public static void loadFunctions() throws IOException, ScriptException {
 		if (frege == null) {
-			// TODO refactor
-			final ScriptEngineManager factory = new ScriptEngineManager();
-			frege = factory.getEngineByName("frege");
+			loadScriptEngine();
 			JarFile jarFile = new JarFile("frege-spark.jar");
 
 			final Enumeration<JarEntry> entries = jarFile.entries();
 			while (entries.hasMoreElements()) {
 				final JarEntry entry = entries.nextElement();
 				if (entry.getName().contains(".")) {
-					// System.out.println("File : " + entry.getName());
-					if (entry.getName().contains("FunctionPoolEntryPoint.fr")) {
+				    //System.out.println("File : " + entry.getName());
+					if (entry.getName().contains("FunctionPool.fr")) {
 						JarEntry fileEntry = jarFile.getJarEntry(entry.getName());
 						InputStream input = jarFile.getInputStream(fileEntry);
 						InputStreamReader isr = new InputStreamReader(input);
 						BufferedReader reader = new BufferedReader(isr);
-						String line;
-						while ((line = reader.readLine()) != null) {
-							if (isFunctionDefinition(line) || isImport(line)) {
-								String script = line.trim();
-								frege.eval(script);
-								// System.out.println(script);
-							}
-						}
+				        frege.eval(reader);
 						reader.close();
-
+						//System.out.println("loaded module: " + entry.getName());
 					}
 				}
 			}
+			// import entry point 
+			frege.eval("import functions.FunctionPool");
+			//frege.eval("import functions.NestedImportFunctionPool");
 			jarFile.close();
 		}
-	}
-
-	/*
-	 *  helper function to determine whether a line is a frege function definition
-	 */
-	private static boolean isFunctionDefinition(String line) {
-		return line.contains("=");
-	}
-	private static boolean isImport(String line) {
-		return line.contains("import");
 	}
 }

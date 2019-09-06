@@ -1,25 +1,9 @@
-# frege_spark
+# frege-spark
 
-Runnable modules can be found in src/main/frege
+This project aims to provide integration between Frege, a functional programming language for the JVM and the Big Data analytics engine Apache Spark.
 
-To run application on Apache Spark in a distributed cluster, start master and slaves of your local Apache Spark distribution and set the master inside your application. 
+This repository contains the code to provide basic interoperability between Frege and Apache Spark through native declarations. Different example appliications written in Frege can be found to showcase the various  levels and ways of integration and interoperability.
 
--- run in terminal in the sbin folder of your Apache Spark distribution
-
-./start-master.sh
-./start-slave.sh "your-master-url"
--- e.g. ./start-slave.sh spark://Damians-MacBook.local:7077
-
--- adjust application to link to master
--- e.g. sparkConfig.setMaster "spark://Damians-MacBook.local:7077"
-
-
-common issues
-
-if you run into StackOverflowError -> increase HeapSize in Eclipse
-
-frege and java builder are needed
-
-
+Further information on how to set up this project can be found in the document InstallationGuide.pdf
 
 

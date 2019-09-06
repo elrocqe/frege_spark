@@ -6,6 +6,7 @@ import frege.test.QuickCheck
 isThreeOrFiveM Nothing = false
 isThreeOrFiveM (Just x) = (x == 3.0 || x == 5.0)
 
+isThreeOrFive :: Double -> Bool
 isThreeOrFive x = (x == 3.0 || x == 5.0)
 
 -- map
@@ -15,6 +16,9 @@ addOneM (Just x) = (Just (x+1))
 
 addOne :: Double -> Double
 addOne x = x+1
+
+timesTen :: Double -> Double
+timesTen x = x * 10
 
 -- reduce
 getSum :: Double -> Double -> Double
